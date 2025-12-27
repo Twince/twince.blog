@@ -1,17 +1,22 @@
-import { PostSchema, SeoSchema, ThumbnailSchema } from "../../../content/config";
-import { z } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { seo, topics, series } from "../../../content/config";
+import { z } from 'astro/zod';
 
-export type Post = z.infer<typeof PostSchema>
-export type Seo = z.infer<typeof SeoSchema>
-export type Thumbnail = z.infer<typeof ThumbnailSchema>
+type seoSchema = z.infer<typeof seo>
+type topicsSchema = z.infer<typeof topics.schema>
+type seriesSchema = z.infer<typeof series.schema>
 
 export type ResolvedPost = {
+  id: string,
+  slug: string,
+  render: CollectionEntry<'posts'>['render'],
   title: string;
   description: string;
   date: Date;
-  status: 'draft' | 'publsihed';
-  tags: string[];
-  topic: string;
+  status: 'draft' | 'published';
+  categories: string[];
+  topics: string;
+  series: string;
   readingTime: number;
   author: 'Twince';
   coAuthor?: string[];
@@ -19,5 +24,5 @@ export type ResolvedPost = {
     src: string;
     alt?: string;
   }
-  seo: Seo;
+  seo: seoSchema;
 }

@@ -1,28 +1,35 @@
-import type { ResolvedPost, Post, Thumbnail } from '../post/types/Resolver';
+import type { CollectionEntry } from "astro:content";
+import type { ResolvedPost } from "./types/Resolver";
 
 const DEFAULT_THUMBNAIL = {
-  src: '*',
-  alt: 'Post Thumbnail',
-}
+  src: "*",
+  alt: "Post Thumbnail",
+};
 
-export const resorvedPost = (post: Post): ResolvedPost => {
+// post collectoin 필드 평탄화 및 데이터 정합성 보장
+export const resolvePost = (post: CollectionEntry<"posts">): ResolvedPost => {
+  const { id, slug, render, data } = post;
   return {
-    title: post.title,
-    description: post.description,
-    date: post.date,
-    status: post.status,
-    tags: post.tags,
-    topic: post.topic,
-    readingTime: post.readingTime,
-    author: post.author,
-    coAuthor: post.coAuthor ?? [],
+    id,
+    slug,
+    render,
+    title: data.title,
+    description: data.description,
+    date: data.date,
+    status: data.status,
+    categories: data.categories,
+    topics: data.topics,
+    series: data.series,
+    readingTime: data.readingTime,
+    author: data.author,
+    coAuthor: data.coAuthor ?? [],
     thumbnail: {
-      src: post.thumbnail?.src ?? DEFAULT_THUMBNAIL.src,
-      alt: post.thumbnail?.alt ?? DEFAULT_THUMBNAIL.alt,
+      src: data.thumbnail?.src ?? DEFAULT_THUMBNAIL.src,
+      alt: data.thumbnail?.alt ?? DEFAULT_THUMBNAIL.alt,
     },
     seo: {
-      title: post.seo?.title ?? post.title,
-      description: post.seo?.description ?? post.description,
-    }
+      title: data.seo?.title ?? data.title,
+      description: data.seo?.description ?? data.description,
+    },
   };
-}
+};
