@@ -3,13 +3,18 @@ import { PostService } from "../service/post"
 
 const blogPosts = await PostService.getPublsihedPosts();
 console.log(blogPosts);
-
+console.log(JSON.stringify(blogPosts[0].topics[0]['id']))
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
+<meta charset="UTF-8" />
 <div>
 	<ul>
-		{blogPosts.map((post) => <li>{post.topics}</li>)}
+		{blogPosts.map((post) => 
+		<li>{post.title}</li>
+		<li>{post.slug}</li>
+		<li>{JSON.stringify(post.topics[0]['id'])}</li>
+		)}
 	</ul>
 </div>
