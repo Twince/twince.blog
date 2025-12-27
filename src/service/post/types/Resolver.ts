@@ -2,27 +2,25 @@ import type { CollectionEntry } from "astro:content";
 import { seo, topics, series } from "../../../content/config";
 import { z } from 'astro/zod';
 
-type seoSchema = z.infer<typeof seo>
-type topicsSchema = z.infer<typeof topics.schema>
-type seriesSchema = z.infer<typeof series.schema>
+type SeoSchema = z.infer<typeof seo>
+type PostData = CollectionEntry<'posts'>['data'];
 
 export type ResolvedPost = {
   id: string,
   slug: string,
-  render: CollectionEntry<'posts'>['render'],
-  title: string;
-  description: string;
-  date: Date;
-  status: 'draft' | 'published';
-  categories: string[];
-  topics: string;
-  series: string;
-  readingTime: number;
+  title: PostData['title']
+  description: PostData['description'],
+  date: PostData['date'],
+  status: PostData['status'],
+  categories: PostData['categories'],
+  topics: PostData['topics'],
+  series?: PostData['series'],
+  readingTime: PostData['readingTime'],
   author: 'Twince';
-  coAuthor?: string[];
+  coAuthor?: PostData['coAuthors'],
   thumbnail: {
     src: string;
     alt?: string;
   }
-  seo: seoSchema;
+  seo: PostData['seo'];
 }

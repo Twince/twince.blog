@@ -11,18 +11,8 @@ export const resolvePost = (post: CollectionEntry<"posts">): ResolvedPost => {
   const { id, slug, render, data } = post;
   return {
     id,
-    slug,
-    render,
-    title: data.title,
-    description: data.description,
-    date: data.date,
-    status: data.status,
-    categories: data.categories,
-    topics: data.topics,
-    series: data.series,
-    readingTime: data.readingTime,
-    author: data.author,
-    coAuthor: data.coAuthor ?? [],
+    slug: id,
+    ...data,
     thumbnail: {
       src: data.thumbnail?.src ?? DEFAULT_THUMBNAIL.src,
       alt: data.thumbnail?.alt ?? DEFAULT_THUMBNAIL.alt,
