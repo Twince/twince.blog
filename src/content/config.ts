@@ -24,7 +24,7 @@ const readingTime = z.union([
 const categories = z.array(z.string()).optional().default([])
 
 export const series = defineCollection({
-  loader: file("src/content/series.json"),
+  loader: file("src/content/blog/series.json"),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -33,7 +33,7 @@ export const series = defineCollection({
 })
 
 export const topics = defineCollection({
-  loader: file("src/content/topics.json"),
+  loader: file("src/content/blog/topics.json"),
   schema: z.object({
     id: z.string(),
     title: z.string(),
@@ -42,14 +42,14 @@ export const topics = defineCollection({
 })
 
 const posts = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "src/content/posts" }),
+  loader: glob({ pattern: "**/*.md", base: "src/content/blog/posts" }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
     status: z.enum(['draft', 'published']),
     categories: categories,
-    topics: z.array(reference('topics')).optional(),
+    topics: z.array(reference('topics')),
     series: reference('series').optional(),
     readingTime: readingTime, // length가 1이면 읽는 시간이 index[0] ~ index[1] 만큼 소요
     author: z.string(),
