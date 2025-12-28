@@ -1,9 +1,9 @@
 // module
+import { getCollection } from "astro:content";
 import { resolvePost } from "./resolver";
 import { sortPosts } from "./sorter";
 
 // type
-import { getCollection } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { ResolvedPost } from "./types/Resolver";
 import type { NeighborPosts } from "./types/Index";
@@ -12,6 +12,7 @@ import type { NeighborPosts } from "./types/Index";
 type rawPost = CollectionEntry<'posts'>
 
 export const PostService = {
+  // status가 'publihed'인 Post만 fetch(프로덕트 빌드된 기준)
   async getPublsihedPosts(): Promise<ResolvedPost[]> {
     const rawPosts = await getCollection('posts', ({data}): rawPost => {
       return import.meta.env.PROD ? data.status === "published" : true;
@@ -20,12 +21,13 @@ export const PostService = {
     return sortPosts(resolvedPosts);
   },
 
+  // 특정 Post의 slug를 기준으로 이전 글과 다음 글 fetch
   async getPostWidthNeighbors(slug: string): Promise<NeighborPosts> {
     const allPosts = await this.getPublsihedPosts();
     const currentIndex = allPosts.findIndex((post) => post.slug === slug);
 
     if(currentIndex === - 1) return null;
-  
+
     const isFirstPost = 0 === currentIndex;
     const isLastPost = allPosts.length-1 === currentIndex;
 
