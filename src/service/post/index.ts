@@ -22,7 +22,7 @@ export const PostService = {
   },
 
   // 특정 Post의 slug를 기준으로 이전 글과 다음 글 fetch
-  async getPostWidthNeighbors(slug: string): Promise<NeighborPosts> {
+  async getPostWithNeighbors(slug: string): Promise<NeighborPosts> {
     const allPosts = await this.getPublsihedPosts();
     const currentIndex = allPosts.findIndex((post) => post.slug === slug);
 
