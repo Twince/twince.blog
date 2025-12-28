@@ -46,8 +46,9 @@ export const PostService = {
       }
     }
   },
-
-  async getPostWithCategories(categories: string | string[]): Promise<PostSummary[]> {
+  
+  // minMatch n를 매개변수를 받을 시, 최소 n개 이상 카테고리가 겹칠때만 post fetch
+  async getPostWithCategories(categories: string | string[], minMatch?: number): Promise<PostSummary[]> {
     const allPosts = await this.getPublishedPosts();
     // 입력받은 카테고리를 uppercase된 string[] 형태로 정규화
     const targetCategories = Array.isArray(categories) ? categories.map((c) => c.toUpperCase()) : [categories.toUpperCase()];
@@ -55,6 +56,11 @@ export const PostService = {
     const categorySet = new Set(targetCategories);
     const filteredPosts = allPosts.filter((post) => {
       const postCategories = post.categories;
+
+      if(minMatch) {
+        const intersection = postCategories.filter(c => categorySet.has(c))
+        return intersection.length >= minMatch;
+      }
       return postCategories.some((c) => categorySet.has(c))
     })
 

@@ -5,7 +5,7 @@ import { PostService } from "../service/post"
 // console.log(blogPosts);
 // console.log(JSON.stringify(blogPosts[0].topics[0]['id']))
 
-const filteredPosts = await PostService.getPostWidthCategories('dev');
+const filteredPosts = await PostService.getPostWithCategories(['dev','design']);
 console.log(filteredPosts);
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
