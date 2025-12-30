@@ -6,7 +6,7 @@ export type PostSummary = {
       src: string;
       alt: string;
     }
-}
+} | null;
 
 export type NeighborPosts = {
   next: PostSummary;
