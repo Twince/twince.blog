@@ -50,7 +50,7 @@ const posts = defineCollection({
     status: z.enum(['draft', 'published']),
     categories: categories,
     topics: z.array(reference('topics')),
-    series: reference('series').optional(),
+    series: z.array(reference('series').optional()),
     readingTime: readingTime, // length가 1이면 읽는 시간이 index[0] ~ index[1] 만큼 소요
     author: z.string(),
     coAuthors: z.array(z.string()).optional().default([]),

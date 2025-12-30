@@ -5,7 +5,7 @@ date: '2025-10-30'
 status: 'published'
 categories: ['DESIGN', 'DEV']
 topics: ['DEV', 'DESIGN']
-series: 'neural-network-viz'
+series: ['neural-network-viz']
 readingTime: [10, 20]
 author: 'Twince'
 thumbnail:
