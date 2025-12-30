@@ -8,6 +8,7 @@ import type { CollectionEntry } from "astro:content";
 import type { ResolvedPost } from "./types/Resolver";
 import type { PostSummary } from "./types/Index";
 import type { NeighborPosts } from "./types/Index";
+import { series } from "../../content/config";
 
 
 type rawPost = CollectionEntry<'posts'>
@@ -50,10 +51,9 @@ export const PostService = {
   // minMatch n를 매개변수를 받을 시, 최소 n개 이상 카테고리가 겹칠때만 post fetch
   async getPostWithCategories(categories: string | string[], minMatch?: number): Promise<PostSummary[]> {
     const allPosts = await this.getPublishedPosts();
-    // 입력받은 카테고리를 uppercase된 string[] 형태로 정규화
-    const targetCategories = Array.isArray(categories) ? categories.map((c) => c.toUpperCase()) : [categories.toUpperCase()];
+    const targetCategories = Array.isArray(categories) ? categories : [categories];
 
-    const categorySet = new Set(targetCategories);
+    const categorySet = new Set(targetCategories.map(c => c.toUpperCase()));
     const filteredPosts = allPosts.filter((post) => {
       const postCategories = post.categories;
 
@@ -62,6 +62,27 @@ export const PostService = {
         return intersection.length >= minMatch;
       }
       return postCategories.some((c) => categorySet.has(c))
+    })
+
+    return filteredPosts.map((post) => {
+      return {
+        slug: post.slug,
+        title: post.title,
+        description: post.description,
+        thumbnail: post.thumbnail,
+      }
+    })
+  },
+
+  async getPostsWithSeries(seriesId: string): Promise<PostSummary[]> {
+    const allPosts = await this.getPublishedPosts();
+    
+    const filteredPosts =  allPosts.filter((post) => {
+      if(post.series) { // 해당 post가 series 속성을 가지고 있다면
+        const postSeriesArr = post.series.map((referenceObj) => referenceObj?.id) // 불러온 series 데이터는 series.json 객체의 참조를 return({id, collection })
+        const postSeriesSet = new Set(postSeriesArr);
+        return postSeriesSet.has(seriesId);
+      } else return null;
     })
 
     return filteredPosts.map((post) => {
