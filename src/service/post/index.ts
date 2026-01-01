@@ -107,5 +107,13 @@ export const PostService = {
       } else return null;
     })
     return filteredPosts.map((post) => this.convertToSummaryMapper(post));
+  },
+
+  async getPostsWithTopic(topicId: string): Promise<TopicMatchedPosts[]> {
+    const allPosts = await this.getPublishedPosts();
+    const filteredPosts = allPosts.filter((post) => {
+      return post.topics.some((referenceObj) => referenceObj.id === topicId)
+    })
+    return filteredPosts.map((post) => this.convertToSummaryMapper(post));
   }
 }
