@@ -20,7 +20,7 @@ export type ResolvedPost = {
   coAuthor?: PostData['coAuthors'],
   thumbnail: {
     src: string;
-    alt?: string;
+    alt: string;
   }
   seo: PostData['seo'];
 }

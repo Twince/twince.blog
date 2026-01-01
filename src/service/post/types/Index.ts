@@ -1,14 +1,19 @@
-export type PostSummary = {
+//imports
+import type { CollectionEntry } from "astro:content";
+
+// types
+export type rawPost = CollectionEntry<'posts'>
+
+export interface PostSummaryBase {
     slug: string | null;
     title: string | null;
     description: string | null;
-    thumbanil?: {
+};
+
+export interface PostSummaryWithThumbnail extends PostSummaryBase {
+  thumbnail: {
       src: string;
       alt: string;
     }
-} | null;
+}
 
-export type NeighborPosts = {
-  next: PostSummary;
-  previous: PostSummary;
-} | null;

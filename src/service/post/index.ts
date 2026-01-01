@@ -1,26 +1,50 @@
-// module
+// module imports
 import { getCollection } from "astro:content";
 import { resolvePost } from "./resolver";
 import { sortPosts } from "./sorter";
 
-// type
-import type { CollectionEntry } from "astro:content";
+// type imports
+import type { PostSummaryBase, PostSummaryWithThumbnail, rawPost } from "./types/Index";
 import type { ResolvedPost } from "./types/Resolver";
-import type { PostSummary } from "./types/Index";
-import type { NeighborPosts } from "./types/Index";
 import { series } from "../../content/config";
 
+// type definition(about module domain)
+type NullableSummary = PostSummaryWithThumbnail | null;
 
-type rawPost = CollectionEntry<'posts'>
+type Mapper<from, to> = (resolvedPosts: ResolvedPost) => NullableSummary;
+type SummaryMapper = Mapper<ResolvedPost, NullableSummary>
+
+type CategorizedPosts = NullableSummary;
+type SeriesMatchedPosts = NullableSummary;
+type TopicMatchedPosts = NullableSummary;
+type NeighborPosts = {
+  next: PostSummaryBase;
+  previous: PostSummaryBase;
+} | null;
+
+
+// logic
+let cachedPosts: ResolvedPost[] | null = null;
 
 export const PostService = {
   // status가 'publihed'인 Post만 fetch(프로덕트 빌드된 기준)
   async getPublishedPosts(): Promise<ResolvedPost[]> {
+    if(cachedPosts) return cachedPosts;
+
     const rawPosts = await getCollection('posts', ({data}): rawPost => {
       return import.meta.env.PROD ? data.status === "published" : true;
     });
     const resolvedPosts = rawPosts.map((post: rawPost) => resolvePost(post));
     return sortPosts(resolvedPosts);
+  },
+
+  convertToSummaryMapper(resolvedPosts: ResolvedPost): NullableSummary {
+     return {
+          slug: resolvedPosts.slug,
+          title: resolvedPosts.title,
+          description: resolvedPosts.description,
+          thumbnail: resolvedPosts.thumbnail,
+    }
   },
 
   // 특정 Post의 slug를 기준으로 이전 글과 다음 글 fetch
@@ -49,7 +73,7 @@ export const PostService = {
   },
   
   // minMatch n를 매개변수를 받을 시, 최소 n개 이상 카테고리가 겹칠때만 post fetch
-  async getPostWithCategories(categories: string | string[], minMatch?: number): Promise<PostSummary[]> {
+  async getPostWithCategories(categories: string | string[], minMatch?: number): Promise<CategorizedPosts[]> {
     const allPosts = await this.getPublishedPosts();
     const targetCategories = Array.isArray(categories) ? categories : [categories];
 
@@ -74,24 +98,14 @@ export const PostService = {
     })
   },
 
-  async getPostsWithSeries(seriesId: string): Promise<PostSummary[]> {
+  async getPostsWithSeries(seriesId: string): Promise<SeriesMatchedPosts[]> {
     const allPosts = await this.getPublishedPosts();
     
     const filteredPosts =  allPosts.filter((post) => {
-      if(post.series) { // 해당 post가 series 속성을 가지고 있다면
-        const postSeriesArr = post.series.map((referenceObj) => referenceObj?.id) // 불러온 series 데이터는 series.json 객체의 참조를 return({id, collection })
-        const postSeriesSet = new Set(postSeriesArr);
-        return postSeriesSet.has(seriesId);
+      if(post.series){
+        return post.series.some((referenceObj) => referenceObj?.id === seriesId)
       } else return null;
     })
-
-    return filteredPosts.map((post) => {
-      return {
-        slug: post.slug,
-        title: post.title,
-        description: post.description,
-        thumbnail: post.thumbnail,
-      }
-    })
+    return filteredPosts.map((post) => this.convertToSummaryMapper(post));
   }
 }
