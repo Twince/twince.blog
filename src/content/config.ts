@@ -1,0 +1,26 @@
+import { defineCollection, z } from "astro:content";
+
+export const SeoSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+});
+
+const ThumbnailSchema = z.object({
+  src: z.string(),
+  alt: z.string().optional()
+})
+
+export const PostSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.coerce.date(),
+  status: z.enum(['draft', 'published']),
+  tags: z.array(z.string()).optional().default([]),
+  topic: z.string().optional(),
+  series: z.array(z.string()).optional().default([]),
+  readingTime: z.number().optional(),
+  author: z.string(),
+  coAuthors: z.array(z.string()).optional().default([]),
+  thumbnail: ThumbnailSchema.optional(),
+  seo: SeoSchema.optional(),
+})
