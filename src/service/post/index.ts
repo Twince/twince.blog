@@ -40,10 +40,11 @@ export const PostService = {
 
   convertToSummaryMapper(resolvedPosts: ResolvedPost): NullableSummary {
      return {
-          slug: resolvedPosts.slug,
-          title: resolvedPosts.title,
-          description: resolvedPosts.description,
-          thumbnail: resolvedPosts.thumbnail,
+        slug: resolvedPosts.slug,
+        title: resolvedPosts.title,
+        description: resolvedPosts.description,
+        categories: resolvedPosts.categories,
+        thumbnail: resolvedPosts.thumbnail,
     }
   },
 
@@ -62,12 +63,14 @@ export const PostService = {
       next: {
         slug: isFirstPost ? null : allPosts[currentIndex-1].slug,
         title: isFirstPost ? null : allPosts[currentIndex-1].title,
-        description: isFirstPost ? null : allPosts[currentIndex-1].description
+        description: isFirstPost ? null : allPosts[currentIndex-1].description,
+        categories: isFirstPost ? null : allPosts[currentIndex-1].categories
       },
       previous: {
-         slug: isLastPost ? null : allPosts[currentIndex+1].slug,
+        slug: isLastPost ? null : allPosts[currentIndex+1].slug,
         title: isLastPost ? null : allPosts[currentIndex+1].title,
-        description: isLastPost ? null : allPosts[currentIndex+1].description
+        description: isLastPost ? null : allPosts[currentIndex+1].description,
+        categories: isLastPost ? null : allPosts[currentIndex+1].categories
       }
     }
   },
@@ -88,14 +91,7 @@ export const PostService = {
       return postCategories.some((c) => categorySet.has(c))
     })
 
-    return filteredPosts.map((post) => {
-      return {
-        slug: post.slug,
-        title: post.title,
-        description: post.description,
-        thumbnail: post.thumbnail,
-      }
-    })
+    return filteredPosts.map((post) => this.convertToSummaryMapper(post));
   },
 
   async getPostsWithSeries(seriesId: string): Promise<SeriesMatchedPosts[]> {
