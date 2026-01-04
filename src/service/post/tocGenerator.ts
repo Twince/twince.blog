@@ -5,8 +5,6 @@ import { visit } from 'unist-util-visit'
 import type { TocNode } from "./types/TocGenrator"
 import type { Root, Element, Text } from 'hast'
 
-interface tocSlugGenerator<input, output> = (text: string): Text;
-
 export const tocGenerator = {
   getToc(tree: Root): TocNode[] {
     const tocNode: TocNode[] = [];
@@ -53,4 +51,4 @@ const extractText = (children: Element): string => {
 
 const slugify = (text: string): string => {
   return text.split(" ").join('-').toLowerCase();
-} // TODO: title이 완전히 겹칠 시 -1 을 붙이는 식의 엣치케이스 보완로직 추가 
+} // TODO: title이 완전히 겹칠 시 -1 을 붙이는 식의 엣치케이스 보완로직 추가

@@ -1,7 +1,7 @@
 // module imports
 import { getCollection } from "astro:content";
-import { resolvePost } from "./resolver";
-import { sortPosts } from "./sorter";
+import { resolvePost } from "./utils/resolver";
+import { sortPosts } from "./utils/sorter";
 
 // type imports
 import type { PostSummaryBase, PostSummaryWithThumbnail, rawPost } from "./types/PostServicer";

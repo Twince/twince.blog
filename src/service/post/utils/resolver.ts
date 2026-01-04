@@ -1,5 +1,5 @@
 import type { CollectionEntry } from "astro:content";
-import type { ResolvedPost } from "./types/Resolver";
+import type { ResolvedPost } from "../types/Resolver";
 
 const DEFAULT_THUMBNAIL = {
   src: "*",
