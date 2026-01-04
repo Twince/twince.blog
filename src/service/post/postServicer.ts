@@ -4,7 +4,7 @@ import { resolvePost } from "./resolver";
 import { sortPosts } from "./sorter";
 
 // type imports
-import type { PostSummaryBase, PostSummaryWithThumbnail, rawPost } from "./types/Index";
+import type { PostSummaryBase, PostSummaryWithThumbnail, rawPost } from "./types/PostServicer";
 import type { ResolvedPost } from "./types/Resolver";
 import { series } from "../../content/config";
 
