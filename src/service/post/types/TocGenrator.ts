@@ -4,3 +4,10 @@ export type TocNode = {
   depth: number;
   children: TocNode[];
 }
+
+export type FlattenToc = {
+  id: string;
+  text: string;
+  depth: number;
+  parentId: string;
+}
