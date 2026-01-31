@@ -1,9 +1,14 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import { rehypeToc } from './src/plugins/rehypToc';
 
 import react from '@astrojs/react';
 
-// https://astro.build/config
 export default defineConfig({
-  integrations: [react()]
+  integrations: [react()],
+  markdown: {
+    rehypePlugins: [
+      rehypeToc
+    ],
+  },
 });
