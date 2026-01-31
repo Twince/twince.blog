@@ -1,4 +1,11 @@
-@font-face {
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
+
+@theme {
+  --font-pretendard: 'Pretendard', sans-serif;
+  --font-staatliches: 'Staatliches' sans-serif;
+}
+/* @font-face {
   font-family: pretendard;
   src: url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap'); 
 }
@@ -6,4 +13,4 @@
 @font-face {
   font-family: Staatliches;
   src: url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-}
+} */

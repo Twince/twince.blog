@@ -1,0 +1,40 @@
+@import "./font.css";
+@import "./semantic.css";
+@import "./theme.light.css";
+@import "./theme.dark.css";
+
+@import "./toc/toc.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 3. 커스텀 전역 스타일 (is:global 제거) */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html, body {
+     font-family: 'Pretendard', 'Staatliches', sans-serif;
+     background-color: var(--color-bg-primary);
+     /* overflow: hidden; */
+  }
+
+  ul {
+    /* list-style: none; */
+    padding-left: 0;
+  }
+}
+
+@layer utilities{
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
