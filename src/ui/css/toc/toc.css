@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+.toc-item {
+  @apply leading-6 cursor-pointer;
+  transition: 0.15s ease-in-out;
+}
+.root-index {
+  @apply absolute -top-[4px] font-[staatliches] text-3xl font-light!;
+}
+
+.toc-item[toc-depth="2"] {
+  @apply pl-2 text-lg font-bold;
+}
+
+.toc-item[toc-depth="3"] {
+  @apply pl-3 text-base font-medium;
+}
+
+.toc-item[toc-depth="4"] {
+  @apply pl-4 text-base font-medium text-text-secondary;
+}
+
+.toc-item[toc-depth="5"] {
+  @apply pl-20 text-base font-medium;
+}

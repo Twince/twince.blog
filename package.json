@@ -10,12 +10,18 @@
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/mdast": "^4.0.4",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "astro": "^5.16.4",
+    "clsx": "^2.1.1",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "rehype-parse": "^9.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
+    "tailwindcss": "^4.1.18",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },

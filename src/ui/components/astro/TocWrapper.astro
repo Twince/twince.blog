@@ -24,5 +24,7 @@ const tocProps: TocProps = {
 const { Content } = await render(entry);
 // flattenToc, collectionIds를 props로 내리기
 ---
-<Content />
-<Toc {...tocProps} client:load/>
+<aside class="flex items-start">
+  <div></div>
+    <Toc {...tocProps} client:load />
+</aside>

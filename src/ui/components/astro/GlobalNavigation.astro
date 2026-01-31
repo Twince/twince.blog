@@ -1,0 +1,17 @@
+---
+const currentPath = Astro.url.pathname;
+const menus = [
+  { label: "ABOUT", href: "/about", disable: true },
+  { label: "POSTS", href: "/posts", disable: true },
+  { label: "SEREIS", href: "/series", disable: true },
+]
+---
+
+<div class="flex ml-20 gap-x-16 font-semibold text-lg">
+  {menus.map((menu) => 
+    menu.href === currentPath ? 
+      (<a class="text-text-primary" href={menu.href}>{menu.label}</a>) : 
+      (<a class="text-text-tertiary" href={menu.href}>{menu.label}</a>)
+    )  
+  }
+</div>

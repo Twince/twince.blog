@@ -1,0 +1,27 @@
+---
+import BaseLayout from "./BaseLayout.astro"
+
+import ArticleBody from "./ArticleBody.astro"
+import ArticleHeader from "./ArticleHeader.astro"
+import ArticleMeta from "./ArticleMeta.astro"
+
+import TocWrapper from "../components/astro/TocWrapper.astro"
+import NeighborPosts from "../components/astro/NeighborPosts.astro"
+
+---
+<BaseLayout>
+  <article class="flex items-start w-full h-full">
+    <div id="article-wrapper" class="max-w-[68ch] h-[calc(100dvh-(--spacing(18)))] overflow-y-scroll 
+     no-scrollbar leading-relaxed flex justify-center mx-auto break-keep">
+      <ArticleHeader />
+      <ArticleMeta />
+      <ArticleBody />
+    </div>
+    <div id="side-bar fixed top-0 border-1 border-border-primary">
+      <div class="mx-15">
+        <TocWrapper />
+        <NeighborPosts />
+      </div>
+      </div>
+  </article>
+</BaseLayout>
