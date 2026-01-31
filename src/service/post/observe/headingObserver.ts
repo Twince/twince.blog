@@ -4,7 +4,7 @@ let activeId: ActiveId = null;
 let observer: IntersectionObserver | null = null;
 
 export const HeadingObserver = {
-  init() {
+  init(root: HTMLElement) {
     if(observer) return;
     observer = new IntersectionObserver((entries) => {
       const isVisable = entries.filter((entry) => entry.isIntersecting)
@@ -15,9 +15,9 @@ export const HeadingObserver = {
       activeId = nextActiveId;
       
     }, {
-      root: null,
+      root: root,
       rootMargin: "0px 0px -70% 0px",
-      threshold: 0.2,
+      threshold: 0,
     }
     )
   },

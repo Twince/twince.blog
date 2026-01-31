@@ -1,0 +1,11 @@
+---
+import { getEntry, render } from "astro:content";import { getEntry, render } from "astro:content";
+
+let slug = 'neural-network-visualization-1';
+const entry = await getEntry('posts', slug);
+
+const { Content } = await render(entry);
+---
+<main class="mt-24">
+  <Content />
+</main>
