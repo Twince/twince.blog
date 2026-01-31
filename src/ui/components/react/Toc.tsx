@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { HeadingObserver } from "../../../service/post/observe/headingObserver";
+import { useScrollTo } from "./useScrollTo";
 import { findActiveIdIndex } from "../../utils/findActiveIdIndex";
 import { findSectionRootIndex } from "../../utils/findSectionRootIndex";
 import clsx from 'clsx';
@@ -14,12 +15,18 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
   const [sectionRootIndex, setSectionRootIndex] = useState<number | null>(0);
   const [currentActiveIndex, setCurrentActiveIndex] = useState<number | null>(0);
   const [sectionEndIndex, setSectionEndIndex] = useState<number | null>(0);
-
+  const rootContainerId = 'article-wrapper'
   const rootDepth = 2;
-  useEffect(() => {
-    const root = document.getElementById('article-wrapper');
-    if(!root) return;
+  
+  const { scrollTo } = useScrollTo(rootContainerId);
+  
+  const scrollIntoView = (itemId: string) => {
+    scrollTo(itemId);
+  }
 
+  useEffect(() => {
+  const root = document.getElementById(rootContainerId);
+  if(!root) return;
     HeadingObserver.init(root);
     HeadingObserver.bind(idList);
 
@@ -32,6 +39,8 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
       setCurrentActiveIndex(activeIdIndex)
       setSectionRootIndex(findSectionRootIndex(flattenToc, activeIdIndex, rootDepth));
       setSectionEndIndex(findSectionEndIndex(flattenToc, activeIdIndex, rootDepth));
+
+     
     };
     root.addEventListener("scroll", onChange);
     console.log(flattenToc)
@@ -52,7 +61,7 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
 
         if(item.depth === rootDepth) rootheadingCount++;
         return (
-          <li key={item.id} className={"flex"}>
+          <li key={item.id} className={"flex"} onClick={() => scrollIntoView(item.id)} >
             <div key={item.id} toc-depth={item.depth} 
             className={clsx(
               "toc-item flex relative hover:border-text-quaternary transition-[box-shadow] duration-300 ease-in-out",
