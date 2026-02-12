@@ -1,0 +1,19 @@
+---
+import Categories from "../components/astro/Categories.astro"
+const { date, readingTime, categories } = Astro.props;
+import { formatDateTime } from "../utils/formatDateTime"
+
+const displayDate = formatDateTime(date);
+const displayTime = readingTime.length === 2 
+  ? `약 ${readingTime[0]} ~ ${readingTime[1]}분 소요` 
+  : `약 ${readingTime[0]}분 소요`;
+---
+
+<div>
+  <div class="flex article-meta">
+    <p class="pr-2">{displayDate}</p>
+    <p>|</p>
+    <p class="pl-2">{displayTime}</p>
+  </div>
+  <Categories categories={categories} />
+</div>

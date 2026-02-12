@@ -2,22 +2,34 @@
 import BaseLayout from "./BaseLayout.astro"
 
 import ArticleBody from "./ArticleBody.astro"
-import ArticleHeader from "./ArticleHeader.astro"
+import ArticleTitle from "./ArticleTitle.astro"
 import ArticleMeta from "./ArticleMeta.astro"
 
 import TocWrapper from "../components/astro/TocWrapper.astro"
 import NeighborPosts from "../components/astro/NeighborPosts.astro"
 
+import { getEntry, render } from "astro:content";import { getEntry, render } from "astro:content";
+
+let slug = 'neural-network-visualization-1';
+const entry = await getEntry('posts', slug);
+
+const {topics, title, date, readingTime, categories} = entry?.data;
+const { Content } = await render(entry);
+
 ---
 <BaseLayout>
   <article class="flex items-start w-full h-full">
-    <div id="article-wrapper" class="max-w-[68ch] h-[calc(100dvh-(--spacing(18)))] overflow-y-scroll 
-     no-scrollbar leading-relaxed flex justify-center mx-auto break-keep">
-      <ArticleHeader />
-      <ArticleMeta />
-      <ArticleBody />
+    <div id="article-wrapper" class="max-w-[80ch] h-[calc(100dvh-(--spacing(18)))] overflow-y-scroll 
+     no-scrollbar leading-relaxed justify-center mx-auto break-keep">
+    <header class="mt-15">
+      <ArticleTitle topics={topics} title={title} />
+      <ArticleMeta date={date} readingTime={readingTime} categories={categories} />
+    </header>
+    <main>
+      <ArticleBody Content={Content} />
+    </main>
     </div>
-    <div id="side-bar fixed top-0 border-1 border-border-primary">
+    <div id="side-bar" class="h-dvh top-0 border-l-1 border-border-primary">
       <div class="mx-15">
         <TocWrapper />
         <NeighborPosts />
