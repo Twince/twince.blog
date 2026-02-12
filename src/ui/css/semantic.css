@@ -4,9 +4,13 @@
   /* background */
   --color-bg-primary: oklch(0.9761 0 0); /* #F7F7F7 */  
   --color-bg-secondary: oklch(0.7668 0 0); /* #B3B3B3 */
-  --color-bg-inverse: oklch(0.235 0 0) /* #1E1E1E */
+  --color-bg-inverse: oklch(0.235 0 0); /* #1E1E1E */
+  --color-bg-pure: oklch(1 0 0); /* #FFFFFF */
 
-  /* text */
+  --color-bg-codefence: oklch(0.3087 0.0195 229.78); /* #263238 */
+  --color--bg-article-blockquote: oklch(0.8884 0 0); /* DADADA */
+
+  /* global text */
   --color-text-primary: oklch(0.1822 0 0); /* #121212 */
   --color-text-secondary:oklch(0.2768 0 0); /* #282828 */
   --color-text-tertiary: oklch(0.3979 0 0); /* #474747 */
@@ -14,6 +18,26 @@
 
   --color-text-active: oklch(0.4936 0.2873 273.98); /* #4326ff */
   --color-text-disable: oklch(0.7508 0 0); /* #AEAEAE */
+
+  /* article text color */
+  --color-article-title: oklch(0.316 0.0228 222.73); /* #25353a */
+  --color-article-content: oklch(0.2923 0.0228 222.73); /* #1f2f34 */
+  --color-article-image: oklch(0.8514 0 0); /* #CECECE */
+  --color-article-image-caption: oklch(0.5103 0 0); /* #666666 */
+  --color-article-divider: oklch(0.9037 0 0); /* DFDFDF */
+
+  /* article font size */
+  --size-article-title: clamp(32px, calc(28.1px + 1.035vw), 52px);
+  --size-article-topic: clamp(13px, calc(11.78px + 0.324vw), 20px);
+  --size-article-meta: clamp(12px, calc(11.52px + 0.129vw), 15px);
+  --size-article-categories: clamp(9px, calc(8.27px + 0.194vw), 13px);
+  --size-article-root-heading: clamp(22px, calc(20.05px + 0.518vw), 32px);
+  --size-article-sub-heading: clamp(16px, calc(15.03px + 0.259vw), 21px);
+  --size-article-content: clamp(14px, calc(13.03px + 0.259vw), 19px);
+  --size-article-footnotes: clamp(14px, calc(13.52px + 0.129vw), 18px);
+  --size-article-image-caption: clamp(13px, calc(12.52px + 0.129vw), 16px);
+  --size-article-blockquote: clamp(12px, calc(11.03px + 0.259vw), 17px);
+  --size-article-codefence: clamp(12px, calc(11.27px + 0.194vw), 16px);
 
   /* border */
   --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
