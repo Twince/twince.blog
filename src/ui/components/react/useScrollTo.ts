@@ -1,5 +1,5 @@
 export const useScrollTo = (containerId: string) => {
-  const scrollTo = (targetId: string, offset: number = 30 ) => {
+  const scrollTo = (targetId: string, offset: number = 120 ) => {
     const container = document.getElementById(containerId);
     const element = document.getElementById(targetId);
 
