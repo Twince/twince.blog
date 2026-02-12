@@ -9,11 +9,11 @@
 }
 
 .toc-item[toc-depth="2"] {
-  @apply pl-2 text-lg font-bold;
+  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
 }
 
 .toc-item[toc-depth="3"] {
-  @apply pl-3 text-base font-medium;
+  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
 }
 
 .toc-item[toc-depth="4"] {
@@ -22,4 +22,8 @@
 
 .toc-item[toc-depth="5"] {
   @apply pl-20 text-base font-medium;
+}
+
+.toc-item[toc-depth="6"] {
+  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
 }
