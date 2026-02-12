@@ -9,7 +9,7 @@ series: ['neural-network-viz']
 readingTime: [10, 20]
 author: 'Twince'
 thumbnail:
-  src: "../assets/thumbanil.jpg"
+  src: "./assets/thumbnail.jpg"
   alt: "thumbnail-image"
 ---
 
