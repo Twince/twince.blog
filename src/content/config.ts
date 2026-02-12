@@ -10,13 +10,9 @@ export const seo = z.object({
   description: z.string(),
 });
 
-const thumbnail = z.object({
-  src: z.string(),
-  alt: z.string().optional()
-})
 
 const readingTime = z.union([
-  z.number().positive(),
+  z.array(z.number().positive()),
   z.tuple([z.number().positive(), z.number().positive()])
   // .transform((val: number) => {
   //   if(Array.isArray(val)) return val;
@@ -58,33 +54,38 @@ loader: {
   name: "custom-post-loader",
   load: async (context) => {
       const { glob } = await import('astro/loaders');
-      const innerLoader = glob({ pattern: "**/*.md", base: "src/content/blog/posts" });
+      const baseDir = "src/content/blog/posts";
+      const innerLoader = glob({ 
+        pattern: "**/*.md", 
+        base: "src/content/blog/posts", 
+        generateId: ({ entry }) => entry.replace(/\/index\.md$/, '').replace(/\.md$/, '')
+       });
 
       // 기본 로더를 먼저 실행하여 파일을 Store 채우기
       await innerLoader.load(context);
 
       // Store에 담긴 모든 엔트리를 순회하며 데이터 변환(TOC 생성)을 수행
       const tasks = Array.from(context.store.entries()).map(async ([id, entry]) => {
+        const updatedData = { ...entry.data } as any;
+        
         // HAST 및 TOC 생성
         const hast = await markdownToHast(entry.body ?? '');
         const toc = tocGenerator.getToc(hast);
 
-        // 4. 기존 데이터를 유지하면서 새로운 데이터를 덮어씌움(Set).
+        updatedData.toc = toc;
+
+        const newDigest = entry.digest ? `${entry.digest}-modified` : JSON.stringify(updatedData);
+
         context.store.set({
-          id,
-          data: {
-            ...entry.data,
-            toc, // 주입된 데이터 schema 검증
-          },
-          body: entry.body,
-          rendered: entry.rendered,
+          ...entry,
+          data: updatedData,
+          digest: newDigest,
         });
       });
-
       await Promise.all(tasks);
     }
   },
-  schema: z.object({
+  schema: ({ image }) =>  z.object({
     title: z.string(),
     description: z.string(),
     date: z.coerce.date(),
@@ -95,9 +96,12 @@ loader: {
     readingTime: readingTime, // length가 1이면 읽는 시간이 index[0] ~ index[1] 만큼 소요
     author: z.string(),
     coAuthors: z.array(z.string()).optional().default([]),
-    thumbnail: thumbnail.optional(),
-    seo: seo.optional(),
+    thumbnail: z.object({
+      src: image(),
+      alt: z.string().optional()
+    }).optional(),
     toc: tocNode.optional(),
+    seo: seo.optional(),
   })
 })
 
