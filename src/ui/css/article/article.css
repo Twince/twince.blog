@@ -274,7 +274,7 @@
 
 .article-img {
   img {
-    width: 99%;
+    max-width: 99%;
     border: 1px solid var(--color-article-image);
     border-radius: 5px;
   }
