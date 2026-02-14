@@ -31,10 +31,10 @@
   --size-article-title: clamp(32px, calc(28.1px + 1.035vw), 52px);
   --size-article-topic: clamp(13px, calc(11.78px + 0.324vw), 20px);
   --size-article-meta: clamp(12px, calc(11.52px + 0.129vw), 15px);
-  --size-article-categories: clamp(9px, calc(8.27px + 0.194vw), 13px);
+  --size-article-categories: clamp(12px, 12px, 13px);
   --size-article-root-heading: clamp(22px, calc(20.05px + 0.518vw), 32px);
   --size-article-sub-heading: clamp(16px, calc(15.03px + 0.259vw), 21px);
-  --size-article-content: clamp(14px, calc(13.03px + 0.259vw), 19px);
+  --size-article-content: clamp(15px, calc(14.27px + 0.194vw), 19px);
   --size-article-footnotes: clamp(12px, calc(11.03px + 0.259vw), 17px);;
   --size-article-image-caption: clamp(13px, calc(12.52px + 0.129vw), 16px);
   --size-article-codeblock: clamp(12px, calc(11.03px + 0.259vw), 17px);

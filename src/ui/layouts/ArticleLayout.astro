@@ -21,7 +21,7 @@ const { Content } = await render(entry);
   <article class="flex items-start w-full h-full">
     <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-[calc(100dvh-(--spacing(18)))] overflow-y-scroll 
      no-scrollbar leading-relaxed px-auto break-keep">
-     <div class="w-fit">
+     <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
       <header class="mt-15">
           <ArticleTitle topics={topics} title={title} />
           <ArticleMeta date={date} readingTime={readingTime} categories={categories} />
@@ -36,6 +36,6 @@ const { Content } = await render(entry);
         <TocWrapper />
         <NeighborPosts />
       </div>
-      </div>
+    </div>
   </article>
 </BaseLayout>
