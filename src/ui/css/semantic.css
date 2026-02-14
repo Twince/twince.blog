@@ -2,13 +2,14 @@
 
 @theme {
   /* background */
-  --color-bg-primary: oklch(0.9761 0 0); /* #F7F7F7 */  
+  --color-bg-primary: oklch(0.9791 0 0); /* #F8F8F8 */  
   --color-bg-secondary: oklch(0.7668 0 0); /* #B3B3B3 */
   --color-bg-inverse: oklch(0.235 0 0); /* #1E1E1E */
   --color-bg-pure: oklch(1 0 0); /* #FFFFFF */
 
   --color-bg-codefence: oklch(0.3087 0.0195 229.78); /* #263238 */
-  --color--bg-article-blockquote: oklch(0.8884 0 0); /* DADADA */
+  --color-bg-article-codeblock: oklch(0.8884 0 0); /* DADADA */
+  --color-bg-article-blockqoute: oklch(0.9551 0 0); /* #F0F0F0 */
 
   /* global text */
   --color-text-primary: oklch(0.1822 0 0); /* #121212 */
@@ -34,14 +35,14 @@
   --size-article-root-heading: clamp(22px, calc(20.05px + 0.518vw), 32px);
   --size-article-sub-heading: clamp(16px, calc(15.03px + 0.259vw), 21px);
   --size-article-content: clamp(14px, calc(13.03px + 0.259vw), 19px);
-  --size-article-footnotes: clamp(14px, calc(13.52px + 0.129vw), 18px);
+  --size-article-footnotes: clamp(12px, calc(11.03px + 0.259vw), 17px);;
   --size-article-image-caption: clamp(13px, calc(12.52px + 0.129vw), 16px);
-  --size-article-blockquote: clamp(12px, calc(11.03px + 0.259vw), 17px);
+  --size-article-codeblock: clamp(12px, calc(11.03px + 0.259vw), 17px);
   --size-article-codefence: clamp(12px, calc(11.27px + 0.194vw), 16px);
 
   /* border */
   --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
-
+  --color-border-blockqoute: oklch(0.7582 0 0); /* #B0B0B0 */
   /* layout */
   --content-max-width: 68ch;
   --toc-width: 22rem;

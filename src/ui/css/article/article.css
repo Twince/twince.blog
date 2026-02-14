@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .article-title {
   font-size: var(--size-article-title) !important;
   color: var(--color-text-secondary);
@@ -7,7 +9,8 @@
 
 .article-topic {
   font-size: var(--size-article-topic) !important;
-  font-weight: 700;
+  color: var(--color-text-secondary);
+  font-weight: 600;
   margin-bottom: 15px;
   margin-left: 2px;
 }
@@ -17,6 +20,7 @@
   font-weight: 300;
   color: var(--color-text-tertiary);
   margin-top: 5px;
+  margin-left: 5px;
 }
 
 .article-categories{
@@ -47,14 +51,14 @@
     margin: 4.5rem 0 0.3rem 0;
   }
   h2:not(:first-of-type) {
-    margin: 5rem 0 0.5rem 0;
+    margin: 5rem 0 0.6rem 0;
   }
 
   h4 {
     font-size: var(--size-article-sub-heading);
     color: var(--color-article-title);
     font-weight: 700;
-    margin: 3rem 0 0.3rem 0;
+    margin: 3rem 0 0.5rem 0;
   }
 
   h2 + h4 {
@@ -74,15 +78,15 @@
     font-weight: 400;
     color: var(--color-article-content);
     margin: 0 0 1.8rem 0;
-    line-height: 1.6rem;
+    line-height: 1.68rem;
   }
   p:has(img) {
     margin: 0 0 .9rem 0;
   }
 
-  p > code { /* blockquote */
-    font-size: var(--size-article-blockquote);
-    background-color: var(--color--bg-article-blockquote);
+  p code { /* blockquote */
+    font-size: var(--size-article-codeblock);
+    background-color: var(--color-bg-article-codeblock);
     
     font-family: var(--font-jetbrain-mono);
     padding: 0 5px;
@@ -133,12 +137,68 @@
     text-transform: uppercase;
   }
 
- 
+  blockquote {
+    margin-left: 6px;
+    margin-bottom: 1rem;
+    padding: 16px 12px;
+    border-left: 2.5px solid var(--color-border-blockqoute);
+    border-radius: 2px;
+    background-color: var(--color-bg-article-blockqoute);
+  }
+  blockquote > * {
+    /* font-family: var(--font-pretendard); */
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    font-weight: 500;
+    /* letter-spacing: -.01rem; */
+    /* word-spacing: -0.2rem; */
+  }
+  blockquote > p {
+    margin: 0;
+  }
+  
+  blockquote ol {
+    list-style: decimal;
+    list-style-position: inside;
+  }
+
+  table {
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    display: inline-block;
+    
+    /* outline: 1px solid var(--color-border-primary); */
+    border-radius: 4px;
+  }
+
+  table > thead {
+    background-color: var(--color-bg-article-blockqoute);
+  }
+
+   table th,td {
+    padding: 6px 8px;
+    border: 1px solid var(--color-border-primary);
+    text-align: center;
+    vertical-align: middle;
+   }
 
   strong {
     font-weight: 600;
   }
-
+  
+  a {
+    color: var(--color-text-active);
+    transition: 0.15s ease-in;
+  }
+  a > code:hover {
+    transition: 0.15s ease-in;
+    @apply inset-ring-[1.5px];
+    /* text-decoration-line: underline;
+    text-underline-offset: 2px; */
+  }
+  a:not(.data-footnote-backref):not(code):hover {
+    @apply shadow-[inset_0_-1px_0_0_var(--color-text-active)];
+  }
   
   sup {
     color: var(--color-text-active);
@@ -148,7 +208,10 @@
 
 
   section.footnotes {
-    margin-top: 4rem;
+    margin-top: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    border-top: 1px solid var(--color-article-divider);
     h2 {display: none;}
     li {
       font-size: var(--size-article-footnotes);
@@ -165,11 +228,11 @@
     content: counter(list-item);
     color: var(--color-text-active);
     font-weight: bold;
+    }
 
     p {
-      font-size: 14px;
+      margin-bottom: 0.8rem;
     }
-}
   }
   section.footnotes::before {
     content: "각주";
@@ -189,7 +252,7 @@
     color: var(--color-article-image-caption);
     font-size: var( --size-article-image-caption);
     margin-left: 4px;
-    margin-bottom: 1rem;
+    margin-bottom: 1.1rem;
     margin-top: .22rem;
     line-height: 1.3rem;
   }

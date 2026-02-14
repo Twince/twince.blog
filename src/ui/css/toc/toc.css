@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .toc-item {
-  @apply leading-6 cursor-pointer;
+  @apply leading-6 cursor-pointer h-fit;
   transition: 0.15s ease-in-out;
 }
 .root-index {
@@ -9,11 +9,11 @@
 }
 
 .toc-item[toc-depth="2"] {
-  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
+  @apply pl-2 text-lg font-bold mt-7 pb-0.5;
 }
 
 .toc-item[toc-depth="3"] {
-  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
+  @apply pl-2 text-lg font-bold mt-7 pb-0.5;
 }
 
 .toc-item[toc-depth="4"] {
