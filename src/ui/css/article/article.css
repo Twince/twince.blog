@@ -32,6 +32,7 @@
   background-color: var(--color-bg-pure);
   padding: 1px 6px;
   margin-right: 4px;
+  margin-bottom: 4px;
 }
 
 .article-text-package{
