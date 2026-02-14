@@ -226,7 +226,7 @@
     /* text-decoration-line: underline;
     text-underline-offset: 2px; */
   }
-  a:not(.data-footnote-backref):not(code):hover {
+  a:not(.data-footnote-backref):not(:has(code)):hover {
     @apply shadow-[inset_0_-1px_0_0_var(--color-text-active)];
   }
   
