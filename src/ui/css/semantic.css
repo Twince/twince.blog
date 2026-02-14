@@ -28,18 +28,17 @@
   --color-article-divider: oklch(0.9037 0 0); /* DFDFDF */
 
   /* article font size */
-  --size-article-title: clamp(32px, calc(28.1px + 1.035vw), 52px);
-  --size-article-topic: clamp(13px, calc(11.78px + 0.324vw), 20px);
-  --size-article-meta: clamp(12px, calc(11.52px + 0.129vw), 15px);
-  --size-article-categories: clamp(12px, 12px, 13px);
-  --size-article-root-heading: clamp(22px, calc(20.05px + 0.518vw), 32px);
-  --size-article-sub-heading: clamp(16px, calc(15.03px + 0.259vw), 21px);
-  --size-article-content: clamp(15px, calc(14.27px + 0.194vw), 19px);
-  --size-article-footnotes: clamp(12px, calc(11.03px + 0.259vw), 17px);;
-  --size-article-image-caption: clamp(13px, calc(12.52px + 0.129vw), 16px);
-  --size-article-codeblock: clamp(12px, calc(11.03px + 0.259vw), 17px);
-  --size-article-codefence: clamp(12px, calc(11.27px + 0.194vw), 16px);
-
+--size-article-title: clamp(36px, calc(33.1px + 0.775vw), 52px);
+  --size-article-topic: clamp(15px, calc(14.28px + 0.194vw), 20px);
+  --size-article-meta: clamp(14px, calc(13.76px + 0.065vw), 15px);
+  --size-article-categories: clamp(12.5px, calc(12.38px + 0.032vw), 13px);
+  --size-article-root-heading: clamp(26px, calc(24.55px + 0.388vw), 32px);
+  --size-article-sub-heading: clamp(20px, calc(20px + 0vw), 21px);
+  --size-article-content: clamp(17px, calc(16.76px + 0.065vw), 19px);
+  --size-article-footnotes: clamp(14px, calc(13.28px + 0.194vw), 17px);
+  --size-article-image-caption: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
+  --size-article-codeblock: clamp(14.5px, calc(14.14px + 0.097vw), 17px);
+--size-article-codefence: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
   /* border */
   --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
   --color-border-blockqoute: oklch(0.7582 0 0); /* #B0B0B0 */

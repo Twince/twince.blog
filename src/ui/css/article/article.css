@@ -161,6 +161,14 @@
     list-style: decimal;
     list-style-position: inside;
   }
+  @media (max-width: 800px) {
+    blockquote ol > li {
+      padding-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+  }
+
+ 
 
   table {
     font-size: var(--size-article-codeblock);
@@ -191,7 +199,7 @@
     transition: 0.15s ease-in;
   }
   a > code:hover {
-    transition: 0.15s ease-in;
+    transition: 0.1s ease-in;
     @apply inset-ring-[1.5px];
     /* text-decoration-line: underline;
     text-underline-offset: 2px; */
