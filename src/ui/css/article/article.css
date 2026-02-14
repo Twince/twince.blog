@@ -156,11 +156,33 @@
   blockquote > p {
     margin: 0;
   }
-  
-  blockquote ol {
+
+  ul {
+    list-style: disc;
+  }
+  ol:not(.footnotes ol) {
     list-style: decimal;
+    list-style-position: inside; 
+  }
+  ul:not(.footnotes ul) {
+    list-style: disc;
     list-style-position: inside;
   }
+  li:not(.footnotes li) {
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    font-weight: 500;
+  }
+  li {
+    ol, ul {
+      padding-left: 1.5rem;
+    }
+  }
+
+  ol:not(.footnotes ol):not(blockquote > *), ul:not(.footnotes ol):not(blockquote > *) {
+    margin: 0 0 0.8rem 0;
+  } /* 각주 및 인용문이 아닌 모든 ol, ul에 대하여(본문만) margin */
+
   @media (max-width: 800px) {
     blockquote ol > li {
       padding-bottom: 0.4rem;
