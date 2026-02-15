@@ -3,6 +3,7 @@
 @import "./theme.light.css";
 @import "./theme.dark.css";
 
+@import "./article/article.css";
 @import "./toc/toc.css";
 
 @tailwind base;
@@ -10,6 +11,7 @@
 @tailwind utilities;
 
 /* 3. 커스텀 전역 스타일 (is:global 제거) */
+
 @layer base {
   * {
     margin: 0;

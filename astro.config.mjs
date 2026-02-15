@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import { rehypeToc } from './src/plugins/rehypToc';
+import { rehypeImgToFigure } from './src/plugins/rehypeImgToFigure';
+import { rehypeToc } from './src/plugins/rehypeToc';
 
 import react from '@astrojs/react';
 
@@ -11,6 +12,7 @@ export default defineConfig({
 
   markdown: {
     rehypePlugins: [
+      rehypeImgToFigure,
       rehypeToc
     ],
   },

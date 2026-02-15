@@ -2,11 +2,16 @@
 
 @theme {
   /* background */
-  --color-bg-primary: oklch(0.9761 0 0); /* #F7F7F7 */  
+  --color-bg-primary: oklch(0.9791 0 0); /* #F8F8F8 */  
   --color-bg-secondary: oklch(0.7668 0 0); /* #B3B3B3 */
-  --color-bg-inverse: oklch(0.235 0 0) /* #1E1E1E */
+  --color-bg-inverse: oklch(0.235 0 0); /* #1E1E1E */
+  --color-bg-pure: oklch(1 0 0); /* #FFFFFF */
 
-  /* text */
+  --color-bg-codefence: oklch(0.3087 0.0195 229.78); /* #263238 */
+  --color-bg-article-codeblock: oklch(0.8884 0 0); /* DADADA */
+  --color-bg-article-blockqoute: oklch(0.9551 0 0); /* #F0F0F0 */
+
+  /* global text */
   --color-text-primary: oklch(0.1822 0 0); /* #121212 */
   --color-text-secondary:oklch(0.2768 0 0); /* #282828 */
   --color-text-tertiary: oklch(0.3979 0 0); /* #474747 */
@@ -15,9 +20,28 @@
   --color-text-active: oklch(0.4936 0.2873 273.98); /* #4326ff */
   --color-text-disable: oklch(0.7508 0 0); /* #AEAEAE */
 
+  /* article text color */
+  --color-article-title: oklch(0.316 0.0228 222.73); /* #25353a */
+  --color-article-content: oklch(0.2923 0.0228 222.73); /* #1f2f34 */
+  --color-article-image: oklch(0.8514 0 0); /* #CECECE */
+  --color-article-image-caption: oklch(0.5103 0 0); /* #666666 */
+  --color-article-divider: oklch(0.9037 0 0); /* DFDFDF */
+
+  /* article font size */
+--size-article-title: clamp(36px, calc(33.1px + 0.775vw), 52px);
+  --size-article-topic: clamp(15px, calc(14.28px + 0.194vw), 20px);
+  --size-article-meta: clamp(14px, calc(13.76px + 0.065vw), 15px);
+  --size-article-categories: clamp(12.5px, calc(12.38px + 0.032vw), 13px);
+  --size-article-root-heading: clamp(26px, calc(24.55px + 0.388vw), 32px);
+  --size-article-sub-heading: clamp(20px, calc(20px + 0vw), 21px);
+  --size-article-content: clamp(17px, calc(16.76px + 0.065vw), 19px);
+  --size-article-footnotes: clamp(14px, calc(13.28px + 0.194vw), 17px);
+  --size-article-image-caption: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
+  --size-article-codeblock: clamp(14.5px, calc(14.14px + 0.097vw), 17px);
+--size-article-codefence: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
   /* border */
   --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
-
+  --color-border-blockqoute: oklch(0.7582 0 0); /* #B0B0B0 */
   /* layout */
   --content-max-width: 68ch;
   --toc-width: 22rem;

@@ -13,7 +13,6 @@ let slug = 'neural-network-visualization-1';
 const entry = await getEntry('posts', slug)
 const validatedToc: TocNode[] | null = validateToc(entry?.data.toc)
 
-
 if(!validatedToc) return null;
   
 const tocProps: TocProps = {

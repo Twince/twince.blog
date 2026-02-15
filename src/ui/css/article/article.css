@@ -1,0 +1,295 @@
+@import "tailwindcss";
+
+.article-title {
+  font-size: var(--size-article-title) !important;
+  color: var(--color-text-secondary);
+  line-height: normal;
+  font-weight: 700;
+}
+
+.article-topic {
+  font-size: var(--size-article-topic) !important;
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  margin-bottom: 15px;
+  margin-left: 2px;
+}
+
+.article-meta {
+  font-size: var(--size-article-meta);
+  font-weight: 300;
+  color: var(--color-text-tertiary);
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.article-categories{
+  font-size: var(--size-article-categories);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: 5px;
+  background-color: var(--color-bg-pure);
+  padding: 1px 6px;
+  margin-right: 4px;
+  margin-bottom: 4px;
+}
+
+.article-text-package{
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  letter-spacing: normal;
+
+  h2 {
+    font-size: var(--size-article-root-heading);
+    color: var(--color-article-title);
+    font-weight: 700;
+  }
+
+  h2:first-of-type {
+    margin: 4.5rem 0 0.3rem 0;
+  }
+  h2:not(:first-of-type) {
+    margin: 5rem 0 0.6rem 0;
+  }
+
+  h4 {
+    font-size: var(--size-article-sub-heading);
+    color: var(--color-article-title);
+    font-weight: 700;
+    margin: 3rem 0 0.5rem 0;
+  }
+
+  h2 + h4 {
+    margin: 1rem 0 0.3rem 0;
+  }
+
+  h6 {
+    visibility: hidden;
+  }
+
+  hr {
+    color: var(--color-article-divider);
+  }
+
+  p {
+    font-size: var(--size-article-content);
+    font-weight: 400;
+    color: var(--color-article-content);
+    margin: 0 0 1.8rem 0;
+    line-height: 1.68rem;
+  }
+  p:has(img) {
+    margin: 0 0 .9rem 0;
+  }
+
+  p code { /* blockquote */
+    font-size: var(--size-article-codeblock);
+    background-color: var(--color-bg-article-codeblock);
+    
+    font-family: var(--font-jetbrain-mono);
+    padding: 0 5px;
+    border-radius: 3px;
+  }
+
+  /* codefence */
+  pre {
+    padding: .6rem .6rem;
+    margin: 1rem 0;
+    counter-reset: code-line;
+  }
+
+  pre > code > span {
+    counter-increment: code-line;
+  }
+  .astro-code,
+  .astro-code span {
+    font-size: var(--size-article-codefence);
+    font-family: var(--font-jetbrain-mono);
+    font-weight: 400;
+    background-color: var(--color-bg-codefence) !important;
+    border-radius: 8px;
+  }
+  
+  pre > code > span::before {
+    content: counter(code-line);
+    font-size: 12px;
+    text-align: right;
+    color: #7b818d;
+    padding-right: 15px;
+  }
+  pre[data-language] {
+    position: relative;
+  }
+
+  pre[data-language]::before {
+    content: attr(data-language);
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #333;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  blockquote {
+    margin-left: 6px;
+    margin-bottom: 1rem;
+    padding: 16px 12px;
+    border-left: 2.5px solid var(--color-border-blockqoute);
+    border-radius: 2px;
+    background-color: var(--color-bg-article-blockqoute);
+  }
+  blockquote > * {
+    /* font-family: var(--font-pretendard); */
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    font-weight: 500;
+    /* letter-spacing: -.01rem; */
+    /* word-spacing: -0.2rem; */
+  }
+  blockquote > p {
+    margin: 0;
+  }
+
+  ul {
+    list-style: disc;
+  }
+  ol:not(.footnotes ol) {
+    list-style: decimal;
+    list-style-position: inside; 
+  }
+  ul:not(.footnotes ul) {
+    list-style: disc;
+    list-style-position: inside;
+  }
+  li:not(.footnotes li) {
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    font-weight: 500;
+  }
+  li {
+    ol, ul {
+      padding-left: 1.5rem;
+    }
+  }
+
+  ol:not(.footnotes ol):not(blockquote > *), ul:not(.footnotes ol):not(blockquote > *) {
+    margin: 0 0 0.8rem 0;
+  } /* 각주 및 인용문이 아닌 모든 ol, ul에 대하여(본문만) margin */
+
+  @media (max-width: 800px) {
+    blockquote ol > li {
+      padding-bottom: 0.4rem;
+      line-height: 1.5;
+    }
+  }
+
+ 
+
+  table {
+    font-size: var(--size-article-codeblock);
+    color: var(--color-article-content);
+    display: inline-block;
+    
+    /* outline: 1px solid var(--color-border-primary); */
+    border-radius: 4px;
+  }
+
+  table > thead {
+    background-color: var(--color-bg-article-blockqoute);
+  }
+
+   table th,td {
+    padding: 6px 8px;
+    border: 1px solid var(--color-border-primary);
+    text-align: center;
+    vertical-align: middle;
+   }
+
+  strong {
+    font-weight: 600;
+  }
+  
+  a {
+    color: var(--color-text-active);
+    transition: 0.15s ease-in;
+  }
+  a > code:hover {
+    transition: 0.1s ease-in;
+    @apply inset-ring-[1.5px];
+    /* text-decoration-line: underline;
+    text-underline-offset: 2px; */
+  }
+  a:not(.data-footnote-backref):not(:has(code)):hover {
+    @apply shadow-[inset_0_-1px_0_0_var(--color-text-active)];
+  }
+  
+  sup {
+    color: var(--color-text-active);
+    font-weight: 700;
+    /* text-decoration: underline; */
+  }
+
+
+  section.footnotes {
+    margin-top: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    border-top: 1px solid var(--color-article-divider);
+    h2 {display: none;}
+    li {
+      font-size: var(--size-article-footnotes);
+      color: var(--color-text-tertiary);
+      margin-left: 0.6rem;
+      padding-left: 0.3rem;
+    }
+    li .data-footnote-backref {
+      color: var(--color-text-active);
+      font-weight: 500;
+      font-size: 1rem;
+    }
+    li::marker {
+    content: counter(list-item);
+    color: var(--color-text-active);
+    font-weight: bold;
+    }
+
+    p {
+      margin-bottom: 0.8rem;
+    }
+  }
+  section.footnotes::before {
+    content: "각주";
+    margin-top: 5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+}
+
+.article-img {
+  img {
+    max-width: 99%;
+    border: 1px solid var(--color-article-image);
+    border-radius: 5px;
+  }
+  figcaption {
+    color: var(--color-article-image-caption);
+    font-size: var( --size-article-image-caption);
+    margin-left: 4px;
+    margin-bottom: 1.1rem;
+    margin-top: .22rem;
+    line-height: 1.3rem;
+  }
+}
+@media (max-width: 1140px) {
+  #side-bar {
+    display: none;
+  }
+}
