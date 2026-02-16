@@ -15,13 +15,14 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
   const [sectionRootIndex, setSectionRootIndex] = useState<number | null>(null);
   const [currentActiveIndex, setCurrentActiveIndex] = useState<number | null>(0);
   const [sectionEndIndex, setSectionEndIndex] = useState<number | null>(null);
-  const rootContainerId = 'article-wrapper'
+  const rootContainerId = 'wrapper'
   const rootDepth = 2;
   const hiddenDepth = 6;
 
   const { scrollTo } = useScrollTo(rootContainerId);
   
   const scrollIntoView = (itemId: string) => {
+    console.log("dlfeks zmfflrehla.", itemId)
     scrollTo(itemId);
   }
 
@@ -52,7 +53,7 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
 
   let headingCount = 0;
   return(
-    <div className={"pt-8"}>
+    <div className={"pt-12"}>
     <h2 className={"font-black -traslate-x-4 underline-offset-2"}>TABLE OF CONTENTS</h2>
     <ul>
       {flattenToc.map((item, index) => {

@@ -1,5 +1,5 @@
 ---
-title: 바닥부터 인공지능을 만들어보자 EP 2 - 디자인과 UX 설계
+title: 인공지능을 만들어보자 EP 2 - 디자인과 UX 설계
 description: This is the first post of my new Astro blog.
 date: 2025-10-30
 status: published

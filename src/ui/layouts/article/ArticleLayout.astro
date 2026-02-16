@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "./../BaseLayout.astro"
 
+import '../../css/index.css'
+
 import ArticleBody from "./../article/ArticleBody.astro"
 import ArticleTitle from "./../article/ArticleTitle.astro"
 import ArticleMeta from "./../article/ArticleMeta.astro"
@@ -9,6 +11,8 @@ import TocWrapper from "../../components/astro/TocWrapper.astro"
 import NeighborPosts from "../../components/astro/NeighborPosts.astro"
 
 import { getEntry, render } from "astro:content";
+import Header from "../Header.astro"
+import Footer from "../Footer.astro"
 
 const { slug } = Astro.props;
 const entry = await getEntry('posts', slug);
@@ -16,11 +20,11 @@ const entry = await getEntry('posts', slug);
 const {topics, title, date, readingTime, categories} = entry?.data;
 const { Content } = await render(entry);
 ---
-<BaseLayout>
-  <article class="flex items-start w-full h-full">
-    <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-full overflow-y-scroll 
-     no-scrollbar leading-relaxed px-auto break-keep">
-     <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
+<article class="flex items-start w-full h-dvh">
+  <div id="wrapper" class="flex-col flex-1 min-w-0 h-full overflow-y-scroll no-scrollbar">
+     <Header />
+    <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-full leading-relaxed px-auto break-keep">
+    <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
       <header class="mt-15">
           <ArticleTitle topics={topics} title={title} />
           <ArticleMeta date={date} readingTime={readingTime} categories={categories} />
@@ -30,11 +34,11 @@ const { Content } = await render(entry);
         </main>
       </div>
     </div>
-    <div id="side-bar" class="h-[calc(100dvh-(--spacing(16)))] flex-none top-0 border-l-1 border-border-primary">
-      <div class="mx-15">
-        <TocWrapper slug={slug}/>
-        <NeighborPosts />
-      </div>
+  </div>
+  <div id="side-bar" class="h-full flex-none top-0 border-l-1 border-border-primary">
+    <div class="mx-15">
+      <TocWrapper slug={slug}/>
+      <NeighborPosts />
     </div>
-  </article>
-</BaseLayout>
+  </div>
+</article>

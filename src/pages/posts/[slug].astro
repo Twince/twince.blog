@@ -2,6 +2,8 @@
 import { PostService } from "../../service/post/fetch/postServicer"
 import ArticleLayout from "../../ui/layouts/article/ArticleLayout.astro"
 
+import "../../ui/css/index.css"
+
 import { getCollection } from "astro:content"
 
 export async function getStaticPaths() {
@@ -14,4 +16,17 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.props;
 ---
-<ArticleLayout slug={slug}/>
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<title>TWINCE.BLOG</title>
+	</head>
+	<body>
+    <ArticleLayout slug={slug}/>
+	</body>
+</html>
