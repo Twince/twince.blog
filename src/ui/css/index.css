@@ -3,14 +3,13 @@
 @import "./theme.light.css";
 @import "./theme.dark.css";
 
+@import "./post-grid/postGrid.css";
 @import "./article/article.css";
 @import "./toc/toc.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* 3. 커스텀 전역 스타일 (is:global 제거) */
 
 @layer base {
   * {

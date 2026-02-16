@@ -7,7 +7,6 @@ categories:
   - AI
   - WEB / DEV
   - DESIGN
-  - PROJECT
   - MATH
 topics:
   - MEMOIRS
@@ -70,6 +69,9 @@ thumbnail:
 > 2. 특정한 동작이 어떤 행위에 물리적 행동과 유사한 경우(물리적으로 학습된 직관)
 
 > " 이것은 단일 인용문 입니다. 깊은 사고란 한발 물러서서 한번 더 생각해볼 수 있는 용기를 의미한다. "
+
+> **TL;DR** <br>
+> 테스트 입니다.
 
 1. list01
 2. list02

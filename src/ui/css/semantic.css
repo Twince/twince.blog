@@ -6,6 +6,7 @@
   --color-bg-secondary: oklch(0.7668 0 0); /* #B3B3B3 */
   --color-bg-inverse: oklch(0.235 0 0); /* #1E1E1E */
   --color-bg-pure: oklch(1 0 0); /* #FFFFFF */
+  --color-bg-hover: oklch(0.9184 0 0); /* */
 
   --color-bg-codefence: oklch(0.3087 0.0195 229.78); /* #263238 */
   --color-bg-article-codeblock: oklch(0.8884 0 0); /* DADADA */
@@ -28,7 +29,7 @@
   --color-article-divider: oklch(0.9037 0 0); /* DFDFDF */
 
   /* article font size */
---size-article-title: clamp(36px, calc(33.1px + 0.775vw), 52px);
+  --size-article-title: clamp(36px, calc(33.1px + 0.775vw), 52px);
   --size-article-topic: clamp(15px, calc(14.28px + 0.194vw), 20px);
   --size-article-meta: clamp(14px, calc(13.76px + 0.065vw), 15px);
   --size-article-categories: clamp(12.5px, calc(12.38px + 0.032vw), 13px);
@@ -38,7 +39,14 @@
   --size-article-footnotes: clamp(14px, calc(13.28px + 0.194vw), 17px);
   --size-article-image-caption: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
   --size-article-codeblock: clamp(14.5px, calc(14.14px + 0.097vw), 17px);
---size-article-codefence: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
+  --size-article-codefence: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
+  
+  /* post-grid font size */
+  --size-post-grid-title: clamp(23px, calc(22.08px + 0.256vw), 28px);
+  --size-post-title: clamp(19px, calc(18.77px + 0.064vw), 21px);
+  --size-post-description: clamp(14px, calc(13.77px + 0.064vw), 15.5px);
+
+  
   /* border */
   --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
   --color-border-blockqoute: oklch(0.7582 0 0); /* #B0B0B0 */

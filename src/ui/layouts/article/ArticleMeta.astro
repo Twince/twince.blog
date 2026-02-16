@@ -1,7 +1,7 @@
 ---
-import Categories from "../components/astro/Categories.astro"
 const { date, readingTime, categories } = Astro.props;
-import { formatDateTime } from "../utils/formatDateTime"
+import Categories from "../../components/astro/Categories.astro";
+import { formatDateTime } from "../../utils/formatDateTime";
 
 const displayDate = formatDateTime(date);
 const displayTime = readingTime.length === 2 

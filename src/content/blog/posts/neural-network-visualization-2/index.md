@@ -1,21 +1,30 @@
 ---
-title: 'JS로 바닥부터 인공지능을 만들어보자 EP 2 - 디자인과 UX 설계'
-description: 'This is the first post of my new Astro blog.'
-date: '2025-10-30'
-status: 'published'
-categories: ['DESIGN', 'DEV']
-topics: ['DEV', 'DESIGN']
-series: ['neural-network-viz']
-readingTime: [10, 20]
-author: 'Twince'
+title: 바닥부터 인공지능을 만들어보자 EP 2 - 디자인과 UX 설계
+description: This is the first post of my new Astro blog.
+date: 2025-10-30
+status: published
+categories:
+  - DESIGN
+  - DEV
+topics:
+  - DEV
+  - DESIGN
+series:
+  - neural-network-viz
+readingTime:
+  - 10
+  - 20
+author: Twince
 thumbnail:
-  src: "./assets/thumbnail.jpg"
-  alt: "thumbnail-image"
+  src: ./assets/thumbnail.jpg
+  alt: thumbnail-image
 ---
 
+###### UX 설계하기
 
 앞선 글에서는 프로젝트의 개요와 인공신경망에 대한 내용을 살펴보았습니다.
 이제 프로젝트의 얼굴이라고 할 수 있는 디자인과 UX 설계에 대해 고민해봅시다.
+
 #### Mobile First Strategy
 2016년, 모바일 트래픽이 데스크탑의 트래픽을 처음 뛰어넘은 이래 모바일 트래픽의 비중은 꾸준히 증가해왔습니다. 2025년 7월 기준 약 60.5% 정도의 웹 트래픽을 모바일이 담당하고 있죠.¹ 주위를 둘러봐도 스마트폰을 사용하지 않는 사람은 찾아보기 힘듭니다.
 
@@ -30,9 +39,9 @@ thumbnail:
 [대충 퍼셉트론을 모바일에 끼워넣은 사진]
 
 화면을 돌려서 넓은 가로 비율을 활용해야 할까요?
-```
-???: 브라우저에서 페이지에 들어가면 화면을 돌린 다음 입력을.. 게임도 아니고, 이것 참 번거롭구만.
-```
+
+**???: 브라우저에서 페이지에 들어가면 화면을 돌린 다음 입력을.. 게임도 아니고, 이것 참 번거롭구만.**
+
 이미 세로 비율과 화면에 익숙한 스마트폰 사용자에게 자연스러운 사용 흐름을 망치게 하고 싶지는 않았습니다.
 
 #### 물리적 요소 활용하기 / 물리적 특성 분해하기
