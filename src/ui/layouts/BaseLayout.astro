@@ -20,7 +20,7 @@ const currentPath = Astro.url.pathname;
 	</head>
 	<body>
 		<Header />
-		<div class="w-auto h-full">
+		<div class="w-auto h-[calc(100dvh-(--spacing(16)))]">
 			<slot />
 		</div>
 		<Footer />

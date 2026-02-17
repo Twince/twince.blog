@@ -1,6 +1,6 @@
 ---
 import { getEntry, render } from "astro:content";
-// const { slug } = Astro.props;
+const { slug } = Astro.props;
 import { Toc } from "../react/Toc"
 import { validateToc } from "../../../service/post/utils/tocValidator"
 import type { TocNode } from "../../../service/post/types/TocGenrator";
@@ -9,7 +9,6 @@ import { collectTocIds } from "../../utils/collectTocIds";
 import { flattenToc } from "../../utils/flattenToc";
 
 
-let slug = 'neural-network-visualization-1';
 const entry = await getEntry('posts', slug)
 const validatedToc: TocNode[] | null = validateToc(entry?.data.toc)
 

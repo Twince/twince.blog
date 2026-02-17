@@ -1,0 +1,17 @@
+---
+import { PostService } from "../../service/post/fetch/postServicer"
+import ArticleLayout from "../../ui/layouts/article/ArticleLayout.astro"
+
+import { getCollection } from "astro:content"
+
+export async function getStaticPaths() {
+  const posts = await PostService.getPublishedPosts();
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { slug: post.slug }
+  }))
+}
+
+const { slug } = Astro.props;
+---
+<ArticleLayout slug={slug}/>

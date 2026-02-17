@@ -1,25 +1,24 @@
 ---
-import BaseLayout from "./BaseLayout.astro"
+import BaseLayout from "./../BaseLayout.astro"
 
-import ArticleBody from "./ArticleBody.astro"
-import ArticleTitle from "./ArticleTitle.astro"
-import ArticleMeta from "./ArticleMeta.astro"
+import ArticleBody from "./../article/ArticleBody.astro"
+import ArticleTitle from "./../article/ArticleTitle.astro"
+import ArticleMeta from "./../article/ArticleMeta.astro"
 
-import TocWrapper from "../components/astro/TocWrapper.astro"
-import NeighborPosts from "../components/astro/NeighborPosts.astro"
+import TocWrapper from "../../components/astro/TocWrapper.astro"
+import NeighborPosts from "../../components/astro/NeighborPosts.astro"
 
-import { getEntry, render } from "astro:content";import { getEntry, render } from "astro:content";
+import { getEntry, render } from "astro:content";
 
-let slug = 'neural-network-visualization-1';
+const { slug } = Astro.props;
 const entry = await getEntry('posts', slug);
 
 const {topics, title, date, readingTime, categories} = entry?.data;
 const { Content } = await render(entry);
-
 ---
 <BaseLayout>
   <article class="flex items-start w-full h-full">
-    <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-[calc(100dvh-(--spacing(16)))] overflow-y-scroll 
+    <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-full overflow-y-scroll 
      no-scrollbar leading-relaxed px-auto break-keep">
      <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
       <header class="mt-15">
@@ -33,7 +32,7 @@ const { Content } = await render(entry);
     </div>
     <div id="side-bar" class="h-[calc(100dvh-(--spacing(16)))] flex-none top-0 border-l-1 border-border-primary">
       <div class="mx-15">
-        <TocWrapper />
+        <TocWrapper slug={slug}/>
         <NeighborPosts />
       </div>
     </div>

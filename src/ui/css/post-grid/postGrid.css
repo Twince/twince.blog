@@ -1,0 +1,31 @@
+.post-grid-text-package {
+  .grid-title {
+    font-size: var(--size-post-grid-title);
+    color: var(--color-text-primary);
+    font-weight: 600;
+  }
+
+  .post-title {
+    font-size: var(--size-post-title);
+    color: var(--color-article-title);
+    font-weight: 700;
+  }
+  .post-description {
+    font-size: var(--size-article-image-caption);
+    color: var(--color-article-image-caption);
+    font-weight: 400;
+    line-height: 1.4;
+  }
+}
+
+.post-grid .categories-wrapper {
+  .article-categories {
+    font-size: 10px;
+  }
+  margin-top: 6px;
+  margin-bottom: 8px;
+}
+
+.post-item:hover .post-title {
+  color: var(--color-text-active);
+}

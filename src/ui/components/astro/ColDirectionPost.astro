@@ -1,0 +1,14 @@
+---
+import { Image } from "astro:assets";
+import Categories from "./Categories.astro";
+const { slug, thumbnail, title, description, categories } = Astro.props;
+---
+<a href={`/posts/${slug}`} class="inline-block article-img flex-col max-w-[380px] min-h-[250px]">
+  <Image class="" src={thumbnail.src} alt={thumbnail.alt ?? title}/>
+  <Categories categories={categories} />
+  <div class="flex-col pl-1 break-keep">
+    <h3 class="post-title">{title}</h3>
+    <p class="post-description">{description}</p>
+  </div>
+  
+</a>

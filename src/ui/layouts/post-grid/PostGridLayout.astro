@@ -1,0 +1,27 @@
+---
+import { PostService } from "../../../service/post/fetch/postServicer";
+import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
+
+const posts = await PostService.getPublishedPosts();
+---
+<div>
+  <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
+      { posts.map((post) => 
+      (<li class="
+      post-item
+      py-1 px-1 rounded-[1px]
+      transition-all duration-150 ease-in-out
+
+      hover:-translate-y-1
+      ">
+        <ColDirectionPost 
+        slug={post.slug} 
+        thumbnail={post.thumbnail} 
+        title={post.title} 
+        description={post.description} 
+        categories={post.categories} 
+        />
+      </li>)
+      )}
+  </ul>
+</div>

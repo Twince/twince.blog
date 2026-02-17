@@ -191,8 +191,6 @@
     }
   }
 
- 
-
   table {
     font-size: var(--size-article-codeblock);
     color: var(--color-article-content);
@@ -236,7 +234,6 @@
     font-weight: 700;
     /* text-decoration: underline; */
   }
-
 
   section.footnotes {
     margin-top: 1rem;
