@@ -5,7 +5,7 @@ import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
 const posts = await PostService.getPublishedPosts();
 ---
 <div>
-  <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-12 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
+  <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
       { posts.map((post) => 
       (<li class="
       post-item

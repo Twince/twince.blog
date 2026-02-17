@@ -1,6 +1,6 @@
 ---
-title: 인공지능 시각화 EP 2 - 디자인과 UX 설계
-description: This is the first post of my new Astro blog.
+title: "ONTOLOGY: 본질을 향하여"
+description: 삶의 본질이란 무엇일까?
 date: 2025-10-30
 status: published
 categories:
