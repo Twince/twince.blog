@@ -22,8 +22,8 @@ type CategorizedPosts = NullableSummary;
 type SeriesMatchedPosts = NullableSummary;
 type TopicMatchedPosts = NullableSummary;
 type NeighborPosts = {
-  next: PostSummaryBase;
-  previous: PostSummaryBase;
+  next: PostSummaryBase | null;
+  previous: PostSummaryBase | null;
 } | null;
 
 // logic
@@ -63,19 +63,17 @@ export const PostService = {
 
     //TODO: 포스트 존재 여부로 함수 리팩토링 하기(ex. !post ? return NeighborPosts : null)
     return {
-      next: {
-        slug: isFirstPost ? null : allPosts[currentIndex - 1].slug,
-        title: isFirstPost ? null : allPosts[currentIndex - 1].title,
-        description: isFirstPost
-          ? null
-          : allPosts[currentIndex - 1].description,
-        categories: isFirstPost ? null : allPosts[currentIndex-1].categories
+      next: isFirstPost ? null :  {
+        slug: allPosts[currentIndex - 1].slug,
+        title: allPosts[currentIndex - 1].title,
+        description: allPosts[currentIndex - 1].description,
+        categories: allPosts[currentIndex-1].categories
       },
-      previous: {
-        slug: isLastPost ? null : allPosts[currentIndex + 1].slug,
-        title: isLastPost ? null : allPosts[currentIndex + 1].title,
-        description: isLastPost ? null : allPosts[currentIndex + 1].description,
-        categories: isLastPost ? null : allPosts[currentIndex + 1].categories
+      previous: isLastPost ? null : {
+        slug: allPosts[currentIndex + 1].slug,
+        title: allPosts[currentIndex + 1].title,
+        description: allPosts[currentIndex + 1].description,
+        categories: allPosts[currentIndex + 1].categories
       },
     };
   },
