@@ -65,7 +65,7 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
           <li key={item.id} className={"flex max-w-[33ch] break-keep"} onClick={() => scrollIntoView(item.id)} >
             <div key={item.id} toc-depth={item.depth}
             className={clsx(
-              "toc-item flex h-fit relative hover:border-text-quaternary transition-[box-shadow] duration-300 ease-in-out",
+              "toc-item flex h-fit relative hover:border-text-quaternary transition-[box-shadow] duration-300 ease-in-out ",
               activeBorderCondition ? "border-l-2 border-text-active! hover:shadow-[inset_1px_0_0_0_var(--color-text-active)]" : "border-l-1x border-bg-primary hover:shadow-[inset_1px_0_0_0_var(--color-text-quaternary)]",
               activeTextCondition ? "text-text-active!" : "text-text-primary",
               currentActiveIndex === index ? "shadow-[inset_0.5px_0_0_0_var(--color-text-active)]" : "",

@@ -30,11 +30,9 @@ const { Content } = await render(entry);
         </main>
       </div>
     </div>
-    <div id="side-bar" class="h-[calc(100dvh-(--spacing(16)))] flex-none top-0 border-l-1 border-border-primary">
-      <div class="mx-15">
-        <TocWrapper slug={slug}/>
-        <NeighborPosts />
-      </div>
+    <div id="side-bar" class="h-[calc(100dvh-(--spacing(16)))] min-w-[450px] flex flex-col justify-between top-0 border-l-1 border-border-primary">
+      <TocWrapper slug={slug}/>
+      <NeighborPosts currentSlug={slug} />
     </div>
   </article>
 </BaseLayout>
