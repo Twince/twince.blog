@@ -9,7 +9,7 @@ const { next, previous } = neighborPosts;
 console.log("test",JSON.stringify(neighborPosts));
 ---
 <div class="w-full h-fit flex flex-col border-t-1 border-border-primary">
-  <a href={`${next?.slug}`} class="z-10 relative pl-14 pt-6 pb-5 block overflow-hidden
+  <a href={`${next?.slug}`} class="z-10 relative pl-12 pt-6 pb-5 block overflow-hidden
     text-gray-800
     before:absolute before:inset-0 before:-z-10
     before:bg-[linear-gradient(to_left,var(--color-bg-primary),var(--color-bg-lite-hover))]
@@ -26,7 +26,7 @@ console.log("test",JSON.stringify(neighborPosts));
       </div>
     </div>
   </a>
-  <a href={`${previous?.slug}`} class="z-10 relative pl-20 py-3 mb-3 block overflow-hidden
+  <a href={`${previous?.slug}`} class="z-10 relative pl-20 pr-4 py-3 mb-3 block overflow-hidden
     text-gray-800
     before:absolute before:inset-0 before:-z-10
     before:bg-[linear-gradient(to_left,var(--color-bg-lite-hover),var(--color-bg-primary))]
