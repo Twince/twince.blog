@@ -72,7 +72,7 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
               index === 0 && "mt-4!"
               )}>
                 {primaryHeading && (<p className={"root-index"}>{String(headingCount).padStart(2, '0')}</p>)}
-                <div className={"pl-10 h-fit"}><p className={"max-w-[29ch] truncate hover:translate-x-0.5 rounded-[1px] duration-300 ease-out"}>{`${item.text}`}</p></div>
+                <div className={"pl-10 h-fit"}><p className={"sub-title truncate hover:translate-x-0.5 rounded-[1px] duration-300 ease-out"}>{`${item.text}`}</p></div>
             </div>
           </li>
         )})}
