@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../ui/layouts/BaseLayout.astro";
+import RootLayout from "../ui/layouts/root/RootLayout.astro";
 import ArticleLayout from "../ui/layouts/article/ArticleLayout.astro";
 
 import { PostService } from "../service/post/fetch/postServicer";
@@ -15,6 +16,4 @@ import tailwindcss from "@tailwindcss/vite";
 // console.log(filteredPosts);
 
 ---
-<BaseLayout>
-	<!-- <ArticleLayout /> -->
-</BaseLayout>
+<RootLayout />

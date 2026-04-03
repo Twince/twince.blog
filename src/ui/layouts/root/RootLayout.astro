@@ -1,0 +1,21 @@
+---
+import ProfileArt from "../../components/astro/ProfileArt.astro"
+import Topics from "../../components/astro/Topics.astro"
+import BaseLayout from "../BaseLayout.astro"
+import SeriesLayouts from "./SeriesLayouts.astro"
+
+---
+<BaseLayout>
+  <div class="w-full h-[800px] flex justify-center">
+    <div class="max-w-[1640px] border-border-primary border-r-1">
+      <ProfileArt />
+      <div class="flex flex-col">
+        <SeriesLayouts />
+        <Topics />
+      </div>
+    </div>
+  </div>
+  <div>
+
+  </div>
+</BaseLayout>

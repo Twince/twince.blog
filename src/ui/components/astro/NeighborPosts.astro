@@ -1,0 +1,47 @@
+<<<<<<< Updated upstream
+=======
+---
+import { PostService } from "../../../service/post/fetch/postServicer";
+import { Icon } from 'astro-icon/components';
+
+const { currentSlug } = Astro.props;
+const neighborPosts = await PostService.getPostWithNeighbors(currentSlug);
+
+const { next, previous } = neighborPosts;
+console.log("test",JSON.stringify(neighborPosts));
+---
+<div class="w-full h-fit flex flex-col border-t-1 border-border-primary">
+  <a href={`${next?.slug}`} class="z-10 relative pl-12 pt-6 pb-5 block overflow-hidden
+    text-gray-800
+    before:absolute before:inset-0 before:-z-10
+    before:bg-[linear-gradient(to_left,var(--color-bg-primary),var(--color-bg-lite-hover))]
+    before:transition-all before:duration-300 before:delay-150
+    before:translate-x-full before:opacity-0
+    hover:before:translate-x-0 hover:before:opacity-100
+    hover:before:delay-0
+    ">
+    <div class="flex">
+      <Icon name="arrow_left" class="w-5 h-5 mt-1.5 mr-4 text-primary hover:text-accent" />
+      <div class="flex flex-col ">
+        <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[24ch]  min-w-[5ch] truncate">{next?.title}</span>
+        <span class="block text-[var(--color-article-image-caption)] break-keep max-w-[33ch] mt-0.5 leading-5">{next?.description}</span>
+      </div>
+    </div>
+  </a>
+  <a href={`${previous?.slug}`} class="z-10 relative pl-20 pr-4 py-3 mb-3 block overflow-hidden
+    text-gray-800
+    before:absolute before:inset-0 before:-z-10
+    before:bg-[linear-gradient(to_left,var(--color-bg-lite-hover),var(--color-bg-primary))]
+    before:transition-all before:duration-300 before:delay-150
+    before:-translate-x-full before:opacity-0
+    hover:before:translate-x-0 hover:before:opacity-100
+    hover:before:delay-0">
+    <div class="flex items-center">
+      <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[27ch] min-w-[5ch] truncate">{previous?.title}</span>
+      <Icon name="arrow_right" class="w-5 h-5 ml-3 text-primary hover:text-accent" />
+    </div>
+    <span class="block text-[var(--color-article-image-caption)] break-keep max-w-[33ch] mt-0.5 leading-5">{previous?.description}</span>
+  </a>
+  
+</div>
+>>>>>>> Stashed changes
