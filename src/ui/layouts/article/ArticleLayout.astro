@@ -13,7 +13,7 @@ import { getEntry, render } from "astro:content";
 const { slug } = Astro.props;
 const entry = await getEntry('posts', slug);
 
-const {topics, title, date, readingTime, categories} = entry?.data;
+const {topics, title, date, readingTime, tags} = entry?.data;
 const { Content } = await render(entry);
 ---
 <BaseLayout>
@@ -23,7 +23,7 @@ const { Content } = await render(entry);
      <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
       <header class="mt-15">
           <ArticleTitle topics={topics} title={title} />
-          <ArticleMeta date={date} readingTime={readingTime} categories={categories} />
+          <ArticleMeta date={date} readingTime={readingTime} tags={tags} />
         </header>
         <main>
           <ArticleBody Content={Content} />

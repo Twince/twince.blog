@@ -15,6 +15,6 @@ const useActiveHeadingObserver = (ids: string) => {
 
     // return cleanup
     // 한가지 걱정되는 점: useActiveHeadingObserver가 다른 도메인과 별개로 동작할 수 있어야한다면 이렇게 activeId에 직접 관여하는게 아니라 콜백 함수르로 돌려줘야하는게 아닌가? 하는 고민.
-  }, [ids // 각 post마다 id는 바뀌므로 ids를 effect 갱신의 지표로 사용])
+  }, [ids]) // 각 post마다 id는 바뀌므로 ids를 effect 갱신의 지표로 사용
   return //TODO: string type의 active된 id(slug) 단수 / viewport가 post에 대한 문서 영역을 지나칠 수 있으므로 nulll이 존재할 수 있음(또는 단일 string slug)
 }

@@ -5,25 +5,25 @@ import { sortPosts } from "../utils/sorter";
 
 // type imports
 import type {
-  PostSummaryBase,
-  PostSummaryWithThumbnail,
+  PostCardWithThumbnail,
+  NeighborSummary,
   rawPost,
 } from "../types/PostServicer";
 import type { ResolvedPost } from "../types/Resolver";
 import { series } from "../../../content/config";
 
 // type definition(about module domain)
-type NullableSummary = PostSummaryWithThumbnail | null;
+type NullableSummary = PostCardWithThumbnail | null;
 
 type Mapper<from, to> = (resolvedPosts: ResolvedPost) => NullableSummary;
 type SummaryMapper = Mapper<ResolvedPost, NullableSummary>;
 
-type CategorizedPosts = NullableSummary;
+type TaggedPosts = NullableSummary;
 type SeriesMatchedPosts = NullableSummary;
 type TopicMatchedPosts = NullableSummary;
 type NeighborPosts = {
-  next: PostSummaryBase | null;
-  previous: PostSummaryBase | null;
+  next: NeighborSummary | null;
+  previous: NeighborSummary | null;
 } | null;
 
 // logic
@@ -45,8 +45,9 @@ export const PostService = {
     return {
       slug: resolvedPosts.slug,
       title: resolvedPosts.title,
+      topic: resolvedPosts.topics[0]?.id ?? null,
       description: resolvedPosts.description,
-      categories: resolvedPosts.categories,
+      tags: resolvedPosts.tags,
       thumbnail: resolvedPosts.thumbnail,
     };
   },
@@ -67,36 +68,34 @@ export const PostService = {
         slug: allPosts[currentIndex - 1].slug,
         title: allPosts[currentIndex - 1].title,
         description: allPosts[currentIndex - 1].description,
-        categories: allPosts[currentIndex-1].categories
       },
       previous: isLastPost ? null : {
         slug: allPosts[currentIndex + 1].slug,
         title: allPosts[currentIndex + 1].title,
         description: allPosts[currentIndex + 1].description,
-        categories: allPosts[currentIndex + 1].categories
       },
     };
   },
 
   // minMatch n를 매개변수를 받을 시, 최소 n개 이상 카테고리가 겹칠때만 post fetch
-  async getPostWithCategories(
-    categories: string | string[],
+  async getPostWithTags(
+    tags: string | string[],
     minMatch?: number
-  ): Promise<CategorizedPosts[]> {
+  ): Promise<TaggedPosts[]> {
     const allPosts = await this.getPublishedPosts();
-    const targetCategories = Array.isArray(categories)
-      ? categories
-      : [categories];
+    const targetTags = Array.isArray(tags)
+      ? tags
+      : [tags];
 
-    const categorySet = new Set(targetCategories.map((c) => c.toUpperCase()));
+    const tagSet = new Set(targetTags.map((c) => c.toUpperCase()));
     const filteredPosts = allPosts.filter((post) => {
-      const postCategories = post.categories;
+      const postTags = post.tags;
 
       if (minMatch) {
-        const intersection = postCategories.filter((c) => categorySet.has(c));
+        const intersection = postTags.filter((c) => tagSet.has(c));
         return intersection.length >= minMatch;
       }
-      return postCategories.some((c) => categorySet.has(c));
+      return postTags.some((c) => tagSet.has(c));
     });
     return filteredPosts.map((post) => this.convertToSummaryMapper(post));
   },

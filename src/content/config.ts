@@ -20,7 +20,7 @@ const readingTime = z.union([
   // }) -> 해당 로직은 resolver에서 처리하는 것이 맞다고 판단. 보류(`25.12.25)
 ])
 
-const categories = z.array(z.string()).optional().default([])
+const tags = z.array(z.string()).optional().default([])
 
 const tocNode:z.ZodType<TocNode> = z.object({
   id: z.string(),
@@ -90,7 +90,7 @@ loader: {
     description: z.string(),
     date: z.coerce.date(),
     status: z.enum(['draft', 'published']),
-    categories: categories,
+    tags: tags,
     topics: z.array(reference('topics')),
     series: z.array(reference('series').optional()),
     readingTime: readingTime, // length가 1이면 읽는 시간이 index[0] ~ index[1] 만큼 소요

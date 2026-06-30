@@ -4,37 +4,27 @@ interface Props {
 }
 
 import { PostService } from "../../../service/post/fetch/postServicer";
+import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
 import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
 import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
 
 const { direction = "col" } = Astro.props;
 const posts = await PostService.getPublishedPosts();
+const cards = posts
+  .map((post) => PostService.convertToSummaryMapper(post))
+  .filter((card): card is PostCardWithThumbnail => card !== null);
 ---
 <div>
   <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
-      { posts.map((post) => 
+      { cards.map((card) =>
       (<li class="
       post-item
       py-1 px-1 rounded-[1px]
       transition-all duration-150 ease-in-out
       hover:-translate-y-1">
-        { direction === "col" ? 
-        <ColDirectionPost 
-          slug={post.slug} 
-          thumbnail={post.thumbnail} 
-          title={post.title} 
-          description={post.description} 
-          categories={post.categories} 
-        /> : 
-        <RowDirectionPost 
-          slug={post.slug} 
-          topic={post.topics[0]}
-          thumbnail={post.thumbnail} 
-          title={post.title} 
-          description={post.description} 
-          categories={post.categories} 
-        /> }
-       
+        { direction === "col"
+          ? <ColDirectionPost {...card} />
+          : <RowDirectionPost {...card} /> }
       </li>)
       )}
   </ul>

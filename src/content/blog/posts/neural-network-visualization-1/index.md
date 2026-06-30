@@ -3,7 +3,7 @@ title: 인공지능 시각화 EP 1 -  개요와 철학
 description: 바닥부터 인공지능을 만들어보고 시각화해보자! 1편 - 개요와 철학
 date: 2025-11-16T19:34:00+09:00
 status: published
-categories:
+tags:
   - AI
   - WEB / DEV
   - DESIGN

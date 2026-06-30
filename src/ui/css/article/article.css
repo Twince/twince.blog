@@ -23,8 +23,8 @@
   margin-left: 5px;
 }
 
-.article-categories{
-  font-size: var(--size-article-categories);
+.article-tags{
+  font-size: var(--size-article-tags);
   font-weight: 600;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border-primary);

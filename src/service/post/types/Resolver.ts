@@ -12,7 +12,7 @@ export type ResolvedPost = {
   description: PostData['description'],
   date: PostData['date'],
   status: PostData['status'],
-  categories: PostData['categories'],
+  tags: PostData['tags'],
   topics: PostData['topics'],
   series?: PostData['series'],
   readingTime: PostData['readingTime'],

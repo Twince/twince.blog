@@ -35,7 +35,7 @@
   --size-article-title: clamp(36px, calc(33.1px + 0.775vw), 52px);
   --size-article-topic: clamp(15px, calc(14.28px + 0.194vw), 20px);
   --size-article-meta: clamp(14px, calc(13.76px + 0.065vw), 15px);
-  --size-article-categories: clamp(12.5px, calc(12.38px + 0.032vw), 13px);
+  --size-article-tags: clamp(12.5px, calc(12.38px + 0.032vw), 13px);
   --size-article-root-heading: clamp(26px, calc(24.55px + 0.388vw), 32px);
   --size-article-sub-heading: clamp(20px, calc(20px + 0vw), 21px);
   --size-article-content: clamp(17px, calc(16.76px + 0.065vw), 19px);

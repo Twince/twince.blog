@@ -3,7 +3,7 @@ title: "ONTOLOGY: 본질을 향하여"
 description: 삶의 본질이란 무엇일까?
 date: 2025-10-30
 status: published
-categories:
+tags:
   - DESIGN
   - DEV
 topics:

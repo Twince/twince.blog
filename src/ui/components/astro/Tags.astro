@@ -1,0 +1,6 @@
+---
+const { tags } = Astro.props;
+---
+<div class="tags-wrapper flex flex-wrap mt-8">
+  {tags.map((item: string) => <div class="article-tags">{item}</div>)}
+</div>
