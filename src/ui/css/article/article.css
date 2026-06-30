@@ -79,7 +79,7 @@
     font-weight: 400;
     color: var(--color-article-content);
     margin: 0 0 1.8rem 0;
-    line-height: 1.68rem;
+    line-height: 1.65;
   }
   p:has(img) {
     margin: 0 0 .9rem 0;
@@ -236,10 +236,10 @@
   }
 
   section.footnotes {
-    margin-top: 1rem;
+    margin-top: 2rem;
     padding-top: 2rem;
     padding-bottom: 4rem;
-    border-top: 1px solid var(--color-article-divider);
+    /* border-top: 1px solid var(--color-article-divider); */
     h2 {display: none;}
     li {
       font-size: var(--size-article-footnotes);

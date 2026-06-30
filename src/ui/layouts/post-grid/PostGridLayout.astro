@@ -1,7 +1,13 @@
 ---
+interface Props {
+  direction: "row" | "col";
+}
+
 import { PostService } from "../../../service/post/fetch/postServicer";
 import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
+import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
 
+const { direction = "col" } = Astro.props;
 const posts = await PostService.getPublishedPosts();
 ---
 <div>
@@ -11,16 +17,24 @@ const posts = await PostService.getPublishedPosts();
       post-item
       py-1 px-1 rounded-[1px]
       transition-all duration-150 ease-in-out
-
-      hover:-translate-y-1
-      ">
+      hover:-translate-y-1">
+        { direction === "col" ? 
         <ColDirectionPost 
-        slug={post.slug} 
-        thumbnail={post.thumbnail} 
-        title={post.title} 
-        description={post.description} 
-        categories={post.categories} 
-        />
+          slug={post.slug} 
+          thumbnail={post.thumbnail} 
+          title={post.title} 
+          description={post.description} 
+          categories={post.categories} 
+        /> : 
+        <RowDirectionPost 
+          slug={post.slug} 
+          topic={post.topics[0]}
+          thumbnail={post.thumbnail} 
+          title={post.title} 
+          description={post.description} 
+          categories={post.categories} 
+        /> }
+       
       </li>)
       )}
   </ul>

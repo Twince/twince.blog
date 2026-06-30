@@ -7,6 +7,8 @@
   --color-bg-secondary: oklch(0.7668 0 0); /* #B3B3B3 */
   --color-bg-inverse: oklch(0.235 0 0); /* #1E1E1E */
   --color-bg-pure: oklch(1 0 0); /* #FFFFFF */
+  
+  --color-bg-lite-hover: oklch(0.9384 0 0);
   --color-bg-hover: oklch(0.9184 0 0); /* */
 
   --color-bg-codefence: oklch(0.3087 0.0195 229.78); /* #263238 */
@@ -42,14 +44,18 @@
   --size-article-codeblock: clamp(14.5px, calc(14.14px + 0.097vw), 17px);
   --size-article-codefence: clamp(14.5px, calc(14.38px + 0.032vw), 16px);
   
+  /* tailwind auto utility genration 기능을 위해서 예약어 text를 사용 */
+  /* 나머지 토큰들은 별도의 CSS 사용 중 */
+  --text-neighbor-post-title: clamp(16px, calc(12px + 0.3125vw), 18px);
+  --text-neighbor-post-description: clamp(11px, calc(9px + 0.156vw), 12px);
+
   /* post-grid font size */
   --size-post-grid-title: clamp(23px, calc(22.08px + 0.256vw), 28px);
   --size-post-title: clamp(19px, calc(18.77px + 0.064vw), 21px);
   --size-post-description: clamp(14px, calc(13.77px + 0.064vw), 15.5px);
-
   
   /* border */
-  --color-border-primary: oklch(0.8421 0 0); /* #CBCBCB */
+  --color-border-primary: oklch(0.862 0 0); /* E4E4E4 */
   --color-border-blockqoute: oklch(0.7582 0 0); /* #B0B0B0 */
   /* layout */
   --content-max-width: 68ch;

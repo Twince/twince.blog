@@ -1,29 +1,45 @@
 @import "tailwindcss";
 
+/* TOC 전체 폰트 배율. 이 값 한 줄로 TOC 전체 크기를 비율 조정 */
+.toc-root { --toc-font-scale: 0.95; }
+.toc-root h2 { font-size: calc(1rem * var(--toc-font-scale)); }
+
 .toc-item {
   @apply leading-6 cursor-pointer h-fit;
   transition: 0.15s ease-in-out;
 }
 .root-index {
-  @apply absolute -top-[4px] font-[staatliches] text-3xl font-light!;
+  @apply absolute font-[staatliches] font-light!;
+  font-size: calc(clamp(26px, calc(18px + 0.625vw), 30px) * var(--toc-font-scale));
+  /* transform: translateY(clamp(-4px, calc(8px - 0.625vw), 0px)); */
 }
-
+/* 3xl - 30px */
 .toc-item[toc-depth="2"] {
-  @apply pl-2 text-lg font-bold mt-7 pb-0.5;
+  @apply pl-2 font-bold pb-0.5;
+  font-size: calc(clamp(16px, calc(12px + 0.3125vw), 18px) * var(--toc-font-scale));
+  margin-top: clamp(16px, calc(-8px + 1.875vw), 28px);
 }
-
+/* lg - 18px */
 .toc-item[toc-depth="3"] {
-  @apply pl-2 text-lg font-bold mt-7 pb-0.5;
+  @apply pl-2 font-bold mt-7 pb-0.5;
+  font-size: calc(clamp(15.5px, calc(12.5px + 0.234vw), 17px) * var(--toc-font-scale));
 }
 
 .toc-item[toc-depth="4"] {
-  @apply pl-4 text-base font-medium text-text-secondary;
+  @apply pl-4 font-medium text-text-secondary;
+  font-size: calc(clamp(14.5px, calc(11.5px + 0.234vw), 16px) * var(--toc-font-scale));
 }
-
+/* base - 16px */
 .toc-item[toc-depth="5"] {
-  @apply pl-20 text-base font-medium;
+  @apply pl-20 font-medium;
+  font-size: calc(clamp(14px, calc(12px + 0.15625vw), 15px) * var(--toc-font-scale));
 }
 
 .toc-item[toc-depth="6"] {
-  @apply pl-2 text-lg font-bold mt-7 h-7 pb-0.5;
+  @apply pl-2 font-bold mt-7 h-7 pb-0.5;
+  font-size: calc(1.125rem * var(--toc-font-scale));
+}
+
+.sub-title {
+  max-width: clamp(22ch, calc(2ch + 1.40625vw), 29ch);
 }
