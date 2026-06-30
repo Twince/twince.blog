@@ -52,7 +52,7 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
 
   let headingCount = 0;
   return(
-    <div className={"pt-8"}>
+    <div className={"pt-8 toc-root"}>
     <h2 className={"font-black -traslate-x-4 underline-offset-2"}>TABLE OF CONTENTS</h2>
     <ul>
       {flattenToc.map((item, index) => {
