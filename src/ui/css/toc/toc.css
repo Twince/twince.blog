@@ -26,7 +26,8 @@
 }
 
 .toc-item[toc-depth="4"] {
-  @apply pl-4 font-medium text-text-secondary;
+  @apply pl-4 font-medium;
+  color: var(--color-text-secondary); /* 커스텀 theme 색은 @apply 대신 var()(@reference 코어엔 없음) */
   font-size: calc(clamp(14.5px, calc(11.5px + 0.234vw), 16px) * var(--toc-font-scale));
 }
 /* base - 16px */

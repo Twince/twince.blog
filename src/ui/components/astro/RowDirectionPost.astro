@@ -1,3 +1,16 @@
 ---
+import { Image } from "astro:assets";
+import Tags from "./Tags.astro";
 const { slug, topic, thumbnail, title, description, tags } = Astro.props;
 ---
+<a href={`/posts/${slug}`} class="row-post-card article-img flex max-w-[640px] break-keep">
+  <Image class="row-post-thumbnail" src={thumbnail.src} alt={thumbnail.alt ?? title}/>
+  <div class="row-post-text flex flex-col flex-1 min-w-0">
+    {topic && <span class="row-post-topic">{topic}</span>}
+    <div class="row-post-main">
+      <h3 class="post-title">{title}</h3>
+      <p class="post-description">{description}</p>
+    </div>
+    <Tags tags={tags} />
+  </div>
+</a>

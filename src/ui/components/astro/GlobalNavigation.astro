@@ -1,16 +1,28 @@
 ---
+interface Props {
+  vertical?: boolean;
+}
+const { vertical = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 const menus = [
-  { label: "POSTS", href: "/posts", disable: true },
-  { label: "SEREIS", href: "/series", disable: true },
-]
+  { label: "POSTS", href: "/posts" },
+  { label: "SERIES", href: "/series" },
+  { label: "SLIDES", href: "/slides" },
+];
+const isRoot = currentPath === "/";
+const isActive = (href: string) =>
+  href === "/" ? currentPath === "/" : currentPath.startsWith(href);
+// root에서는 active 분기 없이 모든 메뉴를 진하게(text-primary)
+const linkColor = (href: string) =>
+  isRoot || isActive(href) ? "text-text-primary" : "text-text-quaternary";
 ---
 
-<div class="flex ml-20 gap-x-16 font-semibold text-lg">
-  {menus.map((menu) => 
-    menu.href === currentPath ? 
-      (<a class="text-text-primary" href={menu.href}>{menu.label}</a>) : 
-      (<a class="text-text-quaternary" href={menu.href}>{menu.label}</a>)
-    )
+<nav class:list={["flex font-semibold text-[15px]", vertical ? "flex-col gap-5" : "gap-x-14"]}>
+  {
+    menus.map((menu) => (
+      <a class={linkColor(menu.href)} href={menu.href}>
+        {menu.label}
+      </a>
+    ))
   }
-</div>
+</nav>

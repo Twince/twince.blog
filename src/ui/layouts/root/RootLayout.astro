@@ -3,19 +3,22 @@ import ProfileArt from "../../components/astro/ProfileArt.astro"
 import Topics from "../../components/astro/Topics.astro"
 import BaseLayout from "../BaseLayout.astro"
 import SeriesLayouts from "./SeriesLayouts.astro"
+import PostGridLayout from "../post-grid/PostGridLayout.astro"
 
 ---
 <BaseLayout>
-  <div class="w-full h-[800px] flex justify-center">
-    <div class="max-w-[1640px] border-border-primary border-r-1">
+  <div class="w-full h-full flex justify-center overflow-y-scroll no-scrollbar">
+    <div class="max-w-[1640px] w-full border-border-primary border-r-1">
       <ProfileArt />
       <div class="flex flex-col">
         <SeriesLayouts />
         <Topics />
       </div>
+      <!-- 메인 피드: 가로(row) 포스트 카드 -->
+      <div class="post-grid-text-package flex flex-col px-6 mt-12 mb-16">
+        <h2 class="grid-title mb-8">POSTS</h2>
+        <PostGridLayout direction="row" />
+      </div>
     </div>
-  </div>
-  <div>
-
   </div>
 </BaseLayout>

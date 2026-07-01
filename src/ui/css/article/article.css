@@ -142,9 +142,9 @@
     margin-left: 6px;
     margin-bottom: 1rem;
     padding: 16px 12px;
-    border-left: 2.5px solid var(--color-border-blockqoute);
+    border-left: 2.5px solid var(--color-border-blockquote);
     border-radius: 2px;
-    background-color: var(--color-bg-article-blockqoute);
+    background-color: var(--color-bg-article-blockquote);
   }
   blockquote > * {
     /* font-family: var(--font-pretendard); */
@@ -201,7 +201,7 @@
   }
 
   table > thead {
-    background-color: var(--color-bg-article-blockqoute);
+    background-color: var(--color-bg-article-blockquote);
   }
 
    table th,td {

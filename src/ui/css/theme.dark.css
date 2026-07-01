@@ -1,7 +1,38 @@
+/* ============================================================
+   DARK THEME — semantic 토큰의 값만 override(이름 고정). var(--primitive)만 참조.
+   ※ Figma 원본은 LIGHT 기준이라 다크 매핑은 '대칭 inversion' 기반 잠정값.
+     디자인 확정되면 step만 재조정.
+   ============================================================ */
 :root[data-theme="dark"] {
-  --color-bg-primary:  oklch(0.1822 0 0); /* #121212 */
-  /* --color-bg-secondary: */
+  /* ── surface / background (라이트와 대각 swap) ───────────── */
+  --color-bg-primary:   var(--gray-950); /* 페이지 #121212 */
+  --color-bg-secondary: var(--gray-700);
+  --color-bg-inverse:   var(--gray-50);
+  --color-bg-pure:      var(--gray-900); /* 카드 표면: 배경보다 한 단계 밝게(elevated) */
+  --color-bg-lite-hover: var(--gray-900);
+  --color-bg-hover:      var(--gray-800);
 
-  /* --color-text-primary:  */
+  --color-bg-article-codeblock:  var(--gray-800);
+  --color-bg-article-blockquote: var(--gray-900);
+  /* codefence는 코드 표면이라 다크에서도 어둡게 유지 */
+  --color-bg-codefence: var(--slate-900);
 
+  /* ── global text (밝게) ──────────────────────────────────── */
+  --color-text-primary:    var(--gray-50);
+  --color-text-secondary:  var(--gray-200);
+  --color-text-tertiary:   var(--gray-400);
+  --color-text-quaternary: var(--gray-500);
+  --color-text-disable:    var(--gray-700);
+
+  /* ── article 잉크 → 밝은 뉴트럴로 swap (BUG: 안 하면 본문 증발) ── */
+  --color-article-title:         var(--gray-100);
+  --color-article-content:       var(--gray-200);
+  --color-article-image:         var(--gray-700);
+  --color-article-image-caption: var(--gray-500);
+  --color-article-divider:       var(--gray-800);
+
+  /* ── border ──────────────────────────────────────────────── */
+  --color-border-primary:    var(--gray-800);
+  --color-border-control:    var(--gray-700);
+  --color-border-blockquote: var(--gray-700);
 }

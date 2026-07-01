@@ -53,24 +53,31 @@ Astro 블로그. 레이어 분리가 명확하다:
 
 ## 🎯 현재 사이클 (진행 중 — 다른 기기에서 여기부터 이어간다)
 
-**다음 작업: 사용자가 `PostCardProps` 타입 계약을 설계 (사용자 차례).**
-완료되면 Claude가 그 계약에 맞춰 `RowDirectionPost.astro`(현재 빈 파일) 마크업+CSS 퍼블리싱.
+**다음 작업: `RowDirectionPost` Figma 픽셀 매칭 + `direction="row"` 라우트 와이어링.**
+타입 계약 설계 → 카드 퍼블리싱까지 완료됨. 아래 "해결된 결정" 참고.
 
-### 사용자가 내려야 할 결정 2가지 (Claude는 답을 박지 않음, 트레이드오프만 제공)
-1. **`INSIGHT` 라벨은 데이터 모델의 무엇에 매핑되나?**
-   후보: `topics` 첫 항목 / `series` / 별도 `primaryCategory` / categories 대표 1개.
-   세로형 카드엔 이 라벨이 없음 → 카드 variant가 데이터를 다르게 소비함. 계약을 어떻게 그을지가 갈림.
-2. **`tags`(types/post.ts) vs `categories`(config.ts) 모델 분열 해소.**
-   하나가 죽은 코드인지, category=대분류 / tag=세분류로 의도됐는데 절반만 구현됐는지 결정.
-   → 카드 props의 진실 소스가 정해진다.
+### 해결된 결정 (이번 사이클에서 인코딩 완료)
+1. **`INSIGHT` 라벨 = `topics[0]`의 resolve된 대표 topic.** 표시값은 `topics[0].id`(예: "DEV")로 채택
+   — 참조에 `.id`가 이미 있어 **sync**(getEntry/async 불필요). 비면 `null` + (향후) warn.
+   나중에 표시명을 키와 다르게(번역/리네임) 하고 싶어지면 그때 `.title` resolve(async)로 전환.
+2. **`category` → `tags`로 일괄 통일 완료** (동작에 이름 맞춤). 위계: **topic(상위, 통제된 참조) > tags(포스트별 자유 라벨)**.
+   `types/post.ts`의 옛 `tags`/`Post`/`PostMeta`는 죽은 코드.
+3. **카드 view-model 타입 계층 (안2, 소비자별 분리 — `service/post/types/PostServicer.ts`)**
+   ```
+   PostSummary            { slug, title, description }          ← 이웃이 그대로 소비
+   NeighborSummary  =     PostSummary                            ← 의미용 별칭(독립 진화 여지)
+   PostCardSummary        extends PostSummary { topic: string|null, tags: string[] }
+   PostCardWithThumbnail  extends PostCardSummary { thumbnail }  ← 썸네일 없는 list는 PostCardSummary 사용
+   ```
+   - resolve는 **resolver**가(SRP): `resolvePost`→`ResolvedPost`, `convertToSummaryMapper`가 `topic: topics[0]?.id ?? null` 투영.
+   - 코어 필드는 `| null` 제거(데이터 흐름상 non-null), `topic`만 `string|null`.
+   - variant(row/col)는 **데이터 타입이 아니라** `PostGridLayout`의 `direction` discriminant가 처리. 카드엔 `{...card}` 스프레드.
 
-### 가로형 카드가 표시하는 필드 (Figma 스펙)
-thumbnail(src, alt) · "INSIGHT" 라벨 · title · description · categories[] · (링크용 slug)
+### RowDirectionPost 현황 (이번에 퍼블리싱)
+- 구현됨: 가로 레이아웃(썸네일 좌 + 우측 topic 라벨/title/description/tags). ColDirectionPost와 동일 토큰·클래스 컨벤션.
+- CSS: `postGrid.css`의 `.row-post-card`(thumbnail/`.row-post-topic`). dev에서 `direction="row"` 렌더 검증 완료(이 세션엔 Figma MCP 없어 **픽셀 매칭은 미완** — Figma node 4200:759 기준 재조정 필요).
+- **아직 `direction="row"`를 쓰는 라우트 없음** → root/topic/series 페이지에서 와이어링 필요.
 
-### 시작점 (사용자가 채울 빈 시그니처 — 위치도 사용자 결정)
-```ts
-export interface PostCardProps {
-  // Figma 스펙 + 결정 1,2 반영해 채우기
-  // 가로/세로 variant를 한 타입으로 표현할지 분리할지도 설계
-}
-```
+### 알려진 기술 부채 (이번 작업 범위 밖, 별도 정리)
+- `astro build`/`sync`가 이 환경에서 "Vite module runner closed"로 실패(콘텐츠 로더). **`astro dev`는 정상.** clean HEAD에서도 재현 → 환경 이슈.
+- 기존 tsc 에러 다수: Astro5 content-layer 마이그레이션(`utils/resolver.ts`의 `.slug`/`.render` 제거), `getCollection` 필터 콜백 반환 타입 오타(`postServicer.ts:38`), unist/rehype visitor 타이핑, strict-null(`Toc.tsx` 등), `sorter.ts` import 경로.

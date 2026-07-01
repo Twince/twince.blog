@@ -1,7 +1,8 @@
 @import "./font.css";
-@import "./semantic.css";
+@import "./primitive.css";   /* 불변 팔레트 (:root, 유틸리티 미생성) */
+@import "./semantic.css";    /* 의미 토큰 (@theme, LIGHT 기본값) */
 @import "./theme.light.css";
-@import "./theme.dark.css";
+@import "./theme.dark.css";  /* 다크 override */
 
 @import "./post-grid/postGrid.css";
 @import "./article/article.css";

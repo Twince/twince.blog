@@ -1,0 +1,34 @@
+---
+// Figma theme-toggle(4200:701): rail(둥근 보더) + sun knob 원. 라이트=knob 우측.
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="테마 전환"
+  class="relative flex items-center justify-end w-[42px] h-6 shrink-0 mx-2"
+>
+  <!-- rail -->
+  <span
+    class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-3.5 rounded-full border border-text-primary"
+  ></span>
+  <!-- knob (sun) -->
+  <span
+    class="relative z-10 flex items-center justify-center size-6 rounded-full border border-text-primary bg-bg-pure text-text-primary"
+  >
+    <svg viewBox="0 0 24 24" class="size-[14px]" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="4.5"></circle>
+      <path d="M12 1.5v2.2M12 20.3v2.2M3.6 3.6l1.6 1.6M18.8 18.8l1.6 1.6M1.5 12h2.2M20.3 12h2.2M3.6 20.4l1.6-1.6M18.8 5.2l1.6-1.6"></path>
+    </svg>
+  </span>
+</button>
+
+<script>
+  const btn = document.getElementById("theme-toggle");
+  const root = document.documentElement;
+  btn?.addEventListener("click", () => {
+    const next = root.dataset.theme === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    localStorage.setItem("theme", next);
+  });
+</script>

@@ -7,12 +7,12 @@
 
   .post-title {
     font-size: var(--size-post-title);
-    color: var(--color-article-title);
+    color: var(--color-text-primary); /* Figma: 카드 제목 검정(article 잉크 차용 끊음) */
     font-weight: 700;
   }
   .post-description {
-    font-size: var(--size-article-image-caption);
-    color: var(--color-article-image-caption);
+    font-size: var(--size-post-description); /* post 소유 토큰 사용 */
+    color: var(--color-text-secondary); /* Figma: 설명 다크(#1e1e1e 근사), 무게로 위계 */
     font-weight: 400;
     line-height: 1.4;
   }
@@ -28,4 +28,60 @@
 
 .post-item:hover .post-title {
   color: var(--color-text-active);
+}
+
+/* ══ post card (row) 전용 토큰 — Figma 4200:759 비율 고정 ══
+   row 카드는 모바일 미사용 → clamp 없이 고정px.
+   ★ 모든 값 = (Figma raw px) × --card-scale → 비율이 항상 Figma와 100% 일치.
+     카드 크기 조정은 --card-scale 한 값만 바꾸면 됨(모든 비율 유지).
+   Figma raw: title15 topic11 subtitle10 tag7.562 / thumb187.5×127.3 / gap20 stack16 radius6.77 */
+:root {
+  --card-scale: 1.2;                                    /* 15px → 18px title */
+  --card-row-title:  calc(15px    * var(--card-scale));
+  --card-row-topic:  calc(11px    * var(--card-scale)); /* 0.733 × title */
+  --card-row-desc:   calc(10px    * var(--card-scale)); /* 0.667 × title */
+  --card-row-tag:    calc(7.562px * var(--card-scale)); /* 0.504 × title */
+  --card-row-thumb:  calc(187.5px * var(--card-scale)); /* 폭(높이는 aspect-ratio) */
+  --card-row-gap:    calc(20px    * var(--card-scale)); /* 썸네일 ↔ 텍스트 */
+  --card-row-stack:  calc(15px    * var(--card-scale)); /* topic ↔ main ↔ tags */
+  --card-row-radius: calc(6.77px  * var(--card-scale));
+}
+
+.row-post-card {
+  gap: var(--card-row-gap);
+  align-items: center; /* Figma items-center: 텍스트 패키지를 썸네일 기준 세로 중앙 */
+
+  .row-post-thumbnail {
+    width: var(--card-row-thumb);
+    aspect-ratio: 187.5 / 127.3;   /* Figma 썸네일 비율 1.473 */
+    object-fit: cover;
+    border-radius: var(--card-row-radius);
+    flex-shrink: 0;
+  }
+
+  /* 텍스트 패키지 = Figma auto-layout(gap-16) 재현: flex gap으로 box간 간격 통제.
+     line-height는 Figma leading-normal에 맞춰 타이트(margin+큰 line-height의 시각 부풀림 제거). */
+  .row-post-text { gap: var(--card-row-stack); }
+  .row-post-main { display: flex; flex-direction: column; gap: 3px; } /* title↔subtitle 타이트 */
+
+  .row-post-topic {
+    font-size: var(--card-row-topic);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-primary); /* Figma: topic 라벨은 검정 */
+    line-height: 1.15;
+  }
+  .post-title      { font-size: var(--card-row-title); line-height: 1.25; }
+  .post-description { font-size: var(--card-row-desc);  line-height: 1.35; }
+  .tags-wrapper    { margin: 0; } /* Tags.astro의 mt-8 무력화, 간격은 row-post-text gap */
+}
+/* chip 폰트: 3-class 특이도로 .post-grid .tags-wrapper .article-tags(10px)를 이김 */
+.row-post-card .tags-wrapper .article-tags {
+  font-size: var(--card-row-tag);
+}
+
+/* post 카드 chip 보더 = Figma #adadad(border-control) — article 태그(border-primary)와 구분 */
+.post-grid .tags-wrapper .article-tags {
+  border-color: var(--color-border-control);
 }

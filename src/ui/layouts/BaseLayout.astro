@@ -17,6 +17,14 @@ const currentPath = Astro.url.pathname;
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>TWINCE.BLOG</title>
+		<!-- FOUC 방지: 첫 페인트 전에 테마 결정(localStorage → prefers-color-scheme) -->
+		<script is:inline>
+			(() => {
+				const t = localStorage.getItem("theme") ||
+					(matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+				document.documentElement.dataset.theme = t;
+			})();
+		</script>
 	</head>
 	<body>
 		<Header />

@@ -13,9 +13,15 @@ const posts = await PostService.getPublishedPosts();
 const cards = posts
   .map((post) => PostService.convertToSummaryMapper(post))
   .filter((card): card is PostCardWithThumbnail => card !== null);
+
+// row(가로 카드)는 넓어서 1~2열 세로 리스트, col(세로 카드)은 3열 그리드
+// row: 넓은 단일 열 리스트(카드 max-w-640이 Figma 비례 유지). col: 3열 그리드.
+const gridClass = direction === "row"
+  ? "post-grid grid mx-2 grid-cols-1 gap-y-10 max-w-[1400px]"
+  : "post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]";
 ---
 <div>
-  <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
+  <ul class={gridClass}>
       { cards.map((card) =>
       (<li class="
       post-item
