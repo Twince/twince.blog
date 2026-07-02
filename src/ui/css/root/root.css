@@ -403,7 +403,7 @@
     clip-path: none; /* 레일 없음 → 마스킹 해제 */
   }
   .twisted-art svg {
-    width: calc(1300px * var(--root-scale));
+    width: calc(1600px * var(--root-scale));
     transform: rotate(46deg); /* 데스크탑 61° 대비 반시계 15° */
   }
 
