@@ -45,7 +45,6 @@
 
   /* ── color: border ───────────────────────────────────────── */
   --color-border-primary:    var(--gray-200);
-  --color-border-faint:      var(--gray-100); /* dashed 레일 등 은은한 구분선 */
   --color-border-badge:      color-mix(in srgb, var(--black) 25%, transparent); /* 배지 헤어라인(투명 흑) */
   --color-border-control:    var(--gray-400); /* chip/입력 보더 (#adadad) */
   --color-border-blockquote: var(--gray-400);

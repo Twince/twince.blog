@@ -34,7 +34,6 @@
 
   /* ── border ──────────────────────────────────────────────── */
   --color-border-primary:    var(--gray-800);
-  --color-border-faint:      var(--gray-900);
   --color-border-badge:      color-mix(in srgb, var(--white) 25%, transparent); /* 다크: 투명 백으로 반전 */
   --color-border-control:    var(--gray-700);
   --color-border-blockquote: var(--gray-700);
