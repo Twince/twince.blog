@@ -83,6 +83,40 @@
   border-color: var(--color-border-control);
 }
 
+/* col 카드 치수 = Figma vertical-post-card(4200:801) raw × --card-scale
+   (thumb 260×176 → tags → title 15 → desc 10) */
+.col-post-card {
+  --card-col-w:      calc(260px * var(--card-scale));
+  --card-col-title:  calc(15px  * var(--card-scale));
+  --card-col-desc:   calc(10px  * var(--card-scale));
+  --card-col-tag:    calc(8px   * var(--card-scale));
+  --card-col-radius: calc(7px   * var(--card-scale));
+
+  width: var(--card-col-w);
+  max-width: 100%;
+
+  .col-post-thumbnail {
+    width: 100%;
+    aspect-ratio: 260 / 176;
+    object-fit: cover;
+    border-radius: var(--card-col-radius);
+  }
+  .col-post-text {
+    margin-top: calc(6px * var(--card-scale));
+    padding-inline: calc(3px * var(--card-scale));
+  }
+  .tags-wrapper { margin: 0; }
+  .col-post-main {
+    margin-top: calc(10px * var(--card-scale));
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .post-title      { font-size: var(--card-col-title); line-height: 1.2; }
+  .post-description { font-size: var(--card-col-desc); line-height: 1.2; }
+}
+.col-post-card .tags-wrapper .article-tags { font-size: var(--card-col-tag); }
+
 /* row 카드 모바일 변형(<768) — 마크업 하나로 col 시안(4114:1165)화:
    썸네일 풀폭 + tags를 title 위로(order) + topic 숨김 */
 @media (width < 768px) {
@@ -98,6 +132,15 @@
     .row-post-text { gap: 4px; padding-top: 8px; }
     .row-post-topic { display: none; }
     .tags-wrapper { order: -1; }
+    .post-title      { font-size: 16px; }
+    .post-description { font-size: 12px; }
+  }
+
+  /* col 카드도 모바일 시안(4114:1165) 절대 스펙으로 */
+  .col-post-card {
+    width: 100%;
+
+    .col-post-thumbnail { aspect-ratio: 317 / 215; }
     .post-title      { font-size: 16px; }
     .post-description { font-size: 12px; }
   }

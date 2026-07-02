@@ -3,11 +3,13 @@ import { Image } from "astro:assets";
 import Tags from "./Tags.astro";
 const { slug, thumbnail, title, description, tags } = Astro.props;
 ---
-<a href={`/posts/${slug}`} class="inline-block article-img flex-col max-w-[330px] min-h-[250px]">
-  <Image class="" src={thumbnail.src} alt={thumbnail.alt ?? title}/>
-  <Tags tags={tags} />
-  <div class="flex-col pl-1 break-keep">
-    <h3 class="post-title">{title}</h3>
-    <p class="post-description">{description}</p>
+<a href={`/posts/${slug}`} class="col-post-card flex flex-col break-keep">
+  <Image class="col-post-thumbnail" src={thumbnail.src} alt={thumbnail.alt ?? title}/>
+  <div class="col-post-text">
+    <Tags tags={tags} />
+    <div class="col-post-main">
+      <h3 class="post-title">{title}</h3>
+      <p class="post-description">{description}</p>
+    </div>
   </div>
 </a>
