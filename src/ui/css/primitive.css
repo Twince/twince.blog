@@ -12,6 +12,7 @@
 
   /* --- gray: neutral ramp (light → dark) --- */
   --gray-50:  oklch(0.9791 0 0); /* #F8F8F8  page bg(L) */
+  --gray-75:  oklch(0.97 0 0);   /* hero 표면(L) — page bg보다 한 단계 낮음 */
   --gray-100: oklch(0.9551 0 0); /* #F0F0F0  text(D) / blockquote bg(L) */
   --gray-200: oklch(0.9189 0 0); /* #E4E4E4  border / hover */
   --gray-300: oklch(0.8884 0 0); /* #DADADA  codeblock bg (#CECECE 흡수) */

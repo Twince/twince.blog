@@ -4,11 +4,11 @@ description: 삶의 본질이란 무엇일까?
 date: 2025-10-30
 status: published
 tags:
-  - DESIGN
-  - DEV
+  - design
+  - dev
 topics:
-  - DEV
-  - DESIGN
+  - dev
+  - design
 series:
   - neural-network-viz
 readingTime:

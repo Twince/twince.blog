@@ -13,10 +13,12 @@
 @theme {
   /* ── color: brand / accent (theme-invariant) ─────────────── */
   --color-brand-primary: var(--brand-500);
+  --color-brand-hover:   var(--brand-500); /* hover/강조 악센트 — 값은 추후 사용자가 직접 튜닝(임시 brand) */
   --color-text-active:   var(--accent-500); /* 링크/active 파랑 */
 
   /* ── color: surface / background ─────────────────────────── */
   --color-bg-primary:   var(--gray-50);  /* 페이지 배경 */
+  --color-bg-hero:      var(--gray-75);  /* hero 표면 — 페이지 bg보다 한 단계 낮음(L) */
   --color-bg-secondary: var(--gray-400);
   --color-bg-inverse:   var(--gray-900);
   --color-bg-pure:      var(--white);    /* 카드/chip 흰 표면 */
@@ -43,6 +45,7 @@
 
   /* ── color: border ───────────────────────────────────────── */
   --color-border-primary:    var(--gray-200);
+  --color-border-badge:      color-mix(in srgb, var(--black) 25%, transparent); /* 배지 헤어라인(투명 흑) */
   --color-border-control:    var(--gray-400); /* chip/입력 보더 (#adadad) */
   --color-border-blockquote: var(--gray-400);
 

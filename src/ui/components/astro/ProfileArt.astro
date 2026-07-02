@@ -1,16 +1,45 @@
 ---
-
+// 프로필 히어로 패널 — Figma 3917:741. 치수/타이포는 root.css의 --root-* 토큰이 통제.
+import TwistedGridMotion from "./TwistedGridMotion.astro";
 ---
-<div class="flex outlie-1">
-  <div class="w-[20px] [writing-mode:vertical-rl]">/ABOUT</div>
-  <div class="relative">
-    <p>“Towards,<br>What Lies Beyond Development“</p>
-    <title>TWINCE</title>
-    <p>SUNWOO HA</p>
-    <address class="flex flex-col">
-      <div><p>contact@twince.blog</p></div>
-      <div><a href="https://github.com/twince">twince</a></div>
-      <div>twince_o</div>
+<div class="profile-art">
+  <div class="twisted-art" aria-hidden="true">
+    <TwistedGridMotion />
+  </div>
+  <span class="art-rail" aria-hidden="true">
+    <svg class="rail-arrow" viewBox="0 0 12 12" fill="none">
+      <path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+    </svg>
+    <span class="rail-label">/ABOUT</span>
+  </span>
+
+  <div class="profile-body">
+    <p class="profile-quote">“Towards,<br />What Lies Beyond Development”</p>
+
+    <p class="profile-logotype">
+      TWINCE<span class="profile-badge">SUNWOO HA</span>
+    </p>
+
+    <address class="profile-contacts">
+      <a href="mailto:contact@twince.blog">
+        <svg viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <rect x="0.7" y="2" width="10.6" height="8" rx="1" stroke="currentColor" stroke-width="1.1"/>
+          <path d="M1 2.6L6 6.4L11 2.6" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round"/>
+        </svg>
+        <span class="contact-text">contact@twince.blog</span>
+      </a>
+      <a href="https://github.com/twince" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        <span class="contact-text">twince</span>
+      </a>
+      <a href="https://www.threads.net/@twince_o" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M11.64 7.42a5.06 5.06 0 0 0-.2-.09c-.11-2.14-1.28-3.36-3.25-3.37h-.02c-1.17 0-2.15.5-2.75 1.42l1.08.74c.45-.68 1.15-.83 1.67-.83h.02c.65 0 1.14.19 1.46.56.23.27.38.64.46 1.11a8.3 8.3 0 0 0-1.86-.09c-1.87.11-3.07 1.2-2.99 2.72.04.77.42 1.43 1.08 1.86.55.36 1.27.54 2 .5 .98-.05 1.74-.42 2.28-1.1 .41-.51.66-1.18.78-2.01.46.28.8.64 .99 1.08 .32.75.34 1.97-.66 2.97-.88.87-1.93 1.25-3.52 1.26-1.77-.01-3.1-.58-3.97-1.68C3.42 11.44 3 9.94 3 8c0-1.94.42-3.44 1.24-4.47.87-1.1 2.2-1.67 3.97-1.68 1.78.01 3.13.58 4.03 1.69.44.54.77 1.23.99 2.02l1.27-.34c-.26-.98-.68-1.83-1.24-2.52C12.11 1.28 10.43.55 8.22.53h-.01C6.01.55 4.36 1.29 3.29 2.72 2.33 3.99 1.84 5.76 1.83 8c.01 2.24.5 4.01 1.46 5.28 1.07 1.43 2.72 2.17 4.92 2.19h.01c1.96-.01 3.34-.53 4.48-1.66 1.47-1.47 1.43-3.31.94-4.44-.35-.81-1.02-1.47-1.94-1.9l-.06-.05zm-3.38 3.14c-.86.05-1.75-.34-1.79-1.16-.03-.61.43-1.29 1.84-1.37l.4-.01c.44 0 .86.04 1.24.13-.14 1.77-.97 2.36-1.69 2.41z"/>
+        </svg>
+        <span class="contact-text">twince_o</span>
+      </a>
     </address>
   </div>
 </div>

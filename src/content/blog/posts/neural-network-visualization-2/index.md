@@ -4,11 +4,11 @@ description: UX는 무엇을 지향해야하는가?
 date: 2025-10-30
 status: published
 tags:
-  - DESIGN
-  - DEV
+  - design
+  - dev
 topics:
-  - DEV
-  - DESIGN
+  - dev
+  - design
 series:
   - neural-network-viz
 readingTime:

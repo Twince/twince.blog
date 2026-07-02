@@ -5,48 +5,22 @@ import ThemeToggle from "../components/astro/ThemeToggle.astro"
 ---
 
 <header class="w-full sticky top-0 z-40 bg-bg-primary border-b-1 border-border-primary">
-  <div class="mx-auto max-w-[1100px] h-16 flex items-center justify-between px-6">
+  {/* desktop (md+): 로고 | 내비+토글 한 줄 */}
+  {/* px 없음: 로고가 콘텐츠 컬럼 모서리(Figma 416≈413+3)에 근접 정렬 — 인셋은 GoToMain mx-2가 담당 */}
+  <div class="hidden md:flex mx-auto max-w-[1100px] h-[var(--header-h)] items-center justify-between">
     <GoToMain />
-
-    {/* desktop (md+) */}
-    <div class="hidden md:flex items-center gap-10">
+    <div class="flex items-center gap-10">
       <GlobalNavigation />
       <ThemeToggle />
     </div>
-
-    {/* mobile (<md): 토글 + 햄버거 */}
-    <div class="flex md:hidden items-center gap-3">
-      <ThemeToggle />
-      <button
-        id="nav-toggle"
-        type="button"
-        aria-label="메뉴 열기"
-        aria-expanded="false"
-        aria-controls="mobile-menu"
-        class="flex flex-col justify-center items-center gap-[5px] size-8"
-      >
-        <span class="block w-5 h-[2px] bg-text-primary"></span>
-        <span class="block w-5 h-[2px] bg-text-primary"></span>
-        <span class="block w-5 h-[2px] bg-text-primary"></span>
-      </button>
-    </div>
   </div>
 
-  {/* mobile 메뉴 패널 */}
-  <div
-    id="mobile-menu"
-    class="hidden md:hidden border-t-1 border-border-primary bg-bg-primary px-6 py-5"
-  >
-    <GlobalNavigation vertical />
+  {/* mobile (<md): 2단 — 로고+토글 / 내비 상시 노출 (Figma 4114:1201) */}
+  <div class="md:hidden h-[var(--header-h)] px-4 py-3 flex flex-col justify-between">
+    <div class="flex items-center justify-between">
+      <GoToMain />
+      <ThemeToggle />
+    </div>
+    <GlobalNavigation />
   </div>
 </header>
-
-<script>
-  const toggle = document.getElementById("nav-toggle");
-  const menu = document.getElementById("mobile-menu");
-  toggle?.addEventListener("click", () => {
-    const isHidden = menu?.classList.toggle("hidden");
-    toggle.setAttribute("aria-expanded", String(!isHidden));
-    toggle.setAttribute("aria-label", isHidden ? "메뉴 열기" : "메뉴 닫기");
-  });
-</script>

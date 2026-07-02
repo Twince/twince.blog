@@ -5,6 +5,7 @@
 @import "./theme.dark.css";  /* 다크 override */
 
 @import "./post-grid/postGrid.css";
+@import "./root/root.css";
 @import "./article/article.css";
 @import "./toc/toc.css";
 
@@ -13,6 +14,13 @@
 @tailwind utilities;
 
 @layer base {
+  /* 헤더 실높이의 단일 출처 — Header(h-[var])와 BaseLayout(100dvh - var)이 함께 소비.
+     전이: 두 컴포넌트가 같은 숫자를 알아야 하면 그 숫자는 제3의 토큰이 소유한다. */
+  :root { --header-h: 96px; }              /* 모바일 2단 헤더 */
+  @media (min-width: 768px) {
+    :root { --header-h: 64px; }            /* md+ 1단 헤더 */
+  }
+
   * {
     margin: 0;
     padding: 0;

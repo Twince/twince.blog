@@ -6,12 +6,12 @@ status: published
 tags:
   - AI
   - WEB / DEV
-  - DESIGN
+  - design
   - MATH
 topics:
-  - MEMOIRS
-  - DEV
-  - DESIGN
+  - memoir
+  - dev
+  - design
 series:
   - neural-network-viz
 readingTime:

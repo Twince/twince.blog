@@ -7,12 +7,12 @@
 
   .post-title {
     font-size: var(--size-post-title);
-    color: var(--color-text-primary); /* Figma: 카드 제목 검정(article 잉크 차용 끊음) */
+    color: var(--color-text-primary);
     font-weight: 700;
   }
   .post-description {
-    font-size: var(--size-post-description); /* post 소유 토큰 사용 */
-    color: var(--color-text-secondary); /* Figma: 설명 다크(#1e1e1e 근사), 무게로 위계 */
+    font-size: var(--size-post-description);
+    color: var(--color-text-secondary);
     font-weight: 400;
     line-height: 1.4;
   }
@@ -27,42 +27,39 @@
 }
 
 .post-item:hover .post-title {
-  color: var(--color-text-active);
+  color: var(--color-brand-hover);
 }
 
-/* ══ post card (row) 전용 토큰 — Figma 4200:759 비율 고정 ══
-   row 카드는 모바일 미사용 → clamp 없이 고정px.
-   ★ 모든 값 = (Figma raw px) × --card-scale → 비율이 항상 Figma와 100% 일치.
-     카드 크기 조정은 --card-scale 한 값만 바꾸면 됨(모든 비율 유지).
-   Figma raw: title15 topic11 subtitle10 tag7.562 / thumb187.5×127.3 / gap20 stack16 radius6.77 */
 :root {
-  --card-scale: 1.2;                                    /* 15px → 18px title */
-  --card-row-title:  calc(15px    * var(--card-scale));
-  --card-row-topic:  calc(11px    * var(--card-scale)); /* 0.733 × title */
-  --card-row-desc:   calc(10px    * var(--card-scale)); /* 0.667 × title */
-  --card-row-tag:    calc(7.562px * var(--card-scale)); /* 0.504 × title */
-  --card-row-thumb:  calc(187.5px * var(--card-scale)); /* 폭(높이는 aspect-ratio) */
-  --card-row-gap:    calc(20px    * var(--card-scale)); /* 썸네일 ↔ 텍스트 */
-  --card-row-stack:  calc(15px    * var(--card-scale)); /* topic ↔ main ↔ tags */
-  --card-row-radius: calc(6.77px  * var(--card-scale));
+  --card-scale: 1.2; /* 전역 기본. 컨텍스트(.root-page 등)가 override하는 knob */
 }
 
+/* row 카드 치수 = Figma raw(정수) × --card-scale — 비율 고정, knob 하나로 리사이즈.
+   ★ 파생 토큰은 소비 지점에 선언해야 함: :root에 두면 var()가 :root에서 치환돼
+     컨텍스트의 --card-scale override가 무시된다. */
 .row-post-card {
+  --card-row-title:  calc(15px  * var(--card-scale));
+  --card-row-topic:  calc(11px  * var(--card-scale));
+  --card-row-desc:   calc(10px  * var(--card-scale));
+  --card-row-tag:    calc(8px   * var(--card-scale));
+  --card-row-thumb:  calc(188px * var(--card-scale));
+  --card-row-gap:    calc(20px  * var(--card-scale));
+  --card-row-stack:  calc(15px  * var(--card-scale));
+  --card-row-radius: calc(7px   * var(--card-scale));
+
   gap: var(--card-row-gap);
-  align-items: center; /* Figma items-center: 텍스트 패키지를 썸네일 기준 세로 중앙 */
+  align-items: center;
 
   .row-post-thumbnail {
     width: var(--card-row-thumb);
-    aspect-ratio: 187.5 / 127.3;   /* Figma 썸네일 비율 1.473 */
+    aspect-ratio: 188 / 128;   /* Figma 썸네일 비율 ≈1.47 */
     object-fit: cover;
     border-radius: var(--card-row-radius);
     flex-shrink: 0;
   }
 
-  /* 텍스트 패키지 = Figma auto-layout(gap-16) 재현: flex gap으로 box간 간격 통제.
-     line-height는 Figma leading-normal에 맞춰 타이트(margin+큰 line-height의 시각 부풀림 제거). */
   .row-post-text { gap: var(--card-row-stack); }
-  .row-post-main { display: flex; flex-direction: column; gap: 3px; } /* title↔subtitle 타이트 */
+  .row-post-main { display: flex; flex-direction: column; gap: 3px; }
 
   .row-post-topic {
     font-size: var(--card-row-topic);
@@ -84,4 +81,24 @@
 /* post 카드 chip 보더 = Figma #adadad(border-control) — article 태그(border-primary)와 구분 */
 .post-grid .tags-wrapper .article-tags {
   border-color: var(--color-border-control);
+}
+
+/* row 카드 모바일 변형(<768) — 마크업 하나로 col 시안(4114:1165)화:
+   썸네일 풀폭 + tags를 title 위로(order) + topic 숨김 */
+@media (width < 768px) {
+  .row-post-card {
+    flex-direction: column;
+    align-items: stretch;
+
+    .row-post-thumbnail {
+      width: 100%;
+      aspect-ratio: 317 / 215;   /* 모바일 시안 썸네일 비율 */
+    }
+    /* 모바일은 시안 절대값(스케일 무시) — 뷰포트 고정 스펙이라 knob 비적용 의도 */
+    .row-post-text { gap: 4px; padding-top: 8px; }
+    .row-post-topic { display: none; }
+    .tags-wrapper { order: -1; }
+    .post-title      { font-size: 16px; }
+    .post-description { font-size: 12px; }
+  }
 }

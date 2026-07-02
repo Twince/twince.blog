@@ -1,0 +1,420 @@
+/* ══ ROOT 페이지 — Figma root v2(3917:491) + mobile(4114:883) ══
+   치수 = (Figma raw 정수) × --root-scale. 크기 조정은 --root-scale 하나로.
+   콘텐츠 컬럼 1100px(시안 1094) — 헤더와 동일 축.
+   반응형 3단(레인지 문법 = 정수 경계 + 소수 뷰포트 갭 없음):
+     <768 모바일 / 768≤w<1024 태블릿(축소+시리즈 2개) / ≥1024 데스크탑 */
+.root-page {
+  --root-scale: 1;
+
+  /* profile */
+  --root-profile-col: calc(393px * var(--root-scale));
+  --root-quote:       calc(9px * var(--root-scale));
+  --root-logotype:    calc(54px * var(--root-scale));
+  --root-badge:       calc(12px * var(--root-scale));
+  --root-contact:     calc(11px * var(--root-scale));
+  --root-rail:        calc(9px * var(--root-scale));
+
+  /* series showcase */
+  --root-series-label: calc(12px * var(--root-scale));
+  --root-series-title: calc(21px * var(--root-scale));
+  --root-series-count: calc(9px * var(--root-scale));
+  --root-series-desc:  calc(10px * var(--root-scale));
+
+  /* topics band */
+  --root-topic-hash: calc(20px * var(--root-scale));
+  --root-topic-name: calc(14px * var(--root-scale));
+  --root-topic-desc: calc(10px * var(--root-scale));
+
+  --root-section-title: calc(21px * var(--root-scale));
+
+  --card-scale: 1.1; /* row 카드 컨텍스트 스케일(전역 1.2 override) */
+}
+
+/* ── 히어로 밴드 ─────────────────────────────────────────────── */
+.root-hero {
+  background-color: var(--color-bg-hero);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+.root-hero-inner {
+  max-width: 1100px;
+  margin-inline: auto;
+  border-inline: 1px solid var(--color-border-primary);
+  display: flex;
+  flex-direction: column;
+}
+@media (width >= 768px) {
+  .root-hero-inner {
+    display: grid;
+    grid-template-columns: var(--root-profile-col) 1fr;
+  }
+  .root-hero-right { border-left: 1px solid var(--color-border-primary); }
+}
+
+/* ── 히어로 인터랙션: hover 시 brand-hover 링(inset — 레이아웃 시프트 없음).
+   히어로 상단은 헤더 보더와 맞닿아 있어 top 밴드 제외(이중선 방지). ── */
+.profile-art,
+.series-col,
+.topics-band {
+  transition: box-shadow 150ms ease-in-out;
+}
+.profile-art:hover,
+.series-col:hover {
+  box-shadow:
+    inset 1.5px 0 0 var(--color-brand-hover),
+    inset -1.5px 0 0 var(--color-brand-hover),
+    inset 0 -1.5px 0 var(--color-brand-hover);
+}
+.topics-band:hover { box-shadow: inset 0 0 0 1.5px var(--color-brand-hover); }
+.profile-art,
+.series-col { cursor: pointer; }
+
+/* 세로 레일 라벨(/ABOUT· /EXPLORE): 아래→위 읽기 */
+.rail-label {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+/* 레일 화살표(↖): 숨김 → 패널 hover 시 y축으로 떠오르며 등장 */
+.rail-arrow {
+  position: relative;
+  top: calc(5px * var(--root-scale));
+  width: var(--root-rail);
+  height: auto;
+  opacity: 0;
+  transform: translateY(4px) rotate(-90deg);
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+.profile-art:hover .rail-arrow {
+  opacity: 1;
+  transform: translateY(0) rotate(-90deg);
+}
+
+/* ── 프로필 패널 (393px) ─────────────────────────────────────── */
+.profile-art {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  min-height: calc(542px * var(--root-scale));
+}
+.art-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8px * var(--root-scale));
+  flex-shrink: 0;
+  width: calc(17px * var(--root-scale));
+  border-right: 1px dashed var(--color-border-primary);
+  font-family: var(--font-jetbrain-mono);
+  font-size: var(--root-rail);
+  font-weight: 300;
+  color: var(--color-text-primary);
+  z-index: 1;
+}
+
+.profile-body {
+  position: relative;
+  z-index: 1;
+  padding-left: calc(15px * var(--root-scale));
+  padding-top: calc(125px * var(--root-scale));
+}
+.profile-quote {
+  font-family: var(--font-jetbrain-mono);
+  font-size: var(--root-quote);
+  font-weight: 300;
+  line-height: normal;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.profile-logotype {
+  position: relative;
+  display: inline-block;
+  margin-top: calc(28px * var(--root-scale));
+  font-family: var(--font-pretendard);
+  font-size: var(--root-logotype);
+  font-weight: 900;
+  line-height: normal;
+  color: var(--color-text-primary);
+  transition: color 250ms ease-out;
+}
+/* 패널 hover: 로고타입·배경 그리드가 악센트로 물들고 그리드는 진해짐 */
+.profile-art:hover .profile-logotype,
+.profile-art:hover .twisted-art {
+  color: var(--color-brand-hover);
+}
+.profile-art:hover .twisted-art { opacity: 0.32; }
+
+.profile-badge {
+  position: absolute;
+  right: calc(-20px * var(--root-scale));
+  bottom: 0; /* TWINCE 베이스라인에 걸침 */
+  display: inline-flex;
+  align-items: center;
+  height: calc(20px * var(--root-scale));
+  padding-inline: calc(6px * var(--root-scale));
+  background-color: color-mix(in srgb, var(--color-bg-pure) 10%, transparent);
+  backdrop-filter: blur(calc(4px * var(--root-scale)));
+  border: 1px solid var(--color-border-badge);
+  color: var(--color-text-primary);
+  font-family: var(--font-jersey);
+  font-size: var(--root-badge);
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+}
+.profile-contacts {
+  display: flex;
+  flex-direction: column;
+  gap: calc(4px * var(--root-scale));
+  margin-top: calc(48px * var(--root-scale));
+  padding-left: calc(5px * var(--root-scale));
+  font-style: normal;
+}
+.profile-contacts a {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(5px * var(--root-scale));
+  width: fit-content;
+  font-size: var(--root-contact);
+  font-weight: 300;
+  color: var(--color-text-primary);
+}
+.profile-contacts a:hover { color: var(--color-brand-hover); }
+/* 이탤릭은 skew로 모사(Pretendard에 italic 없음) — 아이콘은 직립 유지 */
+.profile-contacts .contact-text {
+  display: inline-block;
+  transform: skewX(-18deg) scaleY(0.95);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.profile-contacts svg { width: calc(10px * var(--root-scale)); height: auto; flex-shrink: 0; }
+
+/* ── 배경 twisted grid(수렴·발산) — stroke=currentColor로 테마 추종 ── */
+.twisted-art {
+  position: absolute;
+  left: calc(-260px * var(--root-scale));
+  top: calc(-175px * var(--root-scale));
+  width: calc(963px * var(--root-scale));
+  height: calc(1082px * var(--root-scale));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.1;
+  color: var(--color-text-primary);
+  transition: color 250ms ease-out, opacity 250ms ease-out;
+  /* /ABOUT dashed 레일 뒤로 마스킹. inset left = 레일 17px − left(−260px) = 277px
+     — left를 바꾸면 함께 갱신할 것 */
+  clip-path: inset(0 0 0 calc(277px * var(--root-scale)));
+}
+.twisted-art svg {
+  width: calc(1485px * var(--root-scale)); /* 목(꺾임)이 패널 밖에 있도록 확대 */
+  height: auto;
+  flex-shrink: 0;
+  transform: rotate(61deg);
+}
+
+/* ── 시리즈 쇼케이스 (3열) ───────────────────────────────────── */
+.series-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  min-height: calc(366px * var(--root-scale));
+  border-bottom: 1px solid var(--color-border-primary);
+}
+.series-col {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: calc(27px * var(--root-scale)) calc(24px * var(--root-scale))
+           calc(36px * var(--root-scale)) calc(39px * var(--root-scale));
+}
+.series-col + .series-col { border-left: 1px solid var(--color-border-primary); }
+.series-col:hover .series-title { color: var(--color-brand-hover); }
+
+/* 카드 hover 시 좌상단에 떠오르는 화살표(↖) — rail-arrow와 같은 등장 문법 */
+.series-arrow {
+  position: absolute;
+  top: calc(12px * var(--root-scale));
+  left: calc(12px * var(--root-scale));
+  width: calc(10px * var(--root-scale));
+  height: auto;
+  color: var(--color-brand-hover);
+  opacity: 0;
+  transform: translateY(4px) rotate(-90deg);
+  transition: opacity 250ms ease-out, transform 250ms ease-out;
+}
+.series-col:hover .series-arrow {
+  opacity: 1;
+  transform: translateY(0) rotate(-90deg);
+}
+
+.series-label {
+  font-size: var(--root-series-label);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.series-title {
+  margin-top: calc(25px * var(--root-scale));
+  font-size: var(--root-series-title);
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  word-break: keep-all;
+  transition: color 150ms ease-in-out;
+}
+.series-count {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(4px * var(--root-scale));
+  margin-top: calc(13px * var(--root-scale));
+  font-size: var(--root-series-count);
+  font-weight: 500;
+  color: var(--color-text-quaternary);
+}
+/* 하단 고정 존(4줄 높이) + 상단 정렬 — 길이가 달라도 세 컬럼 시작선이 같은 y */
+.series-desc {
+  margin-top: auto;
+  height: calc(52px * var(--root-scale));
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  font-size: var(--root-series-desc);
+  line-height: 1.3;
+  color: var(--color-text-tertiary);
+  word-break: keep-all;
+}
+
+/* ── 토픽 칩 밴드 ────────────────────────────────────────────── */
+.topics-band {
+  position: relative;
+  display: flex;
+  min-height: calc(179px * var(--root-scale));
+}
+.topics-band .explore-rail {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: calc(17px * var(--root-scale));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: calc(8px * var(--root-scale));
+  border-right: 1px dashed var(--color-border-primary);
+  font-family: var(--font-jetbrain-mono);
+  font-size: var(--root-rail);
+  font-weight: 300;
+  color: var(--color-text-primary);
+}
+.topics-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: calc(22px * var(--root-scale));
+  align-content: center;
+  padding-block: calc(28px * var(--root-scale));
+  padding-left: calc(65px * var(--root-scale));
+  padding-right: calc(24px * var(--root-scale));
+  list-style: none;
+}
+.topic-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: calc(9px * var(--root-scale));
+  cursor: pointer;
+  transform-origin: left center; /* #를 앵커로 확대 — 그리드 정렬 유지 */
+  transition: transform 150ms ease-in-out;
+}
+.topic-chip:hover { transform: scale(1.05); }
+.topic-hash {
+  font-family: var(--font-staatliches);
+  font-size: var(--root-topic-hash);
+  line-height: 1;
+  color: var(--color-brand-primary);
+  transform: translateY(1px);
+}
+.topic-name {
+  font-size: var(--root-topic-name);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-primary);
+}
+.topic-desc {
+  margin-top: calc(4px * var(--root-scale));
+  font-size: var(--root-topic-desc);
+  line-height: 1.25;
+  color: var(--color-text-tertiary);
+  word-break: keep-all;
+}
+
+/* ── 최근 포스트 ─────────────────────────────────────────────── */
+.root-recent {
+  max-width: 1100px;
+  margin-inline: auto;
+  padding-block: calc(67px * var(--root-scale)) calc(96px * var(--root-scale));
+}
+.root-section-title {
+  font-size: var(--root-section-title);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+/* 타이틀은 컬럼 모서리 플러시, 카드 그리드만 인셋 */
+.root-recent .post-grid {
+  margin-top: calc(48px * var(--root-scale));
+  padding-inline: calc(23px * var(--root-scale));
+}
+
+/* ── 태블릿: 데스크탑 뷰 축소 + 시리즈 2개 ───────────────────── */
+@media (768px <= width < 1024px) {
+  .root-page {
+    --root-scale: 0.85;
+    --card-scale: 0.8;
+  }
+  .series-showcase { grid-template-columns: repeat(2, 1fr); }
+  .series-col:nth-of-type(3) { display: none; }
+}
+
+/* ── 모바일 — Figma mobile(4114:883): 시리즈 없음, 칩 가로 스크롤 ── */
+@media (width < 768px) {
+  .profile-art { min-height: calc(219px * var(--root-scale)); }
+  .art-rail { display: none; }
+  .profile-body { padding: calc(45px * var(--root-scale)) calc(28px * var(--root-scale)) calc(36px * var(--root-scale)); }
+  .profile-quote { font-size: calc(9px * var(--root-scale)); }
+  .profile-quote br { display: none; } /* 모바일은 인용구 한 줄 */
+  .profile-logotype { font-size: calc(50px * var(--root-scale)); margin-top: calc(6px * var(--root-scale)); }
+  .profile-badge { height: calc(18px * var(--root-scale)); font-size: calc(11px * var(--root-scale)); }
+  .profile-contacts { margin-top: calc(18px * var(--root-scale)); }
+  .twisted-art {
+    left: auto;
+    right: calc(-330px * var(--root-scale));
+    top: calc(-250px * var(--root-scale));
+    width: calc(751px * var(--root-scale));
+    height: calc(758px * var(--root-scale));
+    clip-path: none; /* 레일 없음 → 마스킹 해제 */
+  }
+  .twisted-art svg { width: calc(700px * var(--root-scale)); }
+
+  .series-showcase { display: none; }
+
+  .topics-band { min-height: 0; border-bottom: 1px solid var(--color-border-primary); }
+  .topics-band .explore-rail { display: none; }
+  .topics-grid {
+    display: flex;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    gap: calc(26px * var(--root-scale));
+    padding: calc(16px * var(--root-scale)) calc(28px * var(--root-scale));
+  }
+  .topics-grid::-webkit-scrollbar { display: none; }
+  .topic-chip { flex-shrink: 0; align-items: center; }
+  .topic-desc { display: none; }
+
+  .root-recent { padding: calc(48px * var(--root-scale)) calc(28px * var(--root-scale)) calc(72px * var(--root-scale)); }
+  .root-section-title { font-size: calc(16px * var(--root-scale)); }
+  .root-recent .post-grid { margin-top: calc(28px * var(--root-scale)); padding-inline: 0; }
+}

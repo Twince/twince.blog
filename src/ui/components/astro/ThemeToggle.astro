@@ -3,7 +3,7 @@
 ---
 
 <button
-  id="theme-toggle"
+  data-theme-toggle
   type="button"
   aria-label="테마 전환"
   class="relative flex items-center justify-end w-[42px] h-6 shrink-0 mx-2"
@@ -24,11 +24,13 @@
 </button>
 
 <script>
-  const btn = document.getElementById("theme-toggle");
+  // 헤더가 데스크탑/모바일 블록에 토글을 각각 렌더 → id 대신 data 속성으로 전부 바인딩
   const root = document.documentElement;
-  btn?.addEventListener("click", () => {
-    const next = root.dataset.theme === "dark" ? "light" : "dark";
-    root.dataset.theme = next;
-    localStorage.setItem("theme", next);
+  document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const next = root.dataset.theme === "dark" ? "light" : "dark";
+      root.dataset.theme = next;
+      localStorage.setItem("theme", next);
+    });
   });
 </script>

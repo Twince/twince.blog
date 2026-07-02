@@ -1,0 +1,32 @@
+---
+// 시리즈 쇼케이스(3열) — Figma 3917:805
+// EDGE(사용자): SeriesServicer.ts의 SeriesCardSummary 설계 후 이 임시 타입을 교체
+interface SeriesCardShape {
+  id: string;
+  title: string;
+  description: string;
+  postCount: number;
+}
+interface Props {
+  series: SeriesCardShape[];
+}
+const { series } = Astro.props;
+---
+<div class="series-showcase">
+  {series.map((item, index) => (
+    <a class="series-col" href={`/series/${item.id}`}>
+      <svg class="series-arrow" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+      </svg>
+      <span class="series-label">시리즈 #{index + 1}</span>
+      <h3 class="series-title">{item.title}</h3>
+      <span class="series-count">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+          <path d="M2 1.5H8M2 3.5H8M2 5.5H8M2 7.5H5.5" stroke="currentColor" stroke-width="1"/>
+        </svg>
+        총 {item.postCount}개의 포스트
+      </span>
+      <p class="series-desc">{item.description}</p>
+    </a>
+  ))}
+</div>

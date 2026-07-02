@@ -1,24 +1,54 @@
 ---
+// ROOT 랜딩 — Figma root v2(3917:491) + mobile(4114:883)
+// 서사: 정체성(프로필) → 대표작(시리즈) → 탐색축(토픽) → 최신 글(피드)
+import BaseLayout from "../BaseLayout.astro"
 import ProfileArt from "../../components/astro/ProfileArt.astro"
 import Topics from "../../components/astro/Topics.astro"
-import BaseLayout from "../BaseLayout.astro"
 import SeriesLayouts from "./SeriesLayouts.astro"
 import PostGridLayout from "../post-grid/PostGridLayout.astro"
 
+// MOCK — EDGE(사용자): getSeriesCards() 구현 후 교체. #1만 실데이터(series.json)와 일치.
+const MOCK_SERIES = [
+  {
+    id: "neural-network-viz",
+    title: "나는 AI를 어떻게 만들었을까?",
+    description:
+      "re:zero부터 시작하는 인공신경망 시각화 프로젝트. 군복무 중 개발했던 첫 프로젝트에 관한 이야기입니다. 산전수전 A to Z",
+    postCount: 6,
+  },
+  {
+    id: "building-blog",
+    title: "자체 블로그 구축하기",
+    description:
+      "여러분이 보고 계신 이 블로그 맞습니다. 백지에서 시작하는 블로그 자체 개발 프로젝트. 개발을 진행하며 무슨 일들이 있었을까요?",
+    postCount: 4,
+  },
+  {
+    id: "learning-language",
+    title: "직관이 언어를 학습하기까지",
+    description:
+      "토익 400부터 980까지. 언어를 공부가 아닌 언어로 학습하는 과정을 담았습니다.",
+    postCount: 5,
+  },
+];
+
+// TODO(사용자 EDGE): 최근 포스트 개수 제한(limit prop vs 래퍼) — 시안은 최신 4개
 ---
 <BaseLayout>
-  <div class="w-full h-full flex justify-center overflow-y-scroll no-scrollbar">
-    <div class="max-w-[1640px] w-full border-border-primary border-r-1">
-      <ProfileArt />
-      <div class="flex flex-col">
-        <SeriesLayouts />
-        <Topics />
+  <div class="root-page h-full overflow-y-auto no-scrollbar">
+    <section class="root-hero">
+      <div class="root-hero-inner">
+        <ProfileArt />
+        <div class="root-hero-right flex flex-col">
+          <SeriesLayouts series={MOCK_SERIES} />
+          <Topics />
+        </div>
       </div>
-      <!-- 메인 피드: 가로(row) 포스트 카드 -->
-      <div class="post-grid-text-package flex flex-col px-6 mt-12 mb-16">
-        <h2 class="grid-title mb-8">POSTS</h2>
-        <PostGridLayout direction="row" />
-      </div>
-    </div>
+    </section>
+
+    <section class="root-recent post-grid-text-package">
+      <h2 class="root-section-title">최근 포스트</h2>
+      <PostGridLayout direction="row" />
+    </section>
   </div>
 </BaseLayout>
