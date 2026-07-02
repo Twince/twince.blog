@@ -55,7 +55,7 @@
 .profile-art,
 .series-col,
 .topics-band {
-  transition: box-shadow 250ms ease-out; /* 내부 악센트 전환(250ms)과 동기 */
+  transition: box-shadow 150ms ease-out; /* 히어로 hover 전환은 전부 150ms 동기 */
 }
 .profile-art:hover,
 .series-col:hover,
@@ -80,7 +80,7 @@
   height: auto;
   opacity: 0;
   transform: translateY(4px) rotate(-90deg);
-  transition: opacity 250ms ease-out, transform 250ms ease-out;
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
 }
 .profile-art:hover .rail-arrow {
   opacity: 1;
@@ -109,7 +109,7 @@
   font-weight: 300;
   color: var(--color-text-primary);
   z-index: 1;
-  transition: border-color 250ms ease-out;
+  transition: border-color 150ms ease-out;
 }
 .profile-art:hover .art-rail { border-right-color: var(--color-border-control); } /* hover: 은은하게 */
 
@@ -136,7 +136,7 @@
   font-weight: 900;
   line-height: normal;
   color: var(--color-text-primary);
-  transition: color 250ms ease-out;
+  transition: color 150ms ease-out;
 }
 /* 패널 hover: 로고타입은 악센트, 그리드는 잉크 톤(text-secondary)으로 진해짐 */
 .profile-art:hover .profile-logotype { color: var(--color-brand-hover); }
@@ -162,7 +162,7 @@
   font-weight: 400;
   line-height: 1;
   white-space: nowrap;
-  transition: color 250ms ease-out, border-color 250ms ease-out;
+  transition: color 150ms ease-out, border-color 150ms ease-out;
 }
 .profile-art:hover .profile-badge {
   color: var(--color-brand-hover);
@@ -184,7 +184,7 @@
   font-size: var(--root-contact);
   font-weight: 300;
   color: var(--color-text-primary);
-  transition: color 250ms ease-out;
+  transition: color 150ms ease-out;
 }
 .profile-contacts a:hover { color: var(--color-brand-hover); }
 /* 이탤릭은 skew로 모사(Pretendard에 italic 없음) — 아이콘은 직립 유지 */
@@ -213,7 +213,7 @@
   pointer-events: none;
   opacity: 0.1;
   color: var(--color-text-primary);
-  transition: color 250ms ease-out, opacity 250ms ease-out;
+  transition: color 150ms ease-out, opacity 150ms ease-out;
   /* /ABOUT dashed 레일 뒤로 마스킹. inset left = 레일 17px − left(−260px) = 277px
      — left를 바꾸면 함께 갱신할 것 */
   clip-path: inset(0 0 0 calc(277px * var(--root-scale)));
@@ -252,7 +252,7 @@
   color: var(--color-brand-hover);
   opacity: 0;
   transform: translateY(4px) rotate(-90deg);
-  transition: opacity 250ms ease-out, transform 250ms ease-out;
+  transition: opacity 150ms ease-out, transform 150ms ease-out;
 }
 .series-col:hover .series-arrow {
   opacity: 1;
@@ -271,7 +271,7 @@
   line-height: 1.3;
   color: var(--color-text-primary);
   word-break: keep-all;
-  transition: color 250ms ease-out;
+  transition: color 150ms ease-out;
 }
 .series-count {
   display: inline-flex;
@@ -351,7 +351,7 @@
   color: var(--color-text-primary);
 }
 .topic-desc {
-  margin-top: calc(4px * var(--root-scale));
+  margin-top: calc(2px * var(--root-scale));
   font-size: var(--root-topic-desc);
   line-height: 1.25;
   color: var(--color-text-tertiary);
