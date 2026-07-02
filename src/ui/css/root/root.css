@@ -52,11 +52,10 @@
 
 /* ── 히어로 인터랙션: hover 시 brand-hover 4면 링(inset — 레이아웃 시프트 없음,
    sticky 헤더(z-40)에 가려지지 않도록 요소 안쪽에 그림) ── */
-.profile-art,
-.series-col,
-.topics-band {
-  transition: box-shadow 150ms ease-out; /* 히어로 hover 전환은 전부 150ms 동기 */
-}
+.profile-art { transition: box-shadow 150ms ease-out, opacity 250ms ease-out; }
+.series-col  { transition: box-shadow 150ms ease-out; }
+.series-showcase { transition: opacity 250ms ease-out; }
+.topics-band { transition: box-shadow 250ms ease-out, opacity 250ms ease-out; } /* topic 쪽은 원래 템포 */
 .profile-art:hover,
 .series-col:hover,
 .topics-band:hover {
@@ -65,6 +64,13 @@
 .profile-art,
 .series-col,
 .topics-band { cursor: pointer; }
+
+/* hover 포커스: 한 섹션에 올리면 나머지 영역은 디밍(disabled 톤) */
+.root-hero-inner:has(.profile-art:hover) :is(.series-showcase, .topics-band),
+.root-hero-inner:has(.series-showcase:hover) :is(.profile-art, .topics-band),
+.root-hero-inner:has(.topics-band:hover) :is(.profile-art, .series-showcase) {
+  opacity: 0.45;
+}
 
 /* 세로 레일 라벨(/ABOUT· /EXPLORE): 아래→위 읽기 */
 .rail-label {
