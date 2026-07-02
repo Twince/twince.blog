@@ -22,6 +22,7 @@
   --gray-700: oklch(0.3979 0 0); /* #474747  tertiary */
   --gray-800: oklch(0.2768 0 0); /* #282828  secondary */
   --gray-900: oklch(0.2350 0 0); /* #1E1E1E  inverse / elevated surface(D) */
+  --gray-925: oklch(0.2000 0 0); /* ≈#161616  hero 표면(D) — 950↔900 사이 전용 스텝 */
   --gray-950: oklch(0.1822 0 0); /* #121212  primary text(L) / page bg(D) */
 
   /* --- slate: 차가운(푸른기) 다크 뉴트럴 — gray와 별개 hue 계열(~222), article 잉크용 --- */

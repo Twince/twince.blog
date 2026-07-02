@@ -12,7 +12,7 @@
 :root[data-theme="dark"] {
   /* ── surface / background (라이트와 대각 swap) ───────────── */
   --color-bg-primary:   var(--gray-950); /* 페이지 #121212 */
-  --color-bg-hero:      var(--gray-900); /* hero 표면: 페이지 bg보다 한 단계 밝게(elevated) */
+  --color-bg-hero:      var(--gray-925); /* hero 표면: L 0.2 — 페이지 bg(950)보다 살짝 elevated */
   --color-bg-secondary: var(--gray-700);
   --color-bg-inverse:   var(--gray-50);
   --color-bg-pure:      var(--gray-900); /* 카드 표면: 배경보다 한 단계 밝게(elevated) */
