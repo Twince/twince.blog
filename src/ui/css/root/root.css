@@ -138,12 +138,12 @@
   color: var(--color-text-primary);
   transition: color 250ms ease-out;
 }
-/* 패널 hover: 로고타입·배경 그리드가 악센트로 물들고 그리드는 진해짐 */
-.profile-art:hover .profile-logotype,
+/* 패널 hover: 로고타입은 악센트, 그리드는 잉크 톤(text-secondary)으로 진해짐 */
+.profile-art:hover .profile-logotype { color: var(--color-brand-hover); }
 .profile-art:hover .twisted-art {
-  color: var(--color-brand-hover);
+  color: var(--color-text-secondary);
+  opacity: 0.32;
 }
-.profile-art:hover .twisted-art { opacity: 0.32; }
 
 .profile-badge {
   position: absolute;
@@ -400,7 +400,8 @@
 
   .series-showcase { display: none; }
 
-  .topics-band { min-height: 0; border-bottom: 1px solid var(--color-border-primary); }
+  /* 칩 스크롤 스트립: 상·하단 동일 보더로 구획 */
+  .topics-band { min-height: 0; border-block: 1px solid var(--color-border-primary); }
   .topics-band .explore-rail { display: none; }
   .topics-grid {
     display: flex;
