@@ -3,6 +3,12 @@
    ※ Figma 원본은 LIGHT 기준이라 다크 매핑은 '대칭 inversion' 기반 잠정값.
      디자인 확정되면 step만 재조정.
    ============================================================ */
+/* light-on-dark 착시(halation)로 글자가 굵어 보이는 것 보정 — macOS 서브픽셀 렌더링 무력화 */
+:root[data-theme="dark"] body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 :root[data-theme="dark"] {
   /* ── surface / background (라이트와 대각 swap) ───────────── */
   --color-bg-primary:   var(--gray-950); /* 페이지 #121212 */
@@ -31,6 +37,10 @@
   --color-article-image:         var(--gray-700);
   --color-article-image-caption: var(--gray-500);
   --color-article-divider:       var(--gray-800);
+
+  /* ── weight: light-on-dark 시각 굵어짐 보정(한 스텝 다운) ── */
+  --font-weight-display: 800;
+  --font-weight-title:   600;
 
   /* ── border ──────────────────────────────────────────────── */
   --color-border-primary:    var(--gray-800);

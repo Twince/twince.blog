@@ -71,6 +71,10 @@
   --size-post-title:       clamp(19px, calc(18.77px + 0.064vw), 21px);
   --size-post-description: clamp(14px, calc(13.77px + 0.064vw), 15.5px);
 
+  /* ── weight: 다크에서 light-on-dark 착시 보정을 위해 스텝 다운 가능한 토큰 ── */
+  --font-weight-display: 900; /* 로고타입 등 디스플레이 */
+  --font-weight-title:   700; /* 카드·시리즈 타이틀 */
+
   /* ── layout ──────────────────────────────────────────────── */
   --content-max-width: 68ch;
   --toc-width: 22rem;
