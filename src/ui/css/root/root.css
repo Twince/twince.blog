@@ -117,7 +117,7 @@
   z-index: 1;
   transition: border-color 150ms ease-out;
 }
-.profile-art:hover .art-rail { border-right-color: var(--color-border-control); } /* hover: 은은하게 */
+.profile-art:hover .art-rail { border-right-color: var(--color-border-control); }
 
 .profile-body {
   position: relative;
@@ -193,7 +193,7 @@
   transition: color 150ms ease-out;
 }
 .profile-contacts a:hover { color: var(--color-brand-hover); }
-/* 이탤릭은 skew로 모사(Pretendard에 italic 없음) — 아이콘은 직립 유지 */
+/* 이탤릭은 skew로 모사(Pretendard에 italic 없음) */
 .profile-contacts .contact-text {
   display: inline-block;
   transform: skewX(-18deg) scaleY(0.95);
@@ -397,7 +397,7 @@
   .art-rail { display: none; }
   .profile-body { padding: calc(45px * var(--root-scale)) calc(28px * var(--root-scale)) calc(36px * var(--root-scale)); }
   .profile-quote { font-size: calc(9px * var(--root-scale)); }
-  .profile-quote br { display: none; } /* 모바일은 인용구 한 줄 */
+  .profile-quote br { display: none; }
   .profile-logotype { font-size: calc(50px * var(--root-scale)); margin-top: calc(6px * var(--root-scale)); }
   .profile-badge { height: calc(18px * var(--root-scale)); font-size: calc(11px * var(--root-scale)); }
   .profile-contacts { margin-top: calc(18px * var(--root-scale)); }
@@ -411,7 +411,7 @@
   }
   .twisted-art svg {
     width: calc(1900px * var(--root-scale));
-    transform: rotate(45deg); /* 데스크탑 61° 대비 반시계 15° */
+    transform: rotate(45deg);
   }
 
   .series-showcase { display: none; }
