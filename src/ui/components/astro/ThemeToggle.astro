@@ -33,7 +33,7 @@
     padding: 2px;
     flex-shrink: 0;
     border: 1px solid var(--color-border-primary);
-    border-radius: 999px;
+    border-radius: 7px;
     background-color: var(--color-bg-primary);
     cursor: pointer;
     transition: border-color 150ms ease-out, background-color 150ms ease-out;
@@ -44,19 +44,20 @@
     outline-offset: 2px;
   }
 
+  /* 썸 중심(left 4 + 10)과 아이콘 슬롯 중심(2 + 24/2 = 14)을 일치시킴 */
   .switch-thumb {
     position: absolute;
-    left: 2px;
+    left: 4px;
     width: 20px;
     height: 20px;
-    border-radius: 999px;
+    border-radius: 5px;
     background-color: var(--color-bg-pure);
     border: 1px solid var(--color-border-primary);
     box-shadow: 0 1px 2px color-mix(in srgb, var(--black) 10%, transparent);
     transform: translateX(0);
     transition: transform 250ms cubic-bezier(0.2, 0, 0, 1);
   }
-  :global(:root[data-theme="dark"]) .switch-thumb { transform: translateX(26px); }
+  :global(:root[data-theme="dark"]) .switch-thumb { transform: translateX(24px); }
   .theme-switch:active .switch-thumb { scale: 0.92; }
 
   /* 아이콘 두 개가 트랙 좌/우 슬롯에 상주 — 활성 쪽만 진하고 커짐 */
