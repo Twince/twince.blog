@@ -38,7 +38,9 @@ export const PostService = {
       return import.meta.env.PROD ? data.status === "published" : true;
     });
     const resolvedPosts = rawPosts.map((post: rawPost) => resolvePost(post));
-    return sortPosts(resolvedPosts);
+    // 모듈 스코프 캐시: 빌드는 프로세스당 1회라 안전, dev HMR에선 stale 허용(재시작으로 갱신)
+    cachedPosts = sortPosts(resolvedPosts);
+    return cachedPosts;
   },
 
   convertToSummaryMapper(resolvedPosts: ResolvedPost): NullableSummary {

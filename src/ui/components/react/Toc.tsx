@@ -66,9 +66,9 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
             <div key={item.id} toc-depth={item.depth}
             className={clsx(
               "toc-item flex h-fit relative hover:border-text-quaternary transition-[box-shadow] duration-300 ease-in-out ",
-              activeBorderCondition ? "border-l-2 border-text-active! hover:shadow-[inset_1px_0_0_0_var(--color-text-active)]" : "border-l-1x border-bg-primary hover:shadow-[inset_1px_0_0_0_var(--color-text-quaternary)]",
-              activeTextCondition ? "text-text-active!" : "text-text-primary",
-              currentActiveIndex === index ? "shadow-[inset_0.5px_0_0_0_var(--color-text-active)]" : "",
+              activeBorderCondition ? "border-l-2 border-brand-hover! hover:shadow-[inset_1px_0_0_0_var(--color-brand-hover)]" : "border-l-1x border-bg-primary hover:shadow-[inset_1px_0_0_0_var(--color-text-quaternary)]",
+              activeTextCondition ? "text-brand-hover!" : "text-text-primary",
+              currentActiveIndex === index ? "shadow-[inset_0.5px_0_0_0_var(--color-brand-hover)]" : "",
               index === 0 && "mt-4!"
               )}>
                 {primaryHeading && (<p className={"root-index"}>{String(headingCount).padStart(2, '0')}</p>)}

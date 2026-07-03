@@ -95,7 +95,8 @@
 }
 .series-deck {
   position: relative;
-  width: calc(262px * var(--series-scale));
+  /* 폭을 장수에서 파생 — 고정폭이면 메타(justify-between)의 tally가 덱 우측 끝 밖으로 밀림 */
+  width: calc(((var(--n, 1) - 1) * 24px + 153px) * var(--series-scale));
   height: calc(103px * var(--series-scale));
 }
 .series-deck .deck-thumb {
@@ -213,8 +214,8 @@
 @media (width < 768px) {
   .series-column { border-inline: none; }
   .series-page-title { padding: 48px 28px 16px; font-size: 20px; }
-  .series-item-link { padding: 24px 28px; min-height: 0; }
-  .series-item-side { display: none; }  /* 모바일 시안: 텍스트만 */
+  .series-item-link { padding: 24px 28px; min-height: 0; flex-direction: column; gap: 16px; }
+  .series-deck { display: none; }  /* 덱만 숨기고 메타는 유지 */
   .series-item-title { margin-top: 12px; font-size: 18px; }
   .series-item-desc { margin-top: 12px; font-size: 11px; }
 

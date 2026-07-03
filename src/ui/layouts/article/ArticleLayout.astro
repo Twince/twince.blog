@@ -17,22 +17,36 @@ const {topics, title, date, readingTime, tags} = entry?.data;
 const { Content } = await render(entry);
 ---
 <BaseLayout>
-  <article class="flex items-start w-full h-full">
-    <div id="article-wrapper" class="flex-1 flex justify-center min-w-0 h-full overflow-y-scroll 
+  {/* 사이드바 등장: 레이아웃(1fr 380px)은 고정, transform만 전환 — 상태는 data-reveal */}
+  <article id="article-root" class="article-grid w-full h-full">
+    <div id="article-wrapper" class="relative flex justify-center min-w-0 h-full overflow-y-scroll
      no-scrollbar leading-relaxed px-auto break-keep">
+     {/* 사이드바 등장 센티널: 이 높이(96px)를 지나 스크롤하면 사이드바가 나타남 */}
+     <div id="scroll-sentinel" class="absolute top-0 h-24 w-px" aria-hidden="true"></div>
      <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
       <header class="mt-15">
           <ArticleTitle topics={topics} title={title} />
           <ArticleMeta date={date} readingTime={readingTime} tags={tags} />
         </header>
-        <main>
+        <div>
           <ArticleBody Content={Content} />
-        </main>
+        </div>
       </div>
     </div>
-    <div id="side-bar" class="h-[calc(100dvh-(--spacing(16)))] max-w-[440px] min-w-[320px] flex flex-col justify-between sticky top-0 border-l-1 border-border-primary">
-      <TocWrapper slug={slug}/>
-      <NeighborPosts currentSlug={slug} />
+    <div class="sidebar-cell">
+      <div id="side-bar" class="h-[calc(100dvh-var(--header-h))] w-[380px] flex flex-col justify-between border-l-1 border-border-primary">
+        <TocWrapper slug={slug}/>
+        <NeighborPosts currentSlug={slug} />
+      </div>
     </div>
   </article>
 </BaseLayout>
+
+<script>
+  import { ScrollRevealObserver } from "../../../service/post/observe/scrollRevealObserver";
+  ScrollRevealObserver.init({
+    sentinelId: "scroll-sentinel",
+    targetId: "article-root",
+    scrollRootId: "article-wrapper",
+  });
+</script>

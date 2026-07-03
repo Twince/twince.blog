@@ -2,7 +2,10 @@
 
 /* TOC 전체 폰트 배율. 이 값 한 줄로 TOC 전체 크기를 비율 조정 */
 .toc-root { --toc-font-scale: 0.95; }
-.toc-root h2 { font-size: calc(1rem * var(--toc-font-scale)); }
+.toc-root h2 {
+  font-size: calc(1rem * var(--toc-font-scale));
+  color: var(--color-text-primary); /* 미지정 시 UA 기본 검정 → 다크 미적용 버그 */
+}
 
 .toc-item {
   @apply leading-6 cursor-pointer h-fit;

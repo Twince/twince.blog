@@ -24,13 +24,13 @@ const items = await Promise.all(
 ---
 <BaseLayout>
   <div class="w-full h-full overflow-y-scroll no-scrollbar">
-    <main class="series-page">
+    <div class="series-page">
       <div class="series-column">
         <h1 class="series-page-title">시리즈 모아보기</h1>
         <ul class="series-list">
           {items.map((item) => <SeriesListItem {...item} />)}
         </ul>
       </div>
-    </main>
+    </div>
   </div>
 </BaseLayout>

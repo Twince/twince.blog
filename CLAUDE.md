@@ -123,6 +123,15 @@ Astro 블로그. 레이어 분리가 명확하다:
 - CSS: `postGrid.css`의 `.row-post-card`(thumbnail/`.row-post-topic`). dev에서 `direction="row"` 렌더 검증 완료(이 세션엔 Figma MCP 없어 **픽셀 매칭은 미완** — Figma node 4200:759 기준 재조정 필요).
 - **아직 `direction="row"`를 쓰는 라우트 없음** → root/topic/series 페이지에서 와이어링 필요.
 
+### 리뷰 백로그 (2026-07-04 전체 코드베이스 Opus 리뷰 — 급하지 않으나 기록)
+- TwistedGridMotion 121KB 인라인 SMIL + reduced-motion 탈출구 없음(SMIL은 CSS로 못 멈춤 → matchMedia + pauseAnimations() 필요).
+- 히어로 인터랙티브 섹션(profile/칩)이 링크가 아님(cursor/hover만) — 라우팅 EDGE 채울 때 <a>로 해소(의도된 상태).
+- convertToSummaryMapper의 유령 `| null`(실제 null 반환 없음) → 소비처마다 불필요한 타입가드. thumbnail 폴백 EDGE와 함께 결정.
+- active-heading 구현 2개(headingObserver ↔ 미사용 useActiveHeadingObserver 훅), createHaadingObserver 오타 스텁 — 정리 필요.
+- CSS 중복 3종(세로 레일 ×3, hover 링 복붙, 스케일 파생 3회 저작) → u-rail/u-hover-ring 추출 후보.
+- article 타이포 !important·.article-tags 3중 소유 — 카드 태그 전용 클래스(.card-tag) 분리로 특이도 에스컬레이션 차단.
+- 폰트 self-host/subset(Pretendard full CDN 블로킹), 사이드바 deep-link 진입 시 1회 슬라이드(관찰).
+
 ### 알려진 기술 부채 (이번 작업 범위 밖, 별도 정리)
 - `astro build`/`sync`가 이 환경에서 "Vite module runner closed"로 실패(콘텐츠 로더). **`astro dev`는 정상.** clean HEAD에서도 재현 → 환경 이슈.
 - 기존 tsc 에러 다수: Astro5 content-layer 마이그레이션(`utils/resolver.ts`의 `.slug`/`.render` 제거), `getCollection` 필터 콜백 반환 타입 오타(`postServicer.ts:38`), unist/rehype visitor 타이핑, strict-null(`Toc.tsx` 등), `sorter.ts` import 경로.

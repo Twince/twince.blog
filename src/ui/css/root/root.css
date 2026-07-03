@@ -85,11 +85,12 @@
   height: auto;
   opacity: 0;
   transform: translateY(4px) rotate(-90deg);
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
+  transition: opacity 150ms ease-out, transform 150ms ease-out, color 150ms ease-out;
 }
 .profile-art:hover .rail-arrow {
   opacity: 1;
   transform: translateY(0) rotate(-90deg);
+  color: var(--color-brand-hover);
 }
 
 /* ── 프로필 패널 (393px) ─────────────────────────────────────── */
@@ -203,6 +204,8 @@
 .profile-contacts img { width: calc(10px * var(--root-scale)); height: auto; flex-shrink: 0; }
 /* 에셋 svg의 fill="black" 하드코딩을 무력화 — hover 색 전환 추종 */
 .profile-contacts svg path { fill: currentColor; }
+/* PNG(discord)는 리컬러 불가 → 다크에서 반전으로 근사 */
+:root[data-theme="dark"] .profile-contacts img { filter: invert(1); }
 
 /* ── 배경 twisted grid(수렴·발산) — stroke=currentColor로 테마 추종 ── */
 .twisted-art {

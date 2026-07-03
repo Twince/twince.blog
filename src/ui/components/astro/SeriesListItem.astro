@@ -25,7 +25,7 @@ const { id, title, description, postCount, thumbnails } = Astro.props;
 
     <div class="series-item-side">
       {thumbnails.length > 0 && (
-        <div class="series-deck" aria-hidden="true">
+        <div class="series-deck" aria-hidden="true" style={`--n: ${thumbnails.length}`}>
           {thumbnails.map((thumb, i) => (
             <Image src={thumb.src} alt="" class="deck-thumb" style={`--i: ${i}`} />
           ))}

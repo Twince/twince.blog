@@ -285,8 +285,58 @@
     line-height: 1.3rem;
   }
 }
-@media (max-width: 1140px) {
-  #side-bar {
-    display: none;
-  }
+/* ── 사이드바 스크롤 등장: 상태는 data-reveal(ScrollRevealObserver), 시각은 CSS.
+   레이아웃(컬럼)은 고정하고 transform만 전환 — 리플로우 없이 본문이 살짝 밀림.
+   --sidebar-push로 이동량 조절(0 = 안 밀림, 190px = 완전 중앙 기준). ── */
+.article-grid {
+  --sidebar-push: 96px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
 }
+.sidebar-cell { overflow: hidden; }
+
+#article-wrapper {
+  transform: translateX(var(--sidebar-push));
+  transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.article-grid[data-reveal="shown"] #article-wrapper { transform: none; }
+
+#side-bar {
+  opacity: 0;
+  transform: translateX(24px);
+  pointer-events: none;
+  transition: opacity 300ms ease-out, transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.article-grid[data-reveal="shown"] #side-bar {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* no-JS: 사이드바 상시 노출(기본 UX 보존) */
+@media (scripting: none) {
+  #article-wrapper { transform: none; }
+  #side-bar { opacity: 1; transform: none; pointer-events: auto; }
+}
+/* 아티클 <1024: 사이드바 미사용, 본문 이동 없음 */
+@media (width < 1024px) {
+  .article-grid,
+  .article-grid[data-reveal="shown"] { grid-template-columns: 1fr 0px; }
+  #article-wrapper { transform: none; }
+  #side-bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #article-wrapper, #side-bar { transition: none; }
+}
+
+/* 긴 TOC는 사이드바 안에서 내부 스크롤(클리핑 셀에 잘리지 않게) */
+#side-bar > aside {
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+}
+
+/* 이웃 포스트 화살표 — 에셋 svg의 fill=black 하드코딩 무력화(다크 추종) */
+.neighbor-arrow path { fill: currentColor; }
+.neighbor-arrow { transition: color 150ms ease-out; }
+#side-bar a:hover .neighbor-arrow { color: var(--color-brand-hover); }
