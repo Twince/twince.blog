@@ -1,16 +1,15 @@
 ---
-import { PostService } from "../service/post/fetch/postServicer";
-
 import BaseLayout from "../ui/layouts/BaseLayout.astro";
-import PostGridLayout from "../ui/layouts/post-grid/postGridLayout.astro";
+import PostGridLayout from "../ui/layouts/post-grid/PostGridLayout.astro";
 ---
 <BaseLayout>
-    <div class="w-full h-full flex justify-center overflow-y-scroll no-scrollbar">
-      <div class="post-grid-text-package flex-col">
-        <h2 class="grid-title mx-6 mb-10 mt-14">POSTS</h2>
-        <PostGridLayout direction="col">
-          <slot />
-        </PostGridLayout>
+  <div class="w-full h-full overflow-y-scroll no-scrollbar">
+    {/* root(.root-recent)와 동일한 컬럼·여백 비율: 1100px 중앙, 모바일 28px / md+ 그리드만 23px 인셋 */}
+    <main class="post-grid-text-package max-w-[1100px] mx-auto px-[28px] md:px-0 pb-24">
+      <h2 class="grid-title mt-14 mb-10">POSTS</h2>
+      <div class="md:px-[23px]">
+        <PostGridLayout direction="col" />
       </div>
-    </div>
+    </main>
+  </div>
 </BaseLayout>

@@ -19,7 +19,7 @@ export type ResolvedPost = {
   author: 'Twince';
   coAuthor?: PostData['coAuthors'],
   thumbnail: {
-    src: string;
+    src: NonNullable<PostData['thumbnail']>['src']; // 스키마 image() = ImageMetadata (string 아님)
     alt: string;
   }
   seo: PostData['seo'];

@@ -1,9 +1,11 @@
 ---
 // 프로필 히어로 패널 — Figma 3917:741. 치수/타이포는 root.css의 --root-* 토큰이 통제.
+import { Image } from "astro:assets";
 import TwistedGridMotion from "./TwistedGridMotion.astro";
 import EmailIcon from "../../assets/icons/email.svg";
 import GithubIcon from "../../assets/icons/github.svg";
 import InstagramIcon from "../../assets/icons/instagram.svg";
+import discordIcon from "../../assets/icons/discord.png";
 ---
 <div class="profile-art">
   <div class="twisted-art" aria-hidden="true">
@@ -24,17 +26,21 @@ import InstagramIcon from "../../assets/icons/instagram.svg";
     </p>
 
     <address class="profile-contacts">
-      <a href="mailto:contact@twince.blog">
-        <EmailIcon aria-hidden="true" />
-        <span class="contact-text">contact@twince.blog</span>
-      </a>
-      <a href="https://github.com/twince" target="_blank" rel="noopener noreferrer">
-        <GithubIcon aria-hidden="true" />
-        <span class="contact-text">twince</span>
-      </a>
       <a href="https://www.instagram.com/twince_o" target="_blank" rel="noopener noreferrer">
         <InstagramIcon aria-hidden="true" />
         <span class="contact-text">twince_o</span>
+      </a>
+      <a href="https://github.com/twince" target="_blank" rel="noopener noreferrer" aria-label="GitHub: twince">
+        <GithubIcon aria-hidden="true" />
+        <span class="contact-text">twince</span>
+      </a>
+      <a href="https://discord.com/users/twince" target="_blank" rel="noopener noreferrer" aria-label="Discord: twince">
+        <Image src={discordIcon} alt="" aria-hidden="true" width="20" height="20" />
+        <span class="contact-text">twince</span>
+      </a>
+      <a href="mailto:contact@twince.blog">
+        <EmailIcon aria-hidden="true" />
+        <span class="contact-text">contact@twince.blog</span>
       </a>
     </address>
   </div>

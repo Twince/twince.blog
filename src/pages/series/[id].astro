@@ -1,0 +1,23 @@
+---
+import { getCollection } from "astro:content";
+import SeriesDetailLayout from "../../ui/layouts/series/SeriesDetailLayout.astro";
+import { PostService } from "../../service/post/fetch/postServicer";
+import type { PostCardWithThumbnail } from "../../service/post/types/PostServicer";
+
+// EDGE(사용자): 라우팅 결정 지점 — 지금은 최소 구현(컬렉션 전 항목 = 페이지).
+// 생각해볼 것: ① 포스트 0개인 시리즈도 페이지를 만들 것인가?
+// ② '시리즈 #N'의 N은 무엇이 결정하는가(컬렉션 순서? 생성일?) — 지금은 배열 index.
+export async function getStaticPaths() {
+  const seriesEntries = await getCollection("series");
+  return seriesEntries.map((entry, i) => ({
+    params: { id: entry.data.id },
+    props: { series: entry.data, index: i + 1 },
+  }));
+}
+
+const { series, index } = Astro.props;
+const posts = (await PostService.getPostsWithSeries(series.id)).filter(
+  (post): post is PostCardWithThumbnail => post !== null
+);
+---
+<SeriesDetailLayout series={series} posts={posts} index={index} />

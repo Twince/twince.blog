@@ -57,6 +57,12 @@ Astro 블로그. 레이어 분리가 명확하다:
 사용자가 v1/v2 중 **v2(시리즈 위·토픽 아래)** 채택 — 근거: 구체(콘텐츠)→추상(분류) 순서,
 밀도 교차 리듬(무거움-가벼움-무거움) 청킹, 칩=피드 진입 어포던스, 모바일 선형화 일관성.
 
+**시리즈 페이지 1차 구현 완료(2026-07-03)**: `/series` 목록(SeriesListItem, 썸네일 덱+tally) +
+`/series/[id]` 상세(SeriesDetailLayout: 슬러그 세로 레일+히어로+row 카드 그리드) + `series.css`(--series-scale 패턴).
+데이터는 기존 공개 API 조합(getCollection + getPostsWithSeries — N+1이지만 cachedPosts라 저비용).
+[id]의 getStaticPaths는 최소 구현 + EDGE 주석(0포스트 시리즈 페이지 여부·시리즈 #N 결정 주체).
+※ root MOCK_SERIES의 #2·#3 id는 아직 dead route — getSeriesCards() EDGE 완료 시 해소.
+
 **다음 작업(사용자 EDGE — 학습 모드 결정 지점):**
 1. `SeriesCardSummary` 타입 설계 + `getSeriesCards()` 구현 (`service/post/types/SeriesServicer.ts`의 힌트 참고)
    → `RootLayout.astro`의 `MOCK_SERIES` 교체. 핵심: postCount 역참조 집계(N+1 vs 1-pass 맵).

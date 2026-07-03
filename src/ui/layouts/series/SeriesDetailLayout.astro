@@ -1,0 +1,49 @@
+---
+// 시리즈 상세 — Figma 4305:1568: 히어로(세로 슬러그 레일 + 라벨/타이틀/설명) + row 카드 그리드
+// TODO(사용자): 히어로 우측 시리즈 전용 이미지는 스키마 확장 결정 후
+import BaseLayout from "../BaseLayout.astro";
+import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
+import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
+
+interface Props {
+  series: { id: string; title: string; description: string };
+  posts: PostCardWithThumbnail[];
+  index: number; // 시리즈 #N — 목록 순서 기반
+}
+const { series, posts, index } = Astro.props;
+---
+<BaseLayout>
+  <div class="w-full h-full overflow-y-scroll no-scrollbar">
+    <main class="series-page">
+      <div class="series-column">
+        <section class="series-hero">
+          <span class="hero-rail" aria-hidden="true">
+            <svg class="rail-arrow" viewBox="0 0 12 12" fill="none">
+              <path d="M2.5 9.5L9.5 2.5M9.5 2.5H3.5M9.5 2.5V8.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="square"/>
+            </svg>
+            <span class="rail-label">/{series.id}</span>
+          </span>
+          <div class="series-hero-body">
+            <span class="series-hero-label">시리즈 #{index}</span>
+            <h1 class="series-hero-title">{series.title}</h1>
+            <p class="series-hero-desc">{series.description}</p>
+          </div>
+        </section>
+
+        <section class="series-posts post-grid-text-package">
+          <div class="series-posts-meta">
+            <span>총 {posts.length}개의 포스트</span>
+            <span class="series-tally" aria-hidden="true">{"I".repeat(Math.min(posts.length, 20))}</span>
+          </div>
+          <ul class="series-posts-grid post-grid">
+            {posts.map((card) => (
+              <li class="post-item transition-all duration-150 ease-in-out hover:-translate-y-1">
+                <RowDirectionPost {...card} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
+    </main>
+  </div>
+</BaseLayout>

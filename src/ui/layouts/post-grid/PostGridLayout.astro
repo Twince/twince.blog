@@ -14,11 +14,11 @@ const cards = posts
   .map((post) => PostService.convertToSummaryMapper(post))
   .filter((card): card is PostCardWithThumbnail => card !== null);
 
-// row: lg+ 2열(미만 1열, 카드는 CSS가 col 시안으로 변형). 가로 인셋은 소비 페이지 소유.
+// row: md+ 2열(카드는 <1024에서 CSS가 col 시안으로 변형). 가로 인셋은 소비 페이지 소유.
 // col: 3열 그리드.
 const gridClass = direction === "row"
-  ? "post-grid grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-10"
-  : "post-grid grid justify-items-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]";
+  ? "post-grid grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10"
+  : "post-grid grid justify-items-center grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3";
 ---
 <div>
   <ul class={gridClass}>

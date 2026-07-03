@@ -1,4 +1,8 @@
 ---
+interface Props {
+  vertical?: boolean; // 모바일 햄버거 메뉴 패널용 세로 배열
+}
+const { vertical = false } = Astro.props;
 const currentPath = Astro.url.pathname;
 const menus = [
   { label: "POSTS", href: "/posts" },
@@ -13,7 +17,7 @@ const linkColor = (href: string) =>
   isRoot || isActive(href) ? "text-text-primary" : "text-text-quaternary";
 ---
 
-<nav class="flex font-semibold text-[15px] gap-x-8 md:gap-x-14">
+<nav class:list={["flex font-semibold text-[15px]", vertical ? "flex-col gap-y-5" : "gap-x-8 md:gap-x-14"]}>
   {
     menus.map((menu) => (
       <a class={linkColor(menu.href)} href={menu.href}>

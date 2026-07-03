@@ -50,8 +50,7 @@
   .root-hero-right { border-left: 1px solid var(--color-border-primary); }
 }
 
-/* ── 히어로 인터랙션: hover 시 brand-hover 4면 링(inset — 레이아웃 시프트 없음,
-   sticky 헤더(z-40)에 가려지지 않도록 요소 안쪽에 그림) ── */
+/* ── 히어로 hover 링: inset이라 레이아웃 시프트·헤더 가림 없음 ── */
 .profile-art { transition: box-shadow 150ms ease-out, opacity 250ms ease-out; }
 .series-col  { transition: box-shadow 150ms ease-out; }
 .series-showcase { transition: opacity 250ms ease-out; }
@@ -144,7 +143,6 @@
   color: var(--color-text-primary);
   transition: color 150ms ease-out;
 }
-/* 패널 hover: 로고타입은 악센트, 그리드는 잉크 톤(text-secondary)으로 진해짐 */
 .profile-art:hover .profile-logotype { color: var(--color-brand-hover); }
 .profile-art:hover .twisted-art {
   color: var(--color-text-secondary);
@@ -201,7 +199,8 @@
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
-.profile-contacts svg { width: calc(10px * var(--root-scale)); height: auto; flex-shrink: 0; }
+.profile-contacts svg,
+.profile-contacts img { width: calc(10px * var(--root-scale)); height: auto; flex-shrink: 0; }
 /* 에셋 svg의 fill="black" 하드코딩을 무력화 — hover 색 전환 추종 */
 .profile-contacts svg path { fill: currentColor; }
 
@@ -248,7 +247,7 @@
 .series-col + .series-col { border-left: 1px solid var(--color-border-primary); }
 .series-col:hover .series-title { color: var(--color-brand-hover); }
 
-/* 카드 hover 시 좌상단에 떠오르는 화살표(↖) — rail-arrow와 같은 등장 문법 */
+/* 카드 hover 시 좌상단에 떠오르는 화살표(↖) */
 .series-arrow {
   position: absolute;
   top: calc(12px * var(--root-scale));
@@ -337,7 +336,7 @@
 }
 .topic-chip {
   display: flex;
-  align-items: center; /* #를 name+desc 블록 세로 중앙에 */
+  align-items: center;
   gap: calc(9px * var(--root-scale));
   cursor: pointer;
   transform-origin: left center; /* #를 앵커로 확대 — 그리드 정렬 유지 */
@@ -371,6 +370,7 @@
   padding-block: calc(67px * var(--root-scale)) calc(96px * var(--root-scale));
 }
 .root-section-title {
+  margin-left: 10px;
   font-size: var(--root-section-title);
   font-weight: 700;
   color: var(--color-text-primary);
@@ -401,17 +401,17 @@
   .profile-logotype { font-size: calc(50px * var(--root-scale)); margin-top: calc(6px * var(--root-scale)); }
   .profile-badge { height: calc(18px * var(--root-scale)); font-size: calc(11px * var(--root-scale)); }
   .profile-contacts { margin-top: calc(18px * var(--root-scale)); }
-  /* 모바일 시안: 아트가 히어로 밴드 전체를 풀블리드로 채움(우측 치우침) */
+  /* 아트가 히어로 전체를 풀블리드로 채움 */
   .twisted-art {
     left: calc(50px * var(--root-scale));
-    top: -20px;
+    top: -15px;
     width: 100%;
     height: 100%;
     clip-path: none; /* 레일 없음 → 마스킹 해제 */
   }
   .twisted-art svg {
-    width: calc(1900px * var(--root-scale));
-    transform: rotate(45deg);
+    width: calc(1300px * var(--root-scale));
+    transform: rotate(40deg);
   }
 
   .series-showcase { display: none; }

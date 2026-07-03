@@ -52,7 +52,7 @@
 
   .row-post-thumbnail {
     width: var(--card-row-thumb);
-    aspect-ratio: 188 / 128;   /* Figma 썸네일 비율 ≈1.47 */
+    aspect-ratio: 188 / 128;
     object-fit: cover;
     border-radius: var(--card-row-radius);
     flex-shrink: 0;
@@ -66,25 +66,24 @@
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--color-text-primary); /* Figma: topic 라벨은 검정 */
+    color: var(--color-text-primary);
     line-height: 1.15;
   }
   .post-title      { font-size: var(--card-row-title); line-height: 1.25; }
   .post-description { font-size: var(--card-row-desc);  line-height: 1.35; }
-  .tags-wrapper    { margin: 0; } /* Tags.astro의 mt-8 무력화, 간격은 row-post-text gap */
+  .tags-wrapper    { margin: 0; } /* Tags의 mt-8 무력화 */
 }
-/* chip 폰트: 3-class 특이도로 .post-grid .tags-wrapper .article-tags(10px)를 이김 */
+/* 3-class 특이도: 위의 .post-grid 쪽 10px 규칙을 이기기 위함 */
 .row-post-card .tags-wrapper .article-tags {
   font-size: var(--card-row-tag);
 }
 
-/* post 카드 chip 보더 = Figma #adadad(border-control) — article 태그(border-primary)와 구분 */
+/* 카드 chip 보더는 article 태그와 구분(border-control) */
 .post-grid .tags-wrapper .article-tags {
   border-color: var(--color-border-control);
 }
 
-/* col 카드 치수 = Figma vertical-post-card(4200:801) raw × --card-scale
-   (thumb 260×176 → tags → title 15 → desc 10) */
+/* col 카드 치수 = Figma vertical-post-card(4200:801) raw × --card-scale */
 .col-post-card {
   --card-col-w:      calc(260px * var(--card-scale));
   --card-col-title:  calc(15px  * var(--card-scale));
@@ -119,31 +118,35 @@
 }
 .col-post-card .tags-wrapper .article-tags { font-size: var(--card-col-tag); }
 
-/* row 카드 모바일 변형(<768) — 마크업 하나로 col 시안(4114:1165)화:
-   썸네일 풀폭 + tags를 title 위로(order) + topic 숨김 */
-@media (width < 768px) {
+/* <1024(모바일+태블릿): row 카드를 마크업 그대로 col 시안(4114:1165)으로 변형
+   — 태블릿에서 축소된 row 카드가 너무 작아 보이는 문제도 함께 해소 */
+@media (width < 1024px) {
   .row-post-card {
     flex-direction: column;
     align-items: stretch;
+    /* 가로용 gap이 세로로 그대로 남아 썸네일↔칩이 벌어짐 → 절반으로 */
+    gap: calc(var(--card-row-gap) / 2);
 
     .row-post-thumbnail {
       width: 100%;
-      aspect-ratio: 317 / 215;   /* 모바일 시안 썸네일 비율 */
+      aspect-ratio: 317 / 215;
     }
-    /* 모바일은 시안 절대값(스케일 무시) — 뷰포트 고정 스펙이라 knob 비적용 의도 */
+    /* 시안 절대값(--card-scale 비적용) */
     .row-post-text { gap: 4px; padding-top: 8px; }
     .row-post-topic { display: none; }
     .tags-wrapper { order: -1; }
     .post-title      { font-size: 16px; }
     .post-description { font-size: 12px; }
   }
+}
 
-  /* col 카드도 모바일 시안(4114:1165) 절대 스펙으로 */
+/* 모바일(<768): col 카드 시안 절대 스펙 */
+@media (width < 768px) {
   .col-post-card {
     width: 100%;
 
     .col-post-thumbnail { aspect-ratio: 317 / 215; }
-    .col-post-text { margin-top: 8px; } /* 썸네일↔태그 시안 간격 */
+    .col-post-text { margin-top: 8px; }
     .post-title      { font-size: 16px; }
     .post-description { font-size: 12px; }
   }

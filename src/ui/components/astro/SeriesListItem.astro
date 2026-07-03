@@ -1,0 +1,40 @@
+---
+// 시리즈 목록 행 — Figma 4305:1519
+import { Image } from "astro:assets";
+
+interface Thumbnail {
+  src: ImageMetadata;
+  alt?: string; // 덱은 장식용이라 렌더에선 미사용
+}
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  postCount: number;
+  thumbnails: Thumbnail[];
+}
+const { id, title, description, postCount, thumbnails } = Astro.props;
+---
+<li class="series-item">
+  <a href={`/series/${id}`} class="series-item-link">
+    <div class="series-item-text">
+      <span class="series-item-slug">/{id}</span>
+      <h2 class="series-item-title">{title}</h2>
+      <p class="series-item-desc">{description}</p>
+    </div>
+
+    <div class="series-item-side">
+      {thumbnails.length > 0 && (
+        <div class="series-deck" aria-hidden="true">
+          {thumbnails.map((thumb, i) => (
+            <Image src={thumb.src} alt="" class="deck-thumb" style={`--i: ${i}`} />
+          ))}
+        </div>
+      )}
+      <div class="series-item-meta">
+        <span>총 {postCount}개의 포스트</span>
+        <span class="series-tally" aria-hidden="true">{"I".repeat(Math.min(postCount, 20))}</span>
+      </div>
+    </div>
+  </a>
+</li>

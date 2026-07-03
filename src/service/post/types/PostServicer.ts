@@ -1,5 +1,6 @@
 //imports
 import type { CollectionEntry } from "astro:content";
+import type { ResolvedPost } from "./Resolver";
 
 // types
 export type rawPost = CollectionEntry<'posts'>
@@ -23,9 +24,6 @@ export interface PostCardSummary extends PostSummary {
 
 // 카드 + 썸네일 (썸네일 없는 post list는 PostCardSummary를 직접 사용)
 export interface PostCardWithThumbnail extends PostCardSummary {
-  thumbnail: {
-    src: string;
-    alt: string;
-  }
+  thumbnail: ResolvedPost['thumbnail']; // src = ImageMetadata — 타입의 단일 출처는 Resolver
 }
 
