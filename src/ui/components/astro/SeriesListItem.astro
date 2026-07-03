@@ -33,7 +33,7 @@ const { id, title, description, postCount, thumbnails } = Astro.props;
       )}
       <div class="series-item-meta">
         <span>총 {postCount}개의 포스트</span>
-        <span class="series-tally" aria-hidden="true">{"I".repeat(Math.min(postCount, 20))}</span>
+        <span class="series-tally" aria-hidden="true">{"▒".repeat(Math.min(postCount, 20))}</span>
       </div>
     </div>
   </a>
