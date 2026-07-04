@@ -239,11 +239,11 @@
     margin-top: 2rem;
     padding-top: 2rem;
     padding-bottom: 4rem;
-    /* border-top: 1px solid var(--color-article-divider); */
+    border-top: 1px solid var(--color-article-divider);
     h2 {display: none;}
     li {
       font-size: var(--size-article-footnotes);
-      color: var(--color-text-tertiary);
+      color: var(--color-article-content);
       margin-left: 0.6rem;
       padding-left: 0.3rem;
     }
@@ -267,6 +267,9 @@
     margin-top: 5rem;
     font-size: 1.5rem;
     font-weight: 700;
+    color: var(--color-article-title);
+    display: block;
+    margin-bottom: 1rem;
   }
 }
 
@@ -340,3 +343,26 @@
 .neighbor-arrow path { fill: currentColor; }
 .neighbor-arrow { transition: color 150ms ease-out; }
 #side-bar a:hover .neighbor-arrow { color: var(--color-brand-hover); }
+
+/* 스크롤 게이트 — 단일 컨트롤(위치 이동), 아이콘↔링 크로스페이드 */
+:root {
+  --gate-progress: 0;
+}
+
+/* ready 상태: bob 애니메이션 */
+@keyframes gate-bob {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.gate-control[data-gate="ready"] {
+  animation: gate-bob 2s ease-in-out infinite;
+}
+
+.gate-control[data-gate="charging"] {
+  animation: none;
+}

@@ -1,0 +1,165 @@
+---
+import { Icon } from 'astro-icon/components';
+---
+
+{/* 스크롤 게이트 컨트롤: position fixed, 하단/상단 도킹 전환
+    같은 중심 좌표에 (a) SVG progress 링, (b) chevron-down, (c) chevron-up 겹침
+    JS가 data-gate/progress에 따라 opacity만 토글 → 아이콘↔링 크로스페이드 */}
+<div class="gate-control" data-gate="hidden">
+  <svg class="gate-ring" viewBox="0 0 60 60" width="60" height="60" aria-hidden="true">
+    {/* 배경 트랙 원 (회색) */}
+    <circle
+      class="gate-ring-track"
+      cx="30"
+      cy="30"
+      r="24"
+      fill="none"
+      stroke-width="3"
+    />
+    {/* progress 링 (dashoffset이 CSS var --gate-progress로 실시간 갱신) */}
+    <circle
+      class="gate-ring-progress"
+      cx="30"
+      cy="30"
+      r="24"
+      fill="none"
+      stroke-width="3"
+      style={`--ring-circ: ${2 * Math.PI * 24}`}
+    />
+  </svg>
+
+  {/* chevron-down 아이콘 — ready/decay 상태에서만 opacity 1 */}
+  <div class="gate-icon-layer gate-icon-down">
+    <Icon name="chevron_down" class="gate-icon" />
+  </div>
+
+  {/* chevron-up 아이콘 — arrived/snapping-forward 상태에서만 opacity 1 */}
+  <div class="gate-icon-layer gate-icon-up">
+    <Icon name="chevron_up" class="gate-icon" />
+  </div>
+
+  <button
+    class="gate-button"
+    aria-label="관련 포스트 미리보기"
+    title="계속 스크롤하면 관련 글을 볼 수 있어요"
+  />
+</div>
+
+<style>
+  .gate-control {
+    position: fixed;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 60px;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms ease-out;
+  }
+
+  /* 상태별 표시 */
+  .gate-control[data-gate="ready"],
+  .gate-control[data-gate="charging"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gate-control[data-gate="snapping-forward"],
+  .gate-control[data-gate="arrived"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .gate-control[data-gate="snapping-back"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* SVG 링 */
+  .gate-ring {
+    position: absolute;
+    inset: 0;
+  }
+
+  .gate-ring-track {
+    stroke: var(--color-border-primary);
+  }
+
+  .gate-ring-progress {
+    stroke: var(--color-text-active);
+    stroke-dasharray: var(--ring-circ, 150);
+    stroke-dashoffset: calc(var(--ring-circ, 150) * (1 - var(--gate-progress, 0)));
+    stroke-linecap: round;
+    transition: stroke-dashoffset 50ms linear;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gate-ring-progress {
+      transition: none;
+    }
+  }
+
+  /* 아이콘 레이어들 — 절대 위치로 겹침 */
+  .gate-icon-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 100ms ease-in-out;
+  }
+
+  .gate-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-active);
+  }
+
+  /* ready: chevron-down만 보임 (opacity 1) */
+  .gate-control[data-gate="ready"] .gate-icon-down {
+    opacity: 1;
+  }
+
+  .gate-control[data-gate="ready"] .gate-icon-up {
+    opacity: 0;
+  }
+
+  /* charging: progress가 극단 벗어날 때 크로스페이드 (0.1~0.9에선 링만) */
+  .gate-control[data-gate="charging"] .gate-icon-down {
+    opacity: 1;
+  }
+
+  .gate-control[data-gate="charging"] .gate-icon-up {
+    opacity: 0;
+  }
+
+  /* arrived: chevron-up만 보임 */
+  .gate-control[data-gate="arrived"] .gate-icon-down {
+    opacity: 0;
+  }
+
+  .gate-control[data-gate="arrived"] .gate-icon-up {
+    opacity: 1;
+  }
+
+  /* snapping-forward: 진행 중 아이콘 전환 (JS가 동적으로 토글) */
+  /* snapping-back: JS가 역방향 전환 */
+
+  /* 불가시 버튼 (위치 이동 및 상태 변화용) */
+  .gate-button {
+    all: unset;
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gate-control,
+    .gate-icon-layer {
+      transition: none;
+    }
+  }
+</style>

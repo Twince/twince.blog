@@ -7,7 +7,10 @@ import ArticleMeta from "./../article/ArticleMeta.astro"
 
 import TocWrapper from "../../components/astro/TocWrapper.astro"
 import NeighborPosts from "../../components/astro/NeighborPosts.astro"
+import ScrollGateControl from "../../components/astro/ScrollGateControl.astro"
+import RelatedPosts from "../../components/astro/RelatedPosts.astro"
 
+import { PostService } from "../../../service/post/fetch/postServicer"
 import { getEntry, render } from "astro:content";
 
 const { slug } = Astro.props;
@@ -15,24 +18,37 @@ const entry = await getEntry('posts', slug);
 
 const {topics, title, date, readingTime, tags} = entry?.data;
 const { Content } = await render(entry);
+
+// 관련 포스트 fetch
+const relatedPosts = await PostService.getRelatedPosts(slug, tags);
 ---
 <BaseLayout>
   {/* 사이드바 등장: 레이아웃(1fr 380px)은 고정, transform만 전환 — 상태는 data-reveal */}
   <article id="article-root" class="article-grid w-full h-full">
-    <div id="article-wrapper" class="relative flex justify-center min-w-0 h-full overflow-y-scroll
-     no-scrollbar leading-relaxed px-auto break-keep">
-     {/* 사이드바 등장 센티널: 이 높이(96px)를 지나 스크롤하면 사이드바가 나타남 */}
-     <div id="scroll-sentinel" class="absolute top-0 h-24 w-px" aria-hidden="true"></div>
-     <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
-      <header class="mt-15">
-          <ArticleTitle topics={topics} title={title} />
-          <ArticleMeta date={date} readingTime={readingTime} tags={tags} />
-        </header>
-        <div>
-          <ArticleBody Content={Content} />
+    <div id="article-wrapper" class="relative flex flex-col min-w-0 h-full overflow-y-scroll no-scrollbar leading-relaxed px-auto break-keep" style={{overscrollBehaviorY: 'contain'}}>
+     {/* 본문 영역 */}
+     <div class="flex justify-center flex-shrink-0">
+       {/* 사이드바 등장 센티널: 이 높이(96px)를 지나 스크롤하면 사이드바가 나타남 */}
+       <div id="scroll-sentinel" class="absolute top-0 h-24 w-px" aria-hidden="true"></div>
+       <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
+        <header class="mt-15">
+            <ArticleTitle topics={topics} title={title} />
+            <ArticleMeta date={date} readingTime={readingTime} tags={tags} />
+          </header>
+          <div>
+            <ArticleBody Content={Content} />
+          </div>
         </div>
       </div>
+
+      {/* 스크롤 게이트 컨트롤 */}
+      <ScrollGateControl />
+
+      {/* 관련 포스트 섹션 */}
+      <RelatedPosts currentSlug={slug} tags={tags} relatedPosts={relatedPosts} />
     </div>
+
+    {/* 사이드바 */}
     <div class="sidebar-cell">
       <div id="side-bar" class="h-[calc(100dvh-var(--header-h))] w-[380px] flex flex-col justify-between border-l-1 border-border-primary">
         <TocWrapper slug={slug}/>
@@ -44,9 +60,17 @@ const { Content } = await render(entry);
 
 <script>
   import { ScrollRevealObserver } from "../../../service/post/observe/scrollRevealObserver";
+  import { ScrollGateObserver } from "../../../service/post/observe/scrollGateObserver";
+
   ScrollRevealObserver.init({
     sentinelId: "scroll-sentinel",
     targetId: "article-root",
     scrollRootId: "article-wrapper",
+  });
+
+  ScrollGateObserver.init({
+    sentinelId: "scroll-sentinel",
+    scrollRootId: "article-wrapper",
+    relatedPostsSentinelId: "related-posts-top-sentinel",
   });
 </script>
