@@ -9,6 +9,7 @@ import TocWrapper from "../../components/astro/TocWrapper.astro"
 import NeighborPosts from "../../components/astro/NeighborPosts.astro"
 import ScrollGateControl from "../../components/astro/ScrollGateControl.astro"
 import RelatedPosts from "../../components/astro/RelatedPosts.astro"
+import Giscus from "../../components/astro/Giscus.astro"
 
 import { PostService } from "../../../service/post/fetch/postServicer"
 import { getEntry, render } from "astro:content";
@@ -23,13 +24,11 @@ const { Content } = await render(entry);
 const relatedPosts = await PostService.getRelatedPosts(slug, tags);
 ---
 <BaseLayout>
-  {/* 사이드바 등장: 레이아웃(1fr 380px)은 고정, transform만 전환 — 상태는 data-reveal */}
+  {/* 사이드바 등장: 레이아웃(1fr 380px)은 고정, transform만 전환 — 페이지 로드 후 data-reveal 자동 토글 */}
   <article id="article-root" class="article-grid w-full h-full">
     <div id="article-wrapper" class="relative flex flex-col min-w-0 h-full overflow-y-scroll no-scrollbar leading-relaxed px-auto break-keep" style={{overscrollBehaviorY: 'contain'}}>
-     {/* 본문 영역 */}
-     <div class="flex justify-center flex-shrink-0">
-       {/* 사이드바 등장 센티널: 이 높이(96px)를 지나 스크롤하면 사이드바가 나타남 */}
-       <div id="scroll-sentinel" class="absolute top-0 h-24 w-px" aria-hidden="true"></div>
+     {/* pb-32: 본문 끝 도킹 시 게이트 컨트롤(bottom 48 + 60px)이 글과 겹치지 않는 전용 공간 */}
+     <div class="flex justify-center flex-shrink-0 pb-32">
        <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">
         <header class="mt-15">
             <ArticleTitle topics={topics} title={title} />
@@ -38,6 +37,9 @@ const relatedPosts = await PostService.getRelatedPosts(slug, tags);
           <div>
             <ArticleBody Content={Content} />
           </div>
+
+          {/* 댓글 (giscus) — 각주 아래. Discussions 설정 완료 전까진 렌더링 안 됨(컴포넌트 내 가드) */}
+          <Giscus />
         </div>
       </div>
 
@@ -59,18 +61,64 @@ const relatedPosts = await PostService.getRelatedPosts(slug, tags);
 </BaseLayout>
 
 <script>
-  import { ScrollRevealObserver } from "../../../service/post/observe/scrollRevealObserver";
   import { ScrollGateObserver } from "../../../service/post/observe/scrollGateObserver";
 
-  ScrollRevealObserver.init({
-    sentinelId: "scroll-sentinel",
-    targetId: "article-root",
-    scrollRootId: "article-wrapper",
+  // 사이드바(TOC): 로드 100ms 후 등장 시작, 400ms 전환
+  const articleRoot = document.getElementById("article-root");
+  if (articleRoot) {
+    window.setTimeout(() => {
+      articleRoot.dataset.reveal = "shown";
+    }, 100);
+  }
+
+  const footnoteDetails = document.querySelector("section.footnotes details") as HTMLDetailsElement | null;
+  const articleWrapper = document.getElementById("article-wrapper");
+  let skipAutoScroll = false; // 앵커 점프가 스크롤을 담당하는 경로에선 auto-scroll 중복 방지
+
+  // 본문 각주 참조(sup) 클릭 시 닫힌 토글을 열어 앵커 점프가 끊기지 않게
+  document.addEventListener("click", (e) => {
+    const link = (e.target as HTMLElement).closest("a[data-footnote-ref]");
+    if (!link) return;
+    if (footnoteDetails && !footnoteDetails.open) {
+      skipAutoScroll = true;
+      footnoteDetails.open = true;
+    }
+  });
+
+  // 각주 해시(#user-content-fn-*)로 직접 진입한 경우도 동일하게 열어줌
+  if (location.hash && footnoteDetails && !footnoteDetails.open) {
+    const target = document.getElementById(decodeURIComponent(location.hash.slice(1)));
+    if (target && footnoteDetails.contains(target)) {
+      skipAutoScroll = true;
+      footnoteDetails.open = true;
+      target.scrollIntoView();
+    }
+  }
+
+  footnoteDetails?.addEventListener("toggle", () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (footnoteDetails.open && !skipAutoScroll && articleWrapper) {
+      articleWrapper.scrollBy({ top: 160, behavior: reduced ? "auto" : "smooth" });
+    }
+    skipAutoScroll = false;
+
+    // 토글은 스크롤 없이 게이트 경계를 옮긴다 — 게이트와의 결합은 이 한 줄뿐
+    ScrollGateObserver.sync();
   });
 
   ScrollGateObserver.init({
-    sentinelId: "scroll-sentinel",
     scrollRootId: "article-wrapper",
-    relatedPostsSentinelId: "related-posts-top-sentinel",
   });
+
+  // 스크롤 컨테이너가 #article-wrapper라 형제인 헤더 위의 휠은 아무것도 스크롤하지 않음 → 포워딩
+  document.querySelector("header")?.addEventListener(
+    "wheel",
+    (e) => {
+      const w = e as WheelEvent;
+      const delta = w.deltaMode === 1 ? w.deltaY * 16 : w.deltaMode === 2 ? w.deltaY * window.innerHeight : w.deltaY;
+      articleWrapper?.scrollBy({ top: delta });
+    },
+    { passive: true }
+  );
 </script>

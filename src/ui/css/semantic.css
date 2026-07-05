@@ -19,6 +19,7 @@
   /* ── color: surface / background ─────────────────────────── */
   --color-bg-primary:   var(--gray-50);  /* 페이지 배경 */
   --color-bg-hero:      var(--gray-75);  /* hero 표면 — 페이지 bg보다 한 단계 낮음(L) */
+  --color-bg-elevated:  var(--gray-75);  /* 미세 elevated 표면 — 페이지 bg와 50단위(75/925) 한 스텝 차이 */
   --color-bg-secondary: var(--gray-400);
   --color-bg-inverse:   var(--gray-900);
   --color-bg-pure:      var(--white);    /* 카드/chip 흰 표면 */

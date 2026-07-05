@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import { rehypeImgToFigure } from './src/plugins/rehypeImgToFigure';
 import { rehypeToc } from './src/plugins/rehypeToc';
+import { rehypeFootnotesToggle } from './src/plugins/rehypeFootnotesToggle';
 
 import react from '@astrojs/react';
 import _icon from 'astro-icon'
@@ -17,7 +18,8 @@ export default defineConfig({
   markdown: {
     rehypePlugins: [
       rehypeImgToFigure,
-      rehypeToc
+      rehypeToc,
+      rehypeFootnotesToggle
     ],
   },
   vite: {

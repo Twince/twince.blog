@@ -89,15 +89,16 @@ export const PostService = {
       ? tags
       : [tags];
 
+    // 태그는 frontmatter 자유 라벨이라 대소문자가 섞임 — 비교는 양쪽 모두 대문자 정규화
     const tagSet = new Set(targetTags.map((c) => c.toUpperCase()));
     const filteredPosts = allPosts.filter((post) => {
       const postTags = post.tags;
 
       if (minMatch) {
-        const intersection = postTags.filter((c) => tagSet.has(c));
+        const intersection = postTags.filter((c) => tagSet.has(c.toUpperCase()));
         return intersection.length >= minMatch;
       }
-      return postTags.some((c) => tagSet.has(c));
+      return postTags.some((c) => tagSet.has(c.toUpperCase()));
     });
     return filteredPosts.map((post) => this.convertToSummaryMapper(post));
   },

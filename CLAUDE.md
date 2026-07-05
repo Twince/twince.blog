@@ -123,6 +123,125 @@ Astro 블로그. 레이어 분리가 명확하다:
 - CSS: `postGrid.css`의 `.row-post-card`(thumbnail/`.row-post-topic`). dev에서 `direction="row"` 렌더 검증 완료(이 세션엔 Figma MCP 없어 **픽셀 매칭은 미완** — Figma node 4200:759 기준 재조정 필요).
 - **아직 `direction="row"`를 쓰는 라우트 없음** → root/topic/series 페이지에서 와이어링 필요.
 
+### 스크롤 게이트 디버깅 (2026-07-05 사이클)
+- 원인 3개 수정: ① init에 사이드바용 `scroll-sentinel`이 넘겨져 상단 96px만 지나면 바닥 판정(+`!isIntersecting`=바닥 로직 자체도 반대) → `gate-sentinel`로 교체 + intersecting(경계)/isPast(지나침) 3구간 판별. ② `related-posts-top-sentinel`이 이름과 달리 섹션 맨 아래 렌더 → 센티널 삭제, gate-sentinel 하나로 복귀 감지 통합(rootMargin -48px 히스테리시스). ③ `gate-bob` keyframe이 `.gate-control`의 transform을 덮어써 `translateX(-50%)` 파괴 + JS `style.top` 트위닝과 CSS `bottom:48px` 충돌 → **위치는 fixed 고정, 도킹 전환은 `--gate-dock-y`(translateY) CSS transition만**, bob은 아이콘 레이어로 이동.
+- **전이 라벨**: transform을 애니메이션 keyframe이 소유하면 같은 속성의 다른 목적(센터링/도킹)이 전부 소거된다 — transform 합성이 필요하면 레이어(래퍼)를 분리해 속성 소유자를 하나로.
+- 인터랙션 확정: 흰색 chevron이 `--gate-progress`에 따라 progress 링으로 **모프**(Face ID/Toss 느낌). 상시 트랙 원 제거, arc(stroke-dashoffset)와 chevron(opacity+scale)이 순수 CSS calc 크로스페이드 — JS는 progress 값만 쓴다. tween 중 휠은 preventDefault(네이티브 스크롤과 tween 경합 차단).
+- 검증: raw CDP 스크립트(scratchpad/gate-test.mjs, gate-click-test.mjs)로 진입/충전/스냅/자유복귀/클릭복귀 E2E 통과.
+- ※ 아이콘 흰색 고정(#fff)은 사용자 지정 — 라이트 테마 배경에선 안 보일 수 있음(추후 토큰화 판단은 사용자).
+
+**2차(같은 날, 사용자 방향 전환):**
+- **사이드바(TOC) 스크롤 등장 폐지** → 로드 100ms 후 data-reveal="shown" 토글(전환 400ms, 0.5초 내 완료).
+  `scrollRevealObserver.ts` 삭제, scroll-sentinel 제거. CSS 전환 메커니즘(data-reveal)은 그대로 재사용.
+- **게이트 감지를 IO→scroll 산술로 교체**: 센티널이 flex-col에서 shrink되어 높이 0 + 경계 정확히에선
+  서브픽셀(0.125px) 오차로 intersecting 실패 → `scrollTop >= boundary(= relatedPosts.offsetTop - clientHeight)`
+  비교로 일원화. gate-sentinel div, IntersectionObserver, rootMargin 히스테리시스 전부 삭제.
+- **경계 하드 클램프**: 게이트 통과 전(hidden/ready/charging) scroll 이벤트에서 하향 통과 차단
+  (lastScrollTop으로 방향 판별 — 관련 포스트에서 위로 빠져나올 땐 통과). IO 비동기 판정 전에
+  휠 관성·키보드·스크롤바로 섹션이 살짝 노출되던 문제의 근본 해결.
+- **전이 라벨**: 픽셀 경계의 정확한 판정이 필요하면 IO(비동기·서브픽셀 취약)보다 scroll 이벤트 + 산술 비교.
+  IO는 "대략 이 근처 진입" 감지에 적합. 또한 flex 컨테이너 안의 고정 크기 센티널은 `shrink-0` 필수.
+- **RelatedPosts 리팩토링**: BACK TO POSTS 제거, 수제 category-chip → `Tags` 컴포넌트 재사용,
+  섹션 `min-height: calc(100dvh - var(--header-h))` + flex 세로 센터링(페이지 섹션처럼 풀뷰포트).
+- 검증: scratchpad/gate-test-v2.mjs — 로드 등장/클램프(프로그램·휠 오버슛)/충전 스냅/클릭·자유 복귀/구조 10항목 전부 통과.
+
+**3차(같은 날): 게이트 양방향 대칭 + 각주 토글 + 관련 포스트 스타일 정합**
+- **복귀도 충전식(대칭)**: arrived에서 위 휠 = `charging-back`(임계 180 — 진입 600보다 훨씬 가볍게,
+  tau=임계/4로 링 그려지는 감각 동일). 섹션 상단도 상향 클램프. 자유 스크롤 복귀(free-scroll return) 폐지.
+  단, **큰 상향 점프(≥ clientHeight/2 — TOC 링크·PageUp)는 게이트 해제하고 통과**(클램프가 내비게이션을 막으면 안 됨).
+  chevron-up도 progress에 따라 링으로 모프 + arrived에서 bob (ready와 대칭).
+- 게이트 아이콘/링 색 `#fff` → `--color-text-primary` 토큰(라이트/다크 추종).
+- **각주 토글**: `rehypeFootnotesToggle` 플러그인(신규, astro.config 등록 — config 변경은 dev 재시작 필요).
+  GFM section.footnotes → details/summary 변환, summary = arrow_left 인라인 svg(currentColor) + "각주" + (n).
+  기본 닫힘, 본문 각주 참조 클릭 시 자동 열림(ArticleLayout 스크립트). CSS ::before "각주" 라벨 제거.
+  닫힘 = 180°(▸), 열림 = -90°(▾) 회전. 각주 접힘→본문 높이 변화는 경계 동적 재계산이라 게이트 무영향(검증됨).
+- 관련 포스트: 타이틀/설명 = `--size-article-root-heading`/`--size-article-content` + `--color-article-title`
+  (clamp라 모바일 픽셀 override 삭제), 배경 = `--color-bg-pure`(elevated), 콘텐츠 상단 정렬(padding-top 100px
+  = 도킹 24 + 컨트롤 60 + 여백 16 — 게이트 컨트롤 픽셀 지오메트리와 결합, 센터링 제거).
+- 검증: gate-test-v3.mjs(대칭 게이트 7항목) + footnote-test.mjs(토글 7항목) 전부 통과.
+
+**4차(같은 날): 디테일 튜닝 + giscus 스캐폴딩**
+- 각주 (n): weight 700 + margin-left -4px(gap 8px 대비 타이트). 화살표 닫힘 ▾(270°)→열림 ▴(450°) = 시계방향 180°(아코디언 관례).
+- **`--color-bg-elevated` semantic 토큰 신설**(L: gray-75 / D: gray-925 — 페이지 bg와 50단위 한 스텝 차이, hero와 같은 값).
+  관련 포스트 배경이 bg-pure(900, 차이 과함)에서 이걸로 교체.
+- **관련 포스트 "글자 깨짐" 원인**: 카드 타이포 규칙(.post-title 등)이 `.post-grid-text-package` 조상 스코프 안에 있는데
+  RelatedPosts에 래퍼 클래스가 없어 weight 400으로 풀림 → inner에 클래스 추가로 해소.
+  **전이 라벨**: 컴포넌트를 새 컨텍스트에 이식할 땐 컴포넌트 자신뿐 아니라 *조상 스코프 클래스 계약*까지 함께 옮겨야 한다.
+- 섹션 타이틀/설명 = `--size-post-grid-title`(≈25.7px)/`--size-post-description`(≈14.7px) — article prose 토큰(30px)은 과했고
+  post-grid 헤더 레시피(.grid-title과 동일)로 정합.
+- **giscus 댓글 스캐폴딩**(`Giscus.astro`, 각주 아래): repo `Twince/twince.blog`, repo-id `R_kgDOQk2RFQ`(조회 완료).
+  **Discussions 미활성 상태라 CATEGORY_ID 비어 있음 → 컴포넌트가 렌더링 가드 중.** 활성화 절차는 컴포넌트 주석 참고
+  (Discussions 켜기 → giscus 앱 설치 → giscus.app에서 category-id 발급 → 상수 채우기). 테마 토글 동기화(postMessage) 구현됨.
+- 검증: round4-test.mjs 8항목 전부 통과.
+
+**5·6차(같은 날): 각주-게이트 동작 분리 + 제스처 튕김 + 디테일**
+- related 타이틀↔설명 gap 4px. 카드 tag↔title 벌어짐 재발 원인: 헤더 칩용 `.related-posts-inner :global(.tags-wrapper)`
+  후손 셀렉터가 카드 내부까지 매칭 → **자식 결합자(>)로 한정**(스코프 누수 — 4차 '스코프 계약' 버그의 쌍대).
+- **각주 토글 ↔ 게이트 분리**: 토글 open 시 wrapper.scrollBy(+160, smooth) 자동 스크롤. 간섭 분석 결과 3개 처리 —
+  ① 토글은 스크롤 없이 경계를 옮김(특히 close 때 관련 포스트 걸침) → `ScrollGateObserver.sync()` 공개 메서드 신설,
+  토글 핸들러가 1회 호출(게이트와의 결합은 이 한 줄뿐). ② 스냅 tween 중 높이 변동 → tween 목표를 프레임마다 재계산.
+  ③ ref 클릭 자동 열림은 앵커 점프가 스크롤 담당 → auto-scroll 억제 플래그. 자동 스크롤 자체는 프로그램 스크롤이라
+  충전(raw는 wheel/touch에서만 누적)과 원천 분리, 경계 초과는 기존 하드 클램프가 단일 방어선.
+- 각주 화살표: 닫힘 ▸(180°, 옆) → 열림 ▾(270°) — 시계방향 90°.
+- **제스처 튕김(chargeBlocked)**: 경계 도달을 만든 제스처의 잔여 관성은 충전 금지 — 클램프/도달 시 잠금,
+  입력이 `GESTURE_GAP`(200ms) 이상 끊겨야 새 제스처로 인정해 해제. 복귀 방향(섹션 top 도달)도 대칭.
+  "DOM이 더 없는 것처럼" 한 번 정지 후, 의도된 새 스크롤부터 충전.
+- 게이트 링: 반지름 24→21.6(-10%), 색 `--color-brand-primary`(오렌지). 아이콘은 text-primary 유지.
+- 검증: round5(8항목)·round6(튕김/링 6항목)·v3 회귀 전부 통과.
+
+**7차(같은 날): 스크롤 성능 + neighbor 라벨 인터랙션**
+- **스크롤 버벅임 해소**: wheel/touchmove의 non-passive 리스너가 상시 부착돼 컴포지터(스레드) 스크롤을 죽이던 것
+  → `updateInputBlocking()`이 **경계 구간(isAtBottom)에서만 동적으로 부착/해제**. 본문 구간은 리스너 0개.
+  **전이 라벨**: preventDefault가 필요한 이벤트 리스너는 "필요한 구간에서만 존재"하게 설계 — non-passive의 비용은
+  핸들러 실행이 아니라 *리스너의 존재 자체*(브라우저가 매 이벤트 JS 응답을 대기).
+- **헤더 위 휠 무반응**: 스크롤 컨테이너가 #article-wrapper라 형제인 헤더 위 휠은 아무것도 스크롤 안 함
+  → 헤더 wheel(passive)을 wrapper.scrollBy로 포워딩. 프로그램 스크롤이라 충전과 무관, 클램프가 방어.
+- **related 카드 hover 히트박스**: ul에 grid 유틸이 없어 li가 블록 전체 폭 → PostGridLayout col variant와 동일한
+  grid 유틸 복사(justify-items-center 포함, li 폭=카드 폭). ※ PostGridLayout 직접 재사용은 내부 fetch 구조라 불가
+  — 커스텀 리스트 주입은 CLAUDE.md 기존 EDGE(limit prop vs 래퍼) 결정에 묶임.
+- related 타이틀↔설명 gap 2px. neighbor desc max-w 33ch→26ch(여백 확보).
+- **neighbor hover 라벨**: '이전 글/다음 글'(quaternary, neighbor-desc 폰트)이 아이콘↔제목 사이 등장.
+  라벨 width 0→40px 확장이 제목을 40px 밀고, 화살표는 transform으로 반대 20px(제목의 1/2). 라벨 translateX는 중앙 보정.
+  prev 아이템은 desc를 텍스트 컬럼 안으로 재구조화(제목과 함께 이동).
+- 발견(백로그): 이웃 없는 포스트의 neighbor 링크가 href="undefined" dead link(기존). wrapper에 정체불명 non-passive
+  scroll 리스너 1개 존재(headingObserver 추정 — scroll은 cancelable 아니라 성능 무해).
+- 검증: round7-test.mjs 10항목 전부 통과.
+
+**8·9차(같은 날): neighbor 오버플로 수정 + 이웃 없음 폴백**
+- **긴 title/desc에 화살표·라벨 소실 원인**: 7차에 desc를 flex row 안 컬럼으로 옮기면서 flex 아이템의
+  `min-width: auto`(min-content 이하로 안 줄어듦)가 발동 — truncate(nowrap) 제목·break-keep desc의 min-content가
+  row를 넘치게 해 화살표는 클리핑, 라벨은 shrink로 짜부. → 텍스트 컬럼 `min-w-0`, 화살표·라벨 `shrink-0`.
+  **전이 라벨**: flex 안에서 truncate/nowrap이 "안 먹는" 문제의 9할은 min-width:auto — 줄어들 아이템에 min-w-0,
+  보호할 아이템에 shrink-0을 명시해 "누가 줄어드는가"를 계약으로 박아라.
+- 라벨 y = 화살표 y 정렬(align-self:flex-start + mt 6px + h 20px — self-stretch 세로 중앙에서 변경).
+- **이웃 없음 폴백**(10차 재조정): href=/posts, **정적 레이아웃** — hover 라벨/이동 인터랙션 없음(-next/-prev 클래스 미부여),
+  아이콘(root series-count 목록 svg, currentColor) 왼쪽 고정, "목록보기" 타이틀 아래 "다음/이전 글이 없어요"가 desc 자리(1줄),
+  칸 높이 축소(py-4/py-3, 2줄 고정 존 미적용). 기존 href="undefined" 해소. next/previous 각각 삼항으로 정상/폴백 분기.
+- **desc 클램프 + 조건부 예약**(11·12차 확정): 상한은 항상 -webkit-line-clamp:2. 하한(min-height 2줄)은
+  `hasBoth`(양쪽 이웃 존재)일 때만 컴포넌트가 `neighbor-desc-reserved`를 붙임 — 정상-정상은 두 칸 높이 **동일**
+  (prev 패딩도 next와 같은 pt-6 pb-5로 통일, 검증 111px==111px), 폴백 혼합은 예약 없이 컴팩트(유령 빈 줄 방지).
+  **전이 라벨**: '상한 클램프'와 '하한 예약'은 별개 결정. 예약은 인접 여백 비용을 치르므로 *정렬이 필요한 컨텍스트에서만*
+  켠다 — 존재 여부를 렌더 시점에 아는 SSR에선 조건부 클래스가 가장 싼 스위치.
+  ※ Astro 삼항 분기 괄호 안에 JSX 주석+요소 병치 금지(단일 표현식 깨짐 — "Expected ) but found $$render"로 실제 밟음).
+- 검증: round8(긴 텍스트 4항목)·round9(폴백·고정존 4항목) 전부 통과.
+
+**10~13차(2026-07-06): 리뷰 반영 + 마감 (커밋 직전 상태)**
+- Opus 워크플로 리뷰 8건 반영: ① getPostWithTags 대소문자 비대칭(tagSet만 대문자) → 양쪽 정규화.
+  ② 터치 충전이 누적 오프셋을 매 이벤트 재합산(제곱 폭증) → 직전 이벤트와의 증분만(touchPrevY).
+  ③ wheel deltaMode 미정규화(Firefox LINE≈3/노치) → normalizeWheelDelta(LINE×16/PAGE×clientH), 헤더 포워딩도.
+  ④⑤ 키보드/스크롤바 게이트 통과 불가(a11y) → 하향에도 뷰포트 절반 이상 점프는 게이트 해제 통과 + 게이트 버튼이
+  ready에서 triggerRelease(양방향 클릭/Enter 경로). ⑥ neighbor href 상대경로(프로덕션 trailing slash 404) → /posts/ 절대.
+  ⑦ 리사이즈 시 경계/상태 미갱신 → resize에서 onScroll() 재판정. ⑧ 각주 해시 직접 진입 시 닫힌 토글 → 로드 시 자동 열림.
+- 폴백 재조정(10차): 정적 레이아웃(hover 인터랙션·라벨 없음), 아이콘 왼쪽 고정, "~ 글이 없어요"는 desc 자리, 높이 축소.
+- **관성 튕김 개선(13차)**: GESTURE_GAP 200→120ms + **델타 스파이크 언블록**(관성은 단조 감쇠 → 델타 급증 = 새 제스처,
+  ≥15px && >직전×1.5). "직후 재스크롤"이 대기 없이 즉시 충전되면서도 한 제스처는 여전히 안 넘어감.
+- 게이트 컨트롤 **x = 본문 컬럼 중앙**(뷰포트 중앙 아님 — updateControlX, 사이드바 reveal transform 종료 후 재측정 700ms).
+  본문 하단 pb-32(128px) 전용 공간 — 컨트롤이 글과 안 겹침. top 도킹 여백 24→12px(섹션 padding-top 88px 연동).
+- 각주 접힘/펼침 높이 애니메이션: `::details-content` + `interpolate-size`(Chrome 131+, 미지원은 즉시 전환 폴백).
+- 인플로우(문서 흐름 내) 컨트롤 리팩토링은 **미착수** — arrived 상태(상단 도킹) 어포던스를 별도 요소로 풀어야 해서
+  사용자 결정 대기. 현재는 fixed + 예약 공간 절충.
+- 검증: round13 10항목 전부 통과. ※ 합성 휠 테스트는 이벤트 간격을 실제 관성(~10ms)에 맞춰야 GESTURE_GAP 오탐 없음.
+
 ### 리뷰 백로그 (2026-07-04 전체 코드베이스 Opus 리뷰 — 급하지 않으나 기록)
 - TwistedGridMotion 121KB 인라인 SMIL + reduced-motion 탈출구 없음(SMIL은 CSS로 못 멈춤 → matchMedia + pauseAnimations() 필요).
 - 히어로 인터랙티브 섹션(profile/칩)이 링크가 아님(cursor/hover만) — 라우팅 EDGE 채울 때 <a>로 해소(의도된 상태).

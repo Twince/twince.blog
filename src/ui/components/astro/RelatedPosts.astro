@@ -1,8 +1,8 @@
 ---
-import { Icon } from 'astro-icon/components';
 import { PostService } from '../../../service/post/fetch/postServicer';
 import type { PostCardWithThumbnail } from '../../../service/post/types/PostServicer';
 import ColDirectionPost from './ColDirectionPost.astro';
+import Tags from './Tags.astro';
 
 interface Props {
   currentSlug: string;
@@ -32,161 +32,83 @@ const tagsNormalized = tags.map((tag) => {
   const upper = tag.toUpperCase();
   return upper === 'PHILOSPPY' ? 'PHILOSOPHY' : upper;
 });
+
+const heading = isMatchingEmpty ? '이런 글은 어때요?' : '같은 카테고리, 다른 글';
+const description = isMatchingEmpty
+  ? '최근에 올린 글들을 소개해요'
+  : '카테고리가 2개 이상 겹치는 글들을 모아보았어요!';
 ---
 
 <section id="related-posts" class="related-posts">
-  <div class="related-posts-header">
-    <a href="/posts" class="related-posts-back">
-      <Icon name="arrow_left" class="related-posts-arrow" />
-      <span>BACK TO POSTS</span>
-    </a>
-  </div>
+  {/* post-grid-text-package: 카드 타이포 규칙(.post-title 등)의 조상 스코프 — 없으면 weight가 풀림 */}
+  <div class="related-posts-inner post-grid-text-package">
+    {!isMatchingEmpty && <Tags tags={tagsNormalized.slice(0, 4)} />}
 
-  {/* 매칭 성공 케이스: 카테고리 칩 표시 */}
-  {!isMatchingEmpty && (
-    <>
-      <div class="related-posts-categories">
-        {tagsNormalized.slice(0, 4).map((tag) => (
-          <div class="category-chip">{tag}</div>
-        ))}
-      </div>
-
-      <div class="related-posts-content">
-        <h2 class="related-posts-title">같은 카테고리, 다른 글</h2>
-        <p class="related-posts-description">
-          카테고리가 2개 이상 겹치는 글들을 모아보았어요!
-        </p>
-      </div>
-    </>
-  )}
-
-  {/* 매칭 실패 케이스: 폴백 분기 */}
-  {isMatchingEmpty && (
     <div class="related-posts-content">
-      <h2 class="related-posts-title">이런 글은 어때요?</h2>
-      <p class="related-posts-description">
-        최근에 올린 글들을 소개해요
-      </p>
+      <h2 class="related-posts-title">{heading}</h2>
+      <p class="related-posts-description">{description}</p>
     </div>
-  )}
 
-  {/* 카드 그리드 (2x3) */}
-  <ul class="related-posts-grid post-grid">
-    {displayPosts.map((card) => (
-      <li class="post-item py-1 px-1 rounded-[1px] transition-all duration-150 ease-in-out hover:-translate-y-1">
-        <ColDirectionPost {...card} />
-      </li>
-    ))}
-  </ul>
-
-  {/* 관련 포스트 섹션 상단 센티널 — scrollGateObserver가 위로 스크롤 시 재진입 감지 */}
-  <div id="related-posts-top-sentinel" class="h-px w-full" aria-hidden="true"></div>
+    {/* grid 유틸은 PostGridLayout col variant와 동일 — 없으면 li가 전체 폭이라 카드 밖 hover가 걸림 */}
+    <ul class="related-posts-grid post-grid grid justify-items-center grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+      {displayPosts.map((card) => (
+        <li class="post-item py-1 px-1 rounded-[1px] transition-all duration-150 ease-in-out hover:-translate-y-1">
+          <ColDirectionPost {...card} />
+        </li>
+      ))}
+    </ul>
+  </div>
 </section>
 
 <style>
   .related-posts {
     width: 100%;
-    background-color: var(--color-bg-primary);
-    padding: calc(96px * var(--root-scale, 1)) calc(23px * var(--root-scale, 1));
+    min-height: calc(100dvh - var(--header-h)); /* 풀뷰포트 섹션 — 콘텐츠가 더 크면 자연 확장 */
+    background-color: var(--color-bg-elevated);
+    /* 상단 88px = 게이트 컨트롤(도킹 12 + 높이 60) + 여백 16 */
+    padding: 88px calc(23px * var(--root-scale, 1)) calc(48px * var(--root-scale, 1));
     border-top: 1px solid var(--color-border-primary);
   }
 
-  .related-posts-header {
-    max-width: 1100px;
-    margin: 0 auto calc(48px * var(--root-scale, 1));
-  }
-
-  .related-posts-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--color-text-primary);
-    text-decoration: none;
-    transition: color 150ms ease-out;
-  }
-
-  .related-posts-back:hover {
-    color: var(--color-brand-hover);
-  }
-
-  .related-posts-arrow {
-    width: 16px;
-    height: 16px;
-  }
-
-  /* 카테고리 칩 (매칭 성공 케이스만) */
-  .related-posts-categories {
-    max-width: 1100px;
-    margin: 0 auto calc(32px * var(--root-scale, 1));
-    display: flex;
-    flex-wrap: wrap;
-    gap: calc(8px * var(--root-scale, 1));
-  }
-
-  .category-chip {
-    display: inline-block;
-    padding: calc(4px * var(--root-scale, 1)) calc(10px * var(--root-scale, 1));
-    border: 1px solid var(--color-border-control);
-    border-radius: 4px;
-    background-color: var(--color-bg-pure);
-    font-size: calc(11px * var(--root-scale, 1));
-    font-weight: 600;
-    color: var(--color-text-primary);
-  }
-
-  .related-posts-content {
-    max-width: 1100px;
-    margin: 0 auto calc(48px * var(--root-scale, 1));
-  }
-
-  .related-posts-title {
-    font-size: calc(21px * var(--root-scale, 1));
-    font-weight: 700;
-    color: var(--color-text-primary);
-    margin-bottom: calc(8px * var(--root-scale, 1));
-  }
-
-  .related-posts-description {
-    font-size: calc(10px * var(--root-scale, 1));
-    color: var(--color-text-tertiary);
-    margin: 0;
-  }
-
-  /* 카드 그리드 (2x3, col-post-card 스케일 override) */
-  .related-posts-grid {
+  .related-posts-inner {
+    width: 100%;
     max-width: 1100px;
     margin: 0 auto;
   }
 
+  /* 자식 결합자(>) 필수 — 후손 셀렉터면 카드 내부 tags-wrapper까지 매칭돼 tag↔title이 벌어짐 */
+  .related-posts-inner > :global(.tags-wrapper) {
+    margin-top: 0;
+    margin-bottom: calc(32px * var(--root-scale, 1));
+  }
+
+  .related-posts-content {
+    margin-bottom: calc(48px * var(--root-scale, 1));
+  }
+
+  /* .grid-title과 동일 레시피 — 다른 라우트의 그리드 헤더와 통일 */
+  .related-posts-title {
+    font-size: var(--size-post-grid-title);
+    font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 2px;
+  }
+
+  .related-posts-description {
+    font-size: var(--size-post-description);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+
+  /* 카드 그리드 (2x3, col-post-card 스케일 override) */
   .related-posts-grid .post-item {
     /* col-post-card --card-scale override: 260px × 1.3 = 338px (Figma Big Card) */
     --card-scale: 1.3;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .related-posts-back {
-      transition: none;
-    }
-  }
-
-  {/* 모바일 대응: 카드 폭 100%, 칩 크기 축소 */}
   @media (width < 768px) {
     .related-posts {
-      padding: calc(48px * var(--root-scale, 1)) calc(28px * var(--root-scale, 1));
-    }
-
-    .category-chip {
-      font-size: 10px;
-    }
-
-    .related-posts-title {
-      font-size: 16px;
-    }
-
-    .related-posts-description {
-      font-size: 12px;
+      padding: 88px calc(28px * var(--root-scale, 1)) calc(48px * var(--root-scale, 1));
     }
   }
 </style>
