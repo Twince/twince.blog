@@ -4,7 +4,7 @@
    반응형 3단(레인지 문법 = 정수 경계 + 소수 뷰포트 갭 없음):
      <768 모바일 / 768≤w<1024 태블릿(축소+시리즈 2개) / ≥1024 데스크탑 */
 .root-page {
-  --root-scale: 1;
+  --root-scale: 1.1;
 
   /* profile */
   --root-profile-col: calc(393px * var(--root-scale));

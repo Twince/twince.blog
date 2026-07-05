@@ -7,7 +7,7 @@
   {
     "id": "insight",
     "title": "INSIGHT",
-    "description": "깊이 사유하고 통찰하기"
+    "description": "개인적인 생각과 통찰"
   },
   {
     "id": "design",
@@ -22,11 +22,11 @@
   {
     "id": "memoir",
     "title": "MEMOIR",
-    "description": "자신을 돌아보며"
+    "description": "자신을 회고하며"
   },
   {
     "id": "founding",
     "title": "FOUNDING",
-    "description": "zero to one, one to hundred"
+    "description": "0에서 1, 1에서 100으로"
   }
 ]
