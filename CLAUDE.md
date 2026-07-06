@@ -238,8 +238,15 @@ Astro 블로그. 레이어 분리가 명확하다:
 - 게이트 컨트롤 **x = 본문 컬럼 중앙**(뷰포트 중앙 아님 — updateControlX, 사이드바 reveal transform 종료 후 재측정 700ms).
   본문 하단 pb-32(128px) 전용 공간 — 컨트롤이 글과 안 겹침. top 도킹 여백 24→12px(섹션 padding-top 88px 연동).
 - 각주 접힘/펼침 높이 애니메이션: `::details-content` + `interpolate-size`(Chrome 131+, 미지원은 즉시 전환 폴백).
-- 인플로우(문서 흐름 내) 컨트롤 리팩토링은 **미착수** — arrived 상태(상단 도킹) 어포던스를 별도 요소로 풀어야 해서
-  사용자 결정 대기. 현재는 fixed + 예약 공간 절충.
+- ~~인플로우 컨트롤 리팩토링 미착수~~ → **14차(refactor/architecture)에서 완료**: `.gate-control`을
+  fixed → **in-flow(relative)** 전환. x는 `margin: auto`(레이아웃), 도킹은 `--gate-y: 120px`(48+60+12,
+  뷰포트 무관 상수 — CSS 상태 셀렉터가 결정). setDock/updateControlX/700ms 재측정 등 JS 지오메트리 전부 삭제.
+  각주 토글로 콘텐츠 높이가 변해도 컨트롤이 콘텐츠와 함께 움직여 위치 버그 클래스 소멸.
+  각주는 기본 열림(rehype open:true), 각주↔컨트롤 여백 84→28px(footnotes pb 1rem + 컨트롤 mt 12 + 마지막 p 마진 0).
+  **발견 버그**: 각주 닫힘의 ::details-content 높이 transition(250ms)이 toggle 시점의 sync()보다 늦게 끝나
+  재클램프를 놓침 → transitionend + 300ms 백업 sync 추가(멱등). 검증: in-flow 8케이스 + 최종 스팟 2건 전부 통과.
+  **전이 라벨**: 콘텐츠에 종속된 UI는 fixed(뷰포트 좌표)가 아니라 in-flow(콘텐츠 좌표)에 두면 콘텐츠 변형에
+  공짜로 추종한다 — fixed가 필요한 건 '콘텐츠와 무관하게 화면에 붙어야 하는 것'뿐.
 - 검증: round13 10항목 전부 통과. ※ 합성 휠 테스트는 이벤트 간격을 실제 관성(~10ms)에 맞춰야 GESTURE_GAP 오탐 없음.
 
 ### 아키텍처 감사 사이클 (2026-07-06, branch refactor/architecture)

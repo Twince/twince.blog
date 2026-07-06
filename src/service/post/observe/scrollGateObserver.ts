@@ -37,7 +37,6 @@ let lastScrollTop = 0;
 let chargeBlocked = false;
 let lastBlockedInputTime = 0;
 let lastBlockedDelta = Infinity;
-let currentDock: 'top' | 'bottom' = 'bottom';
 
 let decayRafId: number | null = null;
 let releaseRafId: number | null = null;
@@ -93,35 +92,6 @@ function setState(newState: GateState) {
     'aria-label',
     newState === 'arrived' || newState === 'charging-back' ? '본문으로 돌아가기' : '관련 포스트로 이동'
   );
-}
-
-function getControl(): HTMLElement | null {
-  return document.querySelector('.gate-control');
-}
-
-// 도킹 전환 — 위치는 fixed 고정, 이동량만 CSS var로 전달(애니메이션은 CSS transition)
-function setDock(dock: 'top' | 'bottom') {
-  currentDock = dock;
-  const control = getControl();
-  if (!control) return;
-
-  if (dock === 'top') {
-    const headerHeight =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64; // index.css 토큰 실값
-    const bottomDockTop = window.innerHeight - 48 - 60;
-    control.style.setProperty('--gate-dock-y', `${headerHeight + 12 - bottomDockTop}px`);
-  } else {
-    control.style.setProperty('--gate-dock-y', '0px');
-  }
-}
-
-// x 좌표 = 본문 컬럼(스크롤 루트) 중앙 — 뷰포트 중앙이 아님(사이드바만큼 어긋난다)
-function updateControlX() {
-  const scrollRoot = scrollRootEl;
-  const control = getControl();
-  if (!scrollRoot || !control) return;
-  const rect = scrollRoot.getBoundingClientRect();
-  control.style.left = `${rect.left + rect.width / 2}px`;
 }
 
 function cancelDecay() {
@@ -199,7 +169,6 @@ function onScroll() {
         cancelDecay();
         raw = 0;
         updateProgress();
-        setDock('top');
         setState('arrived');
       }
     }
@@ -215,7 +184,6 @@ function onScroll() {
         cancelDecay();
         raw = 0;
         updateProgress();
-        setDock('bottom');
         setState(top >= boundary - BOUNDARY_EPSILON ? 'ready' : 'hidden');
       }
     }
@@ -359,7 +327,6 @@ function triggerRelease() {
   const startTarget: number = maybeTarget; // 클로저(animate)에는 제어흐름 내로잉이 전파되지 않음
 
   setState('snapping-forward');
-  setDock('top');
 
   const finish = () => {
     raw = 0;
@@ -403,7 +370,6 @@ function triggerSnappingBack() {
   if (!scrollRoot) return;
 
   setState('snapping-back');
-  setDock('bottom');
   raw = 0;
   updateProgress();
 
@@ -463,11 +429,7 @@ export const ScrollGateObserver = {
     scrollRootEl = scrollRoot;
 
     setState('hidden');
-    setDock('bottom');
     updateProgress();
-    updateControlX();
-    // 사이드바 등장 transform(translateX) 종료 후 본문 컬럼 위치가 확정된다 — 재측정
-    window.setTimeout(updateControlX, 700);
 
     lastScrollTop = scrollRoot.scrollTop;
     scrollRoot.addEventListener('scroll', onScroll, { passive: true });
@@ -476,8 +438,6 @@ export const ScrollGateObserver = {
     document.querySelector('.gate-button')?.addEventListener('click', onGateControlClick);
 
     resizeListener = () => {
-      if (currentDock === 'top') setDock('top');
-      updateControlX();
       onScroll(); // clientHeight 변동으로 경계·상태가 이동했을 수 있음
     };
     window.addEventListener('resize', resizeListener);

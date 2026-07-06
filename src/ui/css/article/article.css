@@ -238,7 +238,7 @@
   section.footnotes {
     margin-top: 2rem;
     padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-bottom: 1rem;
     border-top: 1px solid var(--color-article-divider);
     h2 {display: none;}
     li {
@@ -260,6 +260,10 @@
 
     p {
       margin-bottom: 0.8rem;
+    }
+    /* 마지막 각주의 잔여 p 마진 제거 — 아래 게이트 컨트롤과의 여백은 padding+컨트롤 마진이 소유 */
+    li:last-child p:last-of-type {
+      margin-bottom: 0;
     }
   }
   /* 각주 토글 (rehypeFootnotesToggle이 details/summary로 변환) */

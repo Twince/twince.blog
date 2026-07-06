@@ -69,7 +69,7 @@ export function rehypeFootnotesToggle() {
       const details: Element = {
         type: 'element',
         tagName: 'details',
-        properties: { className: ['footnotes-toggle'] },
+        properties: { className: ['footnotes-toggle'], open: true },
         children: [summary, ...body],
       };
 

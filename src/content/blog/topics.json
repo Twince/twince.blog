@@ -5,8 +5,8 @@
     "description": "기술을 통해 세상을 바라보기"
   },
   {
-    "id": "insight",
-    "title": "INSIGHT",
+    "id": "insights",
+    "title": "INSIGHTS",
     "description": "개인적인 생각과 통찰"
   },
   {
@@ -25,8 +25,8 @@
     "description": "자신을 회고하며"
   },
   {
-    "id": "founding",
-    "title": "FOUNDING",
-    "description": "0에서 1, 1에서 100으로"
+    "id": "founders",
+    "title": "FOUNDERS",
+    "description": "zero to one, one to hundred"
   }
 ]
