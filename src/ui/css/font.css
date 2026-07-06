@@ -1,7 +1,4 @@
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Staatliches&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jersey+20&display=swap');
-
+/* 폰트 CSS 로드는 BaseLayout <head>의 <link>가 담당(직렬 @import 체인 제거) — 여기는 토큰만 */
 @theme {
   --font-pretendard: 'Pretendard', sans-serif;
   --font-staatliches: 'Staatliches', sans-serif;

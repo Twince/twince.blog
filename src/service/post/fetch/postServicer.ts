@@ -10,7 +10,6 @@ import type {
   rawPost,
 } from "../types/PostServicer";
 import type { ResolvedPost } from "../types/Resolver";
-import { series } from "../../../content/config";
 
 // type definition(about module domain)
 type NullableSummary = PostCardWithThumbnail | null;
@@ -34,7 +33,7 @@ export const PostService = {
   async getPublishedPosts(): Promise<ResolvedPost[]> {
     if (cachedPosts) return cachedPosts;
 
-    const rawPosts = await getCollection("posts", ({ data }): rawPost => {
+    const rawPosts = await getCollection("posts", ({ data }) => {
       return import.meta.env.PROD ? data.status === "published" : true;
     });
     const resolvedPosts = rawPosts.map((post: rawPost) => resolvePost(post));

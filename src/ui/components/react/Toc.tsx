@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeadingObserver } from "../../../service/post/observe/headingObserver";
 import { useScrollTo } from "./useScrollTo";
 import { findActiveIdIndex } from "../../utils/findActiveIdIndex";
@@ -20,7 +20,8 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
   const hiddenDepth = 6;
 
   const { scrollTo } = useScrollTo(rootContainerId);
-  
+  const lastActiveIdRef = useRef<string | null>(null);
+
   const scrollIntoView = (itemId: string) => {
     scrollTo(itemId);
   }
@@ -32,6 +33,8 @@ export const Toc = ({idList, flattenToc}: TocProps) => {
     HeadingObserver.bind(idList);
     const onChange = () => {
       const activeId = HeadingObserver.getActiveId();
+      if (activeId === lastActiveIdRef.current) return; // 스크롤 프레임마다 동일 값 O(n) 재스캔 방지
+      lastActiveIdRef.current = activeId;
       setActiveId(activeId)
 
       if(activeId != null) {

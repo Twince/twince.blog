@@ -3,22 +3,28 @@ import '../css/index.css'
 
 import Footer from "./Footer.astro"
 import Header from "./Header.astro"
-
-const currentPath = Astro.url.pathname;
 ---
 <!doctype html>
 <html lang="ko">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<title>TWINCE.BLOG</title>
+		{/* 폰트: CSS @import 직렬 체인(번들 CSS→CDN CSS→폰트) 대신 head에서 병렬 로드.
+		    Pretendard는 dynamic-subset(unicode-range 슬라이스만 다운로드) */}
+		<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Staatliches&display=swap" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jersey+20&display=swap" />
 		<!-- FOUC 방지: 첫 페인트 전에 테마 결정(localStorage → prefers-color-scheme) -->
 		<script is:inline>
 			(() => {
-				const t = localStorage.getItem("theme") ||
+				const stored = localStorage.getItem("theme");
+				const t = (stored === "dark" || stored === "light") ? stored :
 					(matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
 				document.documentElement.dataset.theme = t;
 			})();

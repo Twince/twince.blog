@@ -11,7 +11,7 @@ const DEFAULT_THUMBNAIL = {
 
 // post collectoin 필드 평탄화 및 데이터 정합성 보장
 export const resolvePost = (post: CollectionEntry<"posts">): ResolvedPost => {
-  const { id, slug, render, data } = post;
+  const { id, data } = post; // Astro5 content-layer: entry에 .slug/.render 없음
   return {
     id,
     slug: id,

@@ -1,10 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import Tags from "./Tags.astro";
+import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
+
+interface Props extends PostCardWithThumbnail {}
 const { slug, topic, thumbnail, title, description, tags } = Astro.props;
 ---
 <a href={`/posts/${slug}`} class="row-post-card flex max-w-[640px] break-keep">
-  <Image class="row-post-thumbnail" src={thumbnail.src} alt={thumbnail.alt ?? title}/>
+  <Image class="row-post-thumbnail" src={thumbnail.src} alt={thumbnail.alt ?? title} widths={[320, 480, 680]} sizes="(max-width: 768px) 90vw, 400px"/>
   <div class="row-post-text flex flex-col flex-1 min-w-0">
     {topic && <span class="row-post-topic">{topic}</span>}
     <div class="row-post-main">

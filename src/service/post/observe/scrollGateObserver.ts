@@ -42,7 +42,6 @@ let currentDock: 'top' | 'bottom' = 'bottom';
 let decayRafId: number | null = null;
 let releaseRafId: number | null = null;
 let checkDecayTimerId: number | null = null;
-let returnTimerId: number | null = null;
 
 let startReleaseTime = 0;
 let releaseStartScroll = 0;
@@ -89,6 +88,11 @@ function setState(newState: GateState) {
   if (state === newState) return;
   state = newState;
   document.querySelector('[data-gate]')?.setAttribute('data-gate', newState);
+  // 버튼 동작이 상태에 따라 반대이므로 라벨도 동기화 (클릭/Enter 경로의 SR 안내)
+  document.querySelector('.gate-button')?.setAttribute(
+    'aria-label',
+    newState === 'arrived' || newState === 'charging-back' ? '본문으로 돌아가기' : '관련 포스트로 이동'
+  );
 }
 
 function getControl(): HTMLElement | null {
@@ -103,7 +107,7 @@ function setDock(dock: 'top' | 'bottom') {
 
   if (dock === 'top') {
     const headerHeight =
-      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 80;
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 64; // index.css 토큰 실값
     const bottomDockTop = window.innerHeight - 48 - 60;
     control.style.setProperty('--gate-dock-y', `${headerHeight + 12 - bottomDockTop}px`);
   } else {
@@ -350,8 +354,9 @@ function triggerRelease() {
 
   const scrollRoot = scrollRootEl;
   if (!scrollRoot) return;
-  const startTarget = getRelatedTop();
-  if (startTarget === null) return;
+  const maybeTarget = getRelatedTop();
+  if (maybeTarget === null) return;
+  const startTarget: number = maybeTarget; // 클로저(animate)에는 제어흐름 내로잉이 전파되지 않음
 
   setState('snapping-forward');
   setDock('top');
@@ -499,11 +504,9 @@ export const ScrollGateObserver = {
     cancelDecay();
     if (releaseRafId !== null) cancelAnimationFrame(releaseRafId);
     if (checkDecayTimerId !== null) clearInterval(checkDecayTimerId);
-    if (returnTimerId !== null) clearTimeout(returnTimerId);
 
     resizeListener = null;
     releaseRafId = null;
     checkDecayTimerId = null;
-    returnTimerId = null;
   },
 };

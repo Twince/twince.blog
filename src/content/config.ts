@@ -1,5 +1,5 @@
 import { defineCollection, reference } from "astro:content";
-import { glob, file } from 'astro/loaders'
+import { file } from 'astro/loaders'
 import { z } from 'astro/zod';
 import { tocGenerator } from "../service/post/observe/tocGenerator";
 import type { TocNode } from "../service/post/types/TocGenrator";
@@ -100,7 +100,7 @@ loader: {
       src: image(),
       alt: z.string().optional()
     }).optional(),
-    toc: tocNode.optional(),
+    toc: z.array(tocNode).optional(), // loader가 TocNode[]를 주입 — 단일 노드 스키마는 타입 거짓말이었음
     seo: seo.optional(),
   })
 })

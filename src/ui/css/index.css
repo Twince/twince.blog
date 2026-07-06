@@ -10,13 +10,13 @@
 @import "./article/article.css";
 @import "./toc/toc.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
-  /* 헤더 실높이의 단일 출처 — Header, BaseLayout(100dvh - var), 모바일 메뉴(top)가 함께 소비 */
-  :root { --header-h: 64px; }
+  :root {
+    /* 헤더 실높이의 단일 출처 — Header, BaseLayout(100dvh - var), 모바일 메뉴(top)가 함께 소비 */
+    --header-h: 64px;
+    /* hover 링 레시피 단일 출처 — root(profile/series-col/topics-band)·series(series-item) 공유 */
+    --u-hover-ring: inset 0 0 0 1.5px var(--color-brand-hover);
+  }
 
   * {
     margin: 0;

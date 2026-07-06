@@ -242,6 +242,24 @@ Astro 블로그. 레이어 분리가 명확하다:
   사용자 결정 대기. 현재는 fixed + 예약 공간 절충.
 - 검증: round13 10항목 전부 통과. ※ 합성 휠 테스트는 이벤트 간격을 실제 관성(~10ms)에 맞춰야 GESTURE_GAP 오탐 없음.
 
+### 아키텍처 감사 사이클 (2026-07-06, branch refactor/architecture)
+5개 관점(아키텍처/보안/TS/CSS·a11y/성능) 멀티에이전트 감사 → safe 22건 리팩토링 적용 완료(**tsc 17건→0건**):
+- 죽은 코드 삭제 7파일(types/post.ts, useActiveHeadingObserver, imgFigurelizer, readingStatusObserver, MinimumPost, styles/global.css, createHaadingObserver 스텁) + 미사용 import 5곳.
+- 카드 <Image> widths/sizes(2.2MB 원본→srcset 3변형), 폰트 dynamic-subset + head preconnect/link(직렬 @import 체인 제거).
+- TocWrapper 죽은 render() 삭제(포스트당 마크다운 2중 컴파일 해소) + client:idle, Toc onChange 동일 activeId early-return.
+- config.ts toc 스키마 z.array 교정, resolver Astro5 잔재(.slug/.render) 제거, coAuthor→coAuthors, sorter import 경로.
+- a11y: gate 버튼 :focus-visible + 상태별 aria-label, TwistedGridMotion reduced-motion pauseAnimations, 각주 없는 img alt="".
+- 토큰: raw hex(#7b818d/#333)→primitive(slate-500/gray-850)+semantic(code-linenum/badge-lang), text-gray-800→text-text-secondary,
+  u-rail :is() 통합, --u-hover-ring 단일 출처(index.css), localStorage theme 화이트리스트, index.css 레거시 @tailwind 3줄 제거.
+**decision 17건(사용자 결정 대기)** — 최우선: ① **sorter comparator 반전**(실버그 — '최신순'이 제목순으로 동작 중.
+힌트: 조기 반환 조건이 반대 — timeDiff==0일 때 0을 반환하면 tiebreak이 죽고, 날짜가 다를 때 title 비교가 실행된다.
+comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc.tsx 정비(li onClick→a href, null 규약, 폴링→IO 구독).
+③ TOC 이중 생성 파이프라인 일원화. ④ tocGenerator/markdownToHast를 plugins로 이동(레이어명 정합). ⑤ getPostDetail 서비스 계약.
+⑥ series 스키마 optional 위치. ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
+⑨⑩ 기존 EDGE(getSeriesCards/limit/칩 라우팅). ⑪ gate DOM 계약·reset()·핫패스 캐시. ⑫ 의존성 취약점 36건+CSP.
+⑬ .card-tag 분리+!important 해체. ⑭ quaternary 라이트 대비 3.0:1. ⑮ no-scrollbar. ⑯ SMIL 외부화. ⑰ nnv-4 중복 에셋.
+스킵(리스크): tailwind 임포트 단일화(캐스케이드), 오타 rename(TocGenrator/isVisable/sortBylastest — decision과 함께 권장).
+
 ### 리뷰 백로그 (2026-07-04 전체 코드베이스 Opus 리뷰 — 급하지 않으나 기록)
 - TwistedGridMotion 121KB 인라인 SMIL + reduced-motion 탈출구 없음(SMIL은 CSS로 못 멈춤 → matchMedia + pauseAnimations() 필요).
 - 히어로 인터랙티브 섹션(profile/칩)이 링크가 아님(cursor/hover만) — 라우팅 EDGE 채울 때 <a>로 해소(의도된 상태).

@@ -117,7 +117,7 @@
     content: counter(code-line);
     font-size: 12px;
     text-align: right;
-    color: #7b818d;
+    color: var(--color-code-linenum);
     padding-right: 15px;
   }
   pre[data-language] {
@@ -133,8 +133,8 @@
     font-weight: 600;
     padding: 2px 6px;
     border-radius: 4px;
-    background: #333;
-    color: white;
+    background: var(--color-badge-lang-bg);
+    color: var(--color-badge-lang-text);
     text-transform: uppercase;
   }
 

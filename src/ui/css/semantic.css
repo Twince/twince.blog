@@ -30,6 +30,11 @@
   --color-bg-article-codeblock:  var(--gray-300);
   --color-bg-article-blockquote: var(--gray-100);
 
+  /* 코드 표면 위 요소 — 코드 배경이 테마 불변이라 이들도 불변 */
+  --color-code-linenum:    var(--slate-500);
+  --color-badge-lang-bg:   var(--gray-850);
+  --color-badge-lang-text: var(--white);
+
   /* ── color: global text ──────────────────────────────────── */
   --color-text-primary:    var(--gray-950);
   --color-text-secondary:  var(--gray-800);

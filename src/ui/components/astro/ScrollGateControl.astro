@@ -143,12 +143,18 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
     animation: none;
   }
 
-  /* 불가시 버튼 (클릭 복귀용) */
+  /* 불가시 버튼 — 키보드/보조기기의 게이트 통과 경로 */
   .gate-button {
     all: unset;
     position: absolute;
     inset: 0;
     cursor: pointer;
+  }
+
+  .gate-button:focus-visible {
+    outline: 2px solid var(--color-brand-hover);
+    outline-offset: 2px;
+    border-radius: 50%;
   }
 
   @media (prefers-reduced-motion: reduce) {

@@ -1,4 +1,4 @@
-import type { ResolvedPost } from "./types/Resolver";
+import type { ResolvedPost } from "../types/Resolver";
 
 export const sortPosts = (posts: ResolvedPost[]): ResolvedPost[] => {
   const copiedPosts = [...posts];
