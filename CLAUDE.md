@@ -63,6 +63,13 @@ Astro 블로그. 레이어 분리가 명확하다:
 [id]의 getStaticPaths는 최소 구현 + EDGE 주석(0포스트 시리즈 페이지 여부·시리즈 #N 결정 주체).
 ※ root MOCK_SERIES의 #2·#3 id는 아직 dead route — getSeriesCards() EDGE 완료 시 해소.
 
+**시리즈 스케일 정합(2026-07-07, A+B 채택)**: `--series-scale` 1→**1.1**(root와 동일 축), `--card-scale` 1.05→**1.1**.
+읽기 텍스트 3토큰(item-desc/item-meta/hero-desc)만 `max(12px, …)` 하한 — 장식성 모노(슬러그 8.8/tally/레일)는 제외,
+모바일 블록 절대값 불변. 검증 16항목 통과(1440×900 + 모바일 390×844 회귀). D안(뷰포트 연동 clamp 스케일)은 기각이 아니라
+**사이트 전체(root·posts·series 동시) 결정으로 보류** — decision 버킷 ⑱로 등재. knob 간접층 덕에 전환 비용은 값 교체 한 줄.
+**전이 라벨**: 고정 스케일=캔버스 충실도 레짐, 뷰포트 스케일=디바이스 인체공학 레짐 — 레짐 경계는 페이지가 아니라
+*컴포넌트 재사용 경계*를 따라야 크기 점프가 없다. 스케일(비례)과 가독 하한(floor)은 별개 축의 결정.
+
 **다음 작업(사용자 EDGE — 학습 모드 결정 지점):**
 1. `SeriesCardSummary` 타입 설계 + `getSeriesCards()` 구현 (`service/post/types/SeriesServicer.ts`의 힌트 참고)
    → `RootLayout.astro`의 `MOCK_SERIES` 교체. 핵심: postCount 역참조 집계(N+1 vs 1-pass 맵).
@@ -265,6 +272,8 @@ comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc
 ⑥ series 스키마 optional 위치. ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
 ⑨⑩ 기존 EDGE(getSeriesCards/limit/칩 라우팅). ⑪ gate DOM 계약·reset()·핫패스 캐시. ⑫ 의존성 취약점 36건+CSP.
 ⑬ .card-tag 분리+!important 해체. ⑭ quaternary 라이트 대비 3.0:1. ⑮ no-scrollbar. ⑯ SMIL 외부화. ⑰ nnv-4 중복 에셋.
+⑱ 뷰포트 연동 스케일(D안) — 큰 모니터에서 1100px 고정 컬럼 전체가 작게 읽히는 문제. 사이트 전체(root·posts·series)
+동시 결정 필요: clamp 곡선(하한은 노트북 구간이라 floor 병행 필수)·컬럼 축 스케일 여부(헤더·root 세로 보더 정렬 트레이드오프).
 스킵(리스크): tailwind 임포트 단일화(캐스케이드), 오타 rename(TocGenrator/isVisable/sortBylastest — decision과 함께 권장).
 
 ### 리뷰 백로그 (2026-07-04 전체 코드베이스 Opus 리뷰 — 급하지 않으나 기록)
