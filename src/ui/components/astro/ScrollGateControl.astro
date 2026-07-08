@@ -4,7 +4,7 @@ import { Icon } from 'astro-icon/components';
 const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
 ---
 
-{/* 스크롤 게이트 컨트롤: fixed 고정, 도킹 전환은 --gate-dock-y(translateY), x는 JS가 본문 컬럼 중앙으로.
+{/* 스크롤 게이트 컨트롤(단방향): fixed 고정, x는 JS가 본문 컬럼 중앙으로.
     chevron이 --gate-progress에 따라 progress 링으로 모프(크로스페이드) */}
 <div class="gate-control" data-gate="hidden">
   <svg class="gate-ring" viewBox="0 0 60 60" width="60" height="60" aria-hidden="true">
@@ -21,10 +21,6 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
 
   <div class="gate-icon-layer gate-icon-down">
     <Icon name="chevron_down" class="gate-icon" />
-  </div>
-
-  <div class="gate-icon-layer gate-icon-up">
-    <Icon name="chevron_up" class="gate-icon" />
   </div>
 
   <button
@@ -44,14 +40,14 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
     z-index: 10;
     opacity: 0;
     pointer-events: none;
-    /* 위치는 고정, 도킹 이동은 translateY만 — JS는 --gate-dock-y 값만 바꾼다 */
-    transform: translate(-50%, var(--gate-dock-y, 0px));
-    transition:
-      opacity 200ms ease-out,
-      transform 350ms cubic-bezier(0.45, 0, 0.55, 1);
+    transform: translateX(-50%);
+    transition: opacity 200ms ease-out;
   }
 
-  .gate-control:not([data-gate='hidden']) {
+  /* 컨트롤은 게이트가 열릴 수 있는 구간에서만 보인다(ready/charging).
+     통과 후(snapping-forward/arrived)와 통과 전(hidden)엔 페이드 아웃 */
+  .gate-control[data-gate='ready'],
+  .gate-control[data-gate='charging'] {
     opacity: 1;
     pointer-events: auto;
   }
@@ -72,9 +68,8 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
     stroke-linecap: round;
   }
 
-  /* 충전/snap 중에만: progress가 커질수록 arc가 떠오름 (아이콘과 크로스페이드) — 양방향 공통 */
+  /* 충전/snap 중에만: progress가 커질수록 arc가 떠오름 (아이콘과 크로스페이드) */
   .gate-control[data-gate='charging'] .gate-ring,
-  .gate-control[data-gate='charging-back'] .gate-ring,
   .gate-control[data-gate='snapping-forward'] .gate-ring {
     opacity: clamp(0, calc(var(--gate-progress, 0) * 1.8), 1);
   }
@@ -96,33 +91,18 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
     color: var(--color-text-primary); /* 테마 추종 (라이트/다크 모두 가시) */
   }
 
-  /* chevron→링 모프: progress가 커질수록 chevron은 줄어들며 사라짐 (양방향 대칭) */
+  /* chevron→링 모프: progress가 커질수록 chevron은 줄어들며 사라짐 */
   .gate-icon-down .gate-icon {
     transform: scale(calc(1 - var(--gate-progress, 0) * 0.5));
   }
 
-  .gate-control[data-gate='charging-back'] .gate-icon-up .gate-icon {
-    transform: scale(calc(1 - var(--gate-progress, 0) * 0.5));
-  }
-
   .gate-control[data-gate='ready'] .gate-icon-down,
-  .gate-control[data-gate='charging'] .gate-icon-down,
-  .gate-control[data-gate='snapping-back'] .gate-icon-down {
-    opacity: clamp(0, calc(1 - var(--gate-progress, 0) * 1.8), 1);
-  }
-
-  .gate-control[data-gate='snapping-forward'] .gate-icon-up,
-  .gate-control[data-gate='arrived'] .gate-icon-up {
-    opacity: 1;
-  }
-
-  .gate-control[data-gate='charging-back'] .gate-icon-up {
+  .gate-control[data-gate='charging'] .gate-icon-down {
     opacity: clamp(0, calc(1 - var(--gate-progress, 0) * 1.8), 1);
   }
 
   /* 대기 bob — control이 아니라 아이콘 레이어에 건다
-     (control의 transform은 센터링+도킹용이라 keyframe이 덮어쓰면 위치가 깨짐)
-     ready=chevron-down, arrived=chevron-up 대칭 */
+     (control의 transform은 센터링용이라 keyframe이 덮어쓰면 위치가 깨짐) */
   @keyframes gate-bob {
     0%,
     100% {
@@ -133,17 +113,15 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
     }
   }
 
-  .gate-control[data-gate='ready'] .gate-icon-down,
-  .gate-control[data-gate='arrived'] .gate-icon-up {
+  .gate-control[data-gate='ready'] .gate-icon-down {
     animation: gate-bob 2s ease-in-out infinite;
   }
 
-  .gate-control[data-gate='charging'] .gate-icon-down,
-  .gate-control[data-gate='charging-back'] .gate-icon-up {
+  .gate-control[data-gate='charging'] .gate-icon-down {
     animation: none;
   }
 
-  /* 불가시 버튼 (클릭 복귀용) */
+  /* 불가시 버튼 (클릭 통과용) */
   .gate-button {
     all: unset;
     position: absolute;
@@ -158,8 +136,7 @@ const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
       transition: none;
     }
 
-    .gate-control[data-gate='ready'] .gate-icon-down,
-    .gate-control[data-gate='arrived'] .gate-icon-up {
+    .gate-control[data-gate='ready'] .gate-icon-down {
       animation: none;
     }
   }

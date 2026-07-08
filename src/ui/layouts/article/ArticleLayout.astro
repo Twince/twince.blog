@@ -26,7 +26,7 @@ const relatedPosts = await PostService.getRelatedPosts(slug, tags);
 <BaseLayout>
   {/* 사이드바 등장: 레이아웃(1fr 380px)은 고정, transform만 전환 — 페이지 로드 후 data-reveal 자동 토글 */}
   <article id="article-root" class="article-grid w-full h-full">
-    <div id="article-wrapper" class="relative flex flex-col min-w-0 h-full overflow-y-scroll no-scrollbar leading-relaxed px-auto break-keep" style={{overscrollBehaviorY: 'contain'}}>
+    <div id="article-wrapper" class="relative flex flex-col min-w-0 h-full overflow-y-scroll no-scrollbar leading-relaxed px-auto break-keep" style={{overscrollBehaviorY: 'none'}}>
      {/* pb-32: 본문 끝 도킹 시 게이트 컨트롤(bottom 48 + 60px)이 글과 겹치지 않는 전용 공간 */}
      <div class="flex justify-center flex-shrink-0 pb-32">
        <div class="w-auto max-w-[77ch] min-w-[28ch] mx-6">

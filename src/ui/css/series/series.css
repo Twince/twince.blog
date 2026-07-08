@@ -1,7 +1,7 @@
 /* ══ SERIES 페이지 — Figma series(4305:1497 목록 / 4305:1568 상세) ══
    치수 = (Figma raw 정수) × --series-scale. 컬럼 1100px(헤더·root와 동일 축). */
 .series-page {
-  --series-scale: 1;
+  --series-scale: 1.1;
 
   /* 목록 */
   --series-page-title: calc(25px * var(--series-scale));
