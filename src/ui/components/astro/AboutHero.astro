@@ -6,7 +6,7 @@ import { Image } from "astro:assets";
 import TwistedGridMotion from "./TwistedGridMotion.astro";
 import ProfileLogotype from "./ProfileLogotype.astro";
 import ProfileContacts from "./ProfileContacts.astro";
-import profilePhoto from "../../assets/graphic/profile_photo_cutout.png";
+import profilePhoto from "../../assets/images/sunwoo_profile.png";
 ---
 <section class="about-hero">
   <div class="about-hero-inner">
@@ -15,14 +15,17 @@ import profilePhoto from "../../assets/graphic/profile_photo_cutout.png";
     </div>
 
     <div class="about-hero-photo">
-      <Image src={profilePhoto} alt="하선우 프로필 사진" width={345} height={529} />
+      <Image src={profilePhoto} alt="하선우 프로필 사진" width={345} height={417} />
     </div>
 
     <div class="about-hero-text">
       <ProfileLogotype />
-      <p class="about-hero-greeting">안녕하세요, 하선우입니다!</p>
-      <p class="about-hero-nickname">트윈스라는 닉네임으로도 활동하고 있어요.</p>
-      <ProfileContacts />
+      <!-- greeting·nickname·contacts 묶음 — 모바일에서 frosted glass 패널(backdrop-blur)로 twisted-grid를 이 영역에서 흐림 -->
+      <div class="about-hero-blurb">
+        <p class="about-hero-greeting">안녕하세요, 하선우입니다!</p>
+        <p class="about-hero-nickname">트윈스라는 닉네임으로도 활동하고 있어요.</p>
+        <ProfileContacts />
+      </div>
     </div>
 
     <div class="about-hero-intro">
@@ -32,8 +35,7 @@ import profilePhoto from "../../assets/graphic/profile_photo_cutout.png";
       <p>근본적인 이해와 뾰족한 통찰을 중요하게 생각하며</p>
       <p>다양한 것들을 만들고 깊게 고민하여 본질을 파악하고자 합니다.</p>
       <p class="about-hero-intro-gap">&#8203;</p>
-      <p>단순히 상상하는 것을 넘어, 현실의 문제를 해결하고 여러 도메인에서의</p>
-      <p>베스트 프렉티스를 추구합니다.</p>
+      <p>단순히 상상하는 것을 넘어, 현실의 문제를 해결하고 여러 도메인에서의 베스트 프렉티스를 추구합니다.</p>
       <p class="about-hero-intro-gap">&#8203;</p>
       <p>저와 이야기를 나눠보고 싶으신 분은 언제든 연락주세요 :)</p>
     </div>

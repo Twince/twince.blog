@@ -1,12 +1,20 @@
 // ABOUT 페이지 경력 데이터 — Figma about(4138:1240) EXPERIENCE(4816:895) 원문 전사.
 // EDGE(사용자): content collection으로 승격할지(스키마 통제) vs 정적 모듈 유지 — 갱신 빈도 낮아 모듈로 시작.
 
+/** 제목 아래 작은 회색 라벨의 한 조각 (Figma #9e9e9e). href 유무로 링크/plain 분기. */
+export interface MentionSegment {
+  /** 표시 텍스트 — 링크형(예: "@jungkeechu") 또는 plain 설명(예: "개인정비시간활용") */
+  text: string;
+  /** 있으면 <a>로 렌더, 없으면 plain <span>. ⚠ 아래 href는 GitHub placeholder — 실제 플랫폼 확인 후 교정 */
+  href?: string;
+}
+
 export interface ExperienceItem {
   title: string;
   /** 제목이 두 줄인 경우 \n 포함 (예: 2023 IT 지원위원회) */
   bullets: string[];
-  /** @핸들·비고 등 제목 아래 작은 회색 라벨 (Figma #9e9e9e) */
-  mention?: string;
+  /** @핸들·비고 등 제목 아래 작은 회색 라벨. 조각 단위 배열 — 조각마다 링크 독립 */
+  mention?: MentionSegment[];
   /** 기간 라벨 — 제목 오른쪽 (예: "2024.3 ~ 2024.5") */
   period?: string;
 }
@@ -16,6 +24,8 @@ export interface ExperienceYear {
   year: string;
   /** 연도 라벨 바로 아래 레일 보조 라벨 (예: "군복무") */
   railLabel?: string;
+  /** 바로 위 연도 박스와 divider 없이 하나로 합침(예: 군복무처럼 연속 기간). 위→아래 정렬에서 아래쪽 항목에 지정 */
+  mergeUp?: boolean;
   items: ExperienceItem[];
 }
 
@@ -26,8 +36,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       {
         title: "숭실대학교 축제 서비스 SINGAL 기획 및 개발, 운영",
         bullets: [
-          "사용자 관점에서의 UX 설계 및 서비스 기획 및 발전",
-          "3일간 운영 - 이용자 수 2528명",
+          "사용자 관점에서의 서비스 설계 및 흐름 제시",
+          "3일간 운영 - 총 등록자 수 3,089명",
         ],
       },
     ],
@@ -40,12 +50,12 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "8전투비행단 전대로고 및 패치 디자인",
         bullets: [
           "공군 8전투비행단 항공기정비전대 로고 제작",
-          "지휘관 패치 및 부대 파카 로고 디자인",
+          "지휘관 패치 및 부대 피복 로고 디자인",
         ],
       },
       {
         title: "Neural Network Visualization",
-        mention: "개인정비시간활용",
+        mention: [{ text: "개인정비시간활용" }],
         bullets: [
           "바닥부터 구현하는 AI 신경망 시각화 프로젝트",
           "MVC 아키텍쳐 설계 / EventBus 기반 실시간 숫자추론",
@@ -69,7 +79,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
   },
   {
     year: "2024",
-    railLabel: "군입대",
+    railLabel: "군복무",
+    mergeUp: true, // 위 2025 박스와 divider 없이 하나로(군복무 연속 기간)
     items: [
       {
         title: "YOURSSU PM Vice Lead",
@@ -83,7 +94,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       },
       {
         title: "군입대",
-        period: "2024.6 ~ 2026.3",
+        period: "2024.5 ~ 2026.3",
         bullets: ["공군 제 858기 항공기전자장비정비특기"],
       },
     ],
@@ -101,7 +112,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       },
       {
         title: "SSUTODAY - 숭실대학교 스터디룸 예약 시스템",
-        mention: "@jonghokim27",
+        mention: [{ text: "@jonghokim27", href: "https://github.com/jonghokim27" }],
         bullets: [
           "숭실대학교 IT대학(정보과학관) 테라스 예약 및 학부 공지 시스템 기획",
           "서비스 UX 설계 및 모바일 UI 디자인",
@@ -110,7 +121,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       },
       {
         title: "남성시장 골목상권 활성화 프로젝트",
-        mention: "@jeayungYoon",
+        mention: [{ text: "@jeayungYoon", href: "https://github.com/jeayungYoon" }],
         bullets: [
           "서울시 동작구와 연계하는 골목상권 살리기 프로젝트",
           "전통시장 활성화 소상공인시장진흥공단 - 남성역 골목시장 활성화 유공",
@@ -125,15 +136,11 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         ],
       },
       {
-        title: "HCI LAB - 한국컴퓨터학회 논문기재",
-        mention: "@jungkeechu @EunwooSong",
-        bullets: [
-          "DBpida / DOI 10.32431 / 컴퓨터교육학회논문지 제27권 제2호",
-          "‘웹 기반 파이썬 개발 환경과 메타버스 플랫폼’ 공동개발 / UX 파트",
-        ],
-      },
-      {
         title: "IT 공모전 우수상",
+        mention: [
+          { text: "@YunaPyeoun", href: "https://github.com/Drizzle03" },
+          { text: "@HyunsDev", href: "https://github.com/HyunsDev" },
+        ],
         bullets: [
           "숭실대학교 IT 프로젝트 공모전 우수상",
           "쉽고 빠른 팀플 서비스 모여(Moyeo)",
@@ -145,6 +152,17 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
           "@Yourssu Frontend팀 리드",
           "팀 리소스 관리 및 동아리 운영",
           "축제 TF Management 및 realworld 스터디 주도",
+        ],
+      },
+      {
+        title: "HCI LAB - 한국컴퓨터학회 논문기재",
+        mention: [
+          { text: "@jungkeechu", href: "https://github.com/jungkeechu" },
+          { text: "@EunwooSong", href: "https://github.com/EunwooSong" },
+        ],
+        bullets: [
+          "DBpida / DOI 10.32431 / 컴퓨터교육학회논문지 제27권 제2호",
+          "‘웹 기반 파이썬 개발 환경과 메타버스 플랫폼’ 공동개발 / UX 파트",
         ],
       },
     ],
@@ -162,7 +180,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       },
       {
         title: "숭실대학교 사물함 예약 시스템 공동개발",
-        mention: "@EATSTEAK",
+        mention: [{ text: "@EATSTEAK", href: "https://github.com/EATSTEAK" }],
         bullets: [
           "교내 사물함 인프라 사용을 위한 신청 시스템 기획 및 프론트엔드 개발",
           "Figma를 통한 반응형 UX/UI 설계 및 디자인",

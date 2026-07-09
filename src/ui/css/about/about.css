@@ -13,18 +13,20 @@
 .about-hero {
   position: relative;
   overflow: hidden;
+  background-color: var(--color-bg-hero);
   border-bottom: 1px solid var(--color-border-primary);
-  /* 배경은 페이지 bg 유지(root-hero와 달리 bg-hero 아님) */
+  /* root-hero처럼 bg-hero 밴드(컬럼 보더는 없음). 콘텐츠는 --about-scale 0.9로 90% 축소 */
 
   /* --- 공유 컴포넌트(ProfileLogotype/ProfileContacts)가 소비하는 root 토큰 안전판 --- */
   --root-scale: 1;
+  /* 히어로만 90% 축소 — .about-page의 1을 스코프 오버라이드. 컬럼(--about-col)은 불변 */
+  --about-scale: 0.9;
 
-  /* --- 튜닝 노브(사용자 직접 조정) --------------------------------- */
   /* 배경 아트 위치 — Figma 비율(1300 컬럼 기준) */
-  --about-art-left: -11.9%;
-  --about-art-top: -19.8%;
-  --about-art-width: 63.9%;
-  --about-art-rotate: -8deg;
+  --about-art-left: -48%;
+  --about-art-top: -62%;
+  --about-art-width: 120%;
+  --about-art-rotate: -1deg;
   --about-art-opacity: 0.1;
   /* 3열 인플로우 컬럼 폭 + 각 블록 상단 오프셋(Figma raw) */
   --about-photo-col: calc(355px * var(--about-scale));
@@ -42,9 +44,12 @@
   isolation: isolate;
   max-width: var(--about-col);
   margin-inline: auto;
-  min-height: calc(448px * var(--about-scale));
   display: grid;
-  grid-template-columns: var(--about-photo-col) var(--about-text-col) 1fr;
+  /* intro를 1fr(잔여 전부) 대신 콘텐츠 폭으로 — 컬럼 안 우측 빈 공간 제거 */
+  grid-template-columns: var(--about-photo-col) var(--about-text-col) auto;
+  /* 3열 클러스터를 좌우 대칭 거터로 중앙 정렬(사진이 왼쪽 끝에 붙어 생기던 좌편향 해소) */
+  justify-content: center;
+  column-gap: calc(40px * var(--about-scale));
   align-items: start;
 }
 
@@ -59,7 +64,7 @@
   opacity: var(--about-art-opacity);
   color: var(--color-text-primary);
   pointer-events: none;
-  z-index: 0;
+  z-index: -1; /* 항상 배경 — 모바일 display:contents에서 텍스트 z-index umbrella가 사라져도 아트가 위로 안 옴 */
 }
 .about-hero-art .twisted-grid-motion {
   display: block;
@@ -67,21 +72,19 @@
   height: auto;
 }
 
-/* 사진: 컨테이너 404×451 overflow-hidden(하단 크롭), 사진 345×529 오프셋 */
+/* 사진: sunwoo_profile 네이티브 비율(345×417) 그대로 — object-fit 확대 없음 */
 .about-hero-photo {
   position: relative;
   z-index: 0;
-  width: calc(404px * var(--about-scale));
-  height: calc(451px * var(--about-scale));
+  width: calc(345px * var(--about-scale));
+  height: calc(417px * var(--about-scale));
   margin-top: var(--about-photo-top);
   overflow: hidden;
 }
 .about-hero-photo img {
-  position: absolute;
-  left: calc(9px * var(--about-scale));
-  top: calc(13px * var(--about-scale));
-  width: calc(345px * var(--about-scale));
-  height: calc(529px * var(--about-scale));
+  display: block;
+  width: 100%;
+  height: 100%;
   max-width: none;
   object-fit: cover;
 }
@@ -145,7 +148,9 @@
 }
 .about-hero .profile-contacts {
   margin-top: var(--about-contacts-top);
-  gap: calc(6px * var(--about-scale));
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: calc(6px * var(--about-scale)) calc(18px * var(--about-scale)); /* row-gap column-gap */
   padding-left: 0;
 }
 .about-hero .profile-contacts a {
@@ -163,45 +168,51 @@
   margin-inline: auto;
   padding-top: calc(88px * var(--about-scale));
   padding-bottom: calc(120px * var(--about-scale));
-  padding-left: var(--about-exp-inset);
 
   /* 튜닝 노브 */
-  --about-exp-inset: calc(115px * var(--about-scale)); /* 콘텐츠 좌측 인셋(title/year 정렬) */
-  --about-rail: calc(185px * var(--about-scale)); /* 연도 레일 폭 */
-  --about-item-gap: calc(32px * var(--about-scale)); /* 아이템 간 세로 간격 */
-  --about-year-gap: calc(48px * var(--about-scale)); /* 연도 블록 간 간격 */
+  --about-exp-inset: calc(42px * var(--about-scale)); /* 콘텐츠 좌측 인셋(블럭·타이틀 공용) — series-item padding-left 42와 동일 */
+  --about-rail: calc(130px * var(--about-scale)); /* 연도 레일 폭 — 2열 컬럼(650) 안에서 "2021 ~" 라벨 수용 */
+  --about-item-gap: calc(32px * 1.15 * var(--about-scale)); /* 아이템 간 세로 간격 — 기존 32에서 +15% 완화 */
 }
 .about-exp-title {
-  margin-left: calc(1px * var(--about-scale));
+  margin-left: calc(var(--about-exp-inset) + 1px * var(--about-scale));
   margin-bottom: calc(30px * var(--about-scale));
   font-family: var(--font-pretendard);
-  font-size: calc(32px * var(--about-scale));
-  font-weight: 700;
+  font-size: calc(25px * 1.1); /* series-page-title과 동일 렌더값(25 × series-scale 1.1) */
+  font-weight: var(--font-weight-title);
   line-height: 1;
   color: var(--color-text-primary);
 }
 .about-exp-body {
+  /* 연도 = 전폭 행 박스를 gap 없이 세로로 이어 붙임(보더는 margin -1px로 겹쳐 단선화) */
   display: flex;
   flex-direction: column;
-  gap: var(--about-year-gap);
 }
 
-/* 연도 블록 = 레일(185) | 콘텐츠(1fr) */
+/* 연도 블록 = 레일(--about-rail) | 콘텐츠(1fr) */
 .about-year {
   position: relative;
   display: grid;
   grid-template-columns: var(--about-rail) 1fr;
-  align-items: stretch;
+  align-items: start; /* 콘텐츠는 title 시작선 기준 상단 정렬(높이 stretch 안 함) */
+  /* series-item식 4변 보더 박스 — 인접 박스와 gap 없이 이어 붙는다 */
+  border: 1px solid var(--color-border-primary);
+  padding: calc(38px * var(--about-scale)) calc(32px * var(--about-scale))
+           calc(38px * var(--about-scale)) var(--about-exp-inset); /* 상·하 y여백 26→38로 완화 */
 }
-/* 2026 블록 아래에만 가로 구분선(Figma x53 w813) */
-.about-year--divided::after {
-  content: "";
-  position: absolute;
-  left: calc(-62px * var(--about-scale)); /* 인셋 115 대비 x53 */
-  bottom: calc(-1 * var(--about-year-gap) / 2);
-  width: calc(813px * var(--about-scale));
-  height: 1px;
-  background: var(--color-border-primary);
+/* 인접 연도 박스 보더 겹침 제거 — 아래 박스를 1px 위로 끌어올려 상·하 보더를 단선으로 합침 */
+.about-year + .about-year {
+  margin-top: -1px;
+}
+/* mergeUp: 위 박스와 divider 없이 하나로 — 접합 보더를 양쪽 다 제거해 한 박스처럼 */
+.about-year--merge-up {
+  border-top: none;
+}
+.about-year + .about-year--merge-up {
+  margin-top: 0; /* 접합 보더가 없으니 -1px 겹침 불필요 */
+}
+.about-year:has(+ .about-year--merge-up) {
+  border-bottom: none;
 }
 
 .about-year-rail {
@@ -212,7 +223,7 @@
 .about-year-label {
   padding-left: calc(5px * var(--about-scale));
   font-family: var(--font-pretendard);
-  font-size: calc(36px * var(--about-scale));
+  font-size: calc(32px * var(--about-scale));
   font-weight: 700;
   line-height: 0.9;
   color: var(--color-text-primary);
@@ -227,21 +238,17 @@
   line-height: 1;
   color: var(--color-text-quaternary);
 }
-/* 세로 타임라인 — 연도 라벨 아래부터 블록 끝까지(flex:1) */
-.about-year-line {
-  flex: 1;
-  width: 1px;
-  min-height: calc(24px * var(--about-scale));
-  margin-top: calc(12px * var(--about-scale));
-  margin-left: calc(9px * var(--about-scale));
-  background: var(--color-border-primary);
-}
-
 .about-year-content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--about-item-gap);
+  /* 아이템 높이순 패킹(masonry) — 빈틈 없음(열 우선 흐름). 행 우선+빈틈0은 CSS 불가라 packing 우선 채택 */
+  columns: 2;
+  column-gap: calc(40px * var(--about-scale));
   padding-left: calc(5px * var(--about-scale));
+}
+.about-year-content > .about-item {
+  break-inside: avoid; /* 아이템이 열 경계에서 쪼개지지 않게 */
+}
+.about-year-content > .about-item:not(:last-child) {
+  margin-bottom: var(--about-item-gap); /* columns엔 row-gap이 없어 수동 세로 간격 */
 }
 
 /* 아이템 */
@@ -268,13 +275,26 @@
   white-space: nowrap;
 }
 .about-item-mention {
-  display: block;
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(2px * var(--about-scale)) calc(7px * var(--about-scale)); /* 다중 핸들 간 간격 */
   margin-top: calc(4px * var(--about-scale));
   font-family: var(--font-pretendard);
   font-size: calc(10.5px * var(--about-scale));
   font-weight: 500;
   line-height: 1;
   color: var(--color-text-quaternary);
+}
+/* 링크형 세그먼트만 밑줄+hover 색전환(contacts와 동일 어포던스 문법) */
+.about-mention-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  transition: color 150ms ease-out;
+}
+.about-mention-link:hover {
+  color: var(--color-brand-hover);
 }
 .about-item-bullets {
   margin-top: calc(8px * var(--about-scale));
@@ -291,11 +311,10 @@
   margin: 0;
 }
 
-/* CERTIFICATIONS — 레일에 라벨+리스트를 세로로(연도 블록과 다름) */
-.about-cert {
-  padding-left: calc(58px * var(--about-scale)); /* 라벨 x173 vs 인셋 115 */
-}
+/* CERTIFICATIONS 타이틀 — EXPERIENCE처럼 박스 밖 섹션 헤딩(exp-title과 동일 좌측 정렬) */
 .about-cert-title {
+  margin-top: calc(40px * var(--about-scale)); /* 연도 스택과 분리 */
+  margin-left: calc(var(--about-exp-inset) + 1px * var(--about-scale));
   margin-bottom: calc(14px * var(--about-scale));
   font-family: var(--font-pretendard);
   font-size: calc(27px * var(--about-scale));
@@ -303,9 +322,15 @@
   line-height: 1;
   color: var(--color-text-primary);
 }
+/* 리스트만 담은 독립 박스(타이틀은 위로 빠짐) */
+.about-cert {
+  border: 1px solid var(--color-border-primary);
+  padding: calc(34px * var(--about-scale)) calc(32px * var(--about-scale))
+           calc(34px * var(--about-scale)) calc(var(--about-exp-inset) + 58px * var(--about-scale)); /* 연도 라벨 대비 +58 들여쓰기 */
+}
 .about-cert-list {
-  list-style: none;
-  padding-left: calc(10px * var(--about-scale)); /* 리스트 x183 vs 라벨 x173 */
+  list-style: disc;
+  padding-left: calc(23px * var(--about-scale)); /* disc 마커 확보 — about-item-bullets와 동일 */
   display: flex;
   flex-direction: column;
   gap: calc(6px * var(--about-scale));
@@ -316,24 +341,36 @@
   color: var(--color-text-tertiary);
 }
 
-/* ══════════════════ 반응형 <1024: 선형 스택 ══════════════════ */
+/* ══════════════════ 반응형 공통 <1024: EXPERIENCE 선형화 + 좁은 화면 줄바꿈 ══════════════════ */
 @media (width < 1024px) {
-  .about-hero-inner {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    min-height: 0;
-    gap: calc(24px * var(--about-scale));
-    padding: calc(40px * var(--about-scale)) calc(28px * var(--about-scale));
+  .about-experience {
+    --about-exp-inset: calc(28px * var(--about-scale));
+    --about-rail: calc(110px * var(--about-scale));
   }
-  .about-hero-photo,
-  .about-hero-text,
-  .about-hero-intro {
-    margin-top: 0;
+  .about-year-content {
+    columns: 1; /* 내부 masonry 2열 → 1열 */
   }
-  .about-hero-intro {
+  .about-cert {
+    padding-left: var(--about-exp-inset);
+  }
+  /* 데스크톱 nowrap → 좁은 화면에선 줄바꿈 허용(태블릿·모바일 공통) */
+  .about-hero-intro,
+  .about-hero-greeting,
+  .about-hero-nickname {
     white-space: normal;
     word-break: keep-all;
+  }
+  /* (데스크톱 제외) intro를 독립 섹션으로 — 뷰포트 full-bleed 불투명 밴드가
+     twisted-grid를 좌우 거터까지 완전히 덮어 crop(그리드가 섹션 밖으로 안 새어나옴) */
+  .about-hero-intro {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw); /* 컨테이너 패딩을 뚫고 뷰포트 폭까지 확장 */
+    /* intro는 항상 마지막 콘텐츠(flex order 6 / grid 마지막 행) → 하단 padding을
+       inner의 padding-bottom(40)만큼 흡수해 불투명 배경이 그 구간까지 채우게 한다.
+       (inner의 padding-bottom은 대칭으로 0 처리 — 총 여백은 불변, 커버 구간만 이동) */
+    padding: calc(28px * var(--about-scale)) calc(28px * var(--about-scale)) calc(40px * var(--about-scale));
+    border-top: 1px solid var(--color-border-primary);
+    background: var(--color-bg-hero);
   }
   .about-hero-intro-gap {
     display: none;
@@ -341,35 +378,134 @@
   .about-hero-intro p + p {
     margin-top: calc(4px * var(--about-scale));
   }
+}
 
-  .about-experience {
-    padding-left: calc(28px * var(--about-scale));
-    padding-right: calc(28px * var(--about-scale));
-    --about-exp-inset: calc(28px * var(--about-scale));
-    --about-rail: calc(110px * var(--about-scale));
+/* ══════════════════ HERO 태블릿(650–1023): 텍스트(좌)·사진(우), intro는 아래 전폭 ══════════════════ */
+@media (width >= 650px) and (width < 1024px) {
+  .about-hero-inner {
+    /* about-hero-text(좌) | 사진(우), intro는 그 아래 전폭 스팬.
+       photo 트랙은 "auto"(사진 자신의 인플로우 폭으로 역산) 대신 사진과 동일한 리터럴 폭을 못박는다 —
+       사진이 아래에서 grid-flow를 벗어나 absolute가 되어도(세로 full-fill용) 이 컬럼 폭은 불변이라
+       text 컬럼 폭 계산에 영향이 없다(제약: "text 레이아웃 폭이 안 깨져야 한다"). */
+    grid-template-columns: minmax(0, 1fr) calc(230px * var(--about-scale));
+    grid-template-areas:
+      "text photo"
+      "intro intro";
+    justify-content: start;
+    column-gap: calc(40px * var(--about-scale));
+    row-gap: calc(32px * var(--about-scale));
+    padding: calc(40px * var(--about-scale)) calc(28px * var(--about-scale)) 0; /* 하단은 마지막 grid 행(intro)이 배경으로 흡수 */
   }
-  .about-year--divided::after {
-    left: 0;
-    width: 100%;
+  .about-hero-photo {
+    grid-area: photo;
+    margin-top: 0;
+    /* 세로 full-fill: 사진을 grid 흐름에서 빼 absolute로 전환한다. abspos 그리드 아이템은
+       자신에게 배정된 grid-area(= 위 "photo" 셀, 프로필 행 × 사진 컬럼)를 containing block으로
+       삼는다(CSS Grid §9.4, 크로스브라우저 지원) — 그 덕에 위 grid-template-columns가 못박은
+       사진 컬럼 폭은 그대로 유지한 채, top/right/bottom 세 변만으로 "히어로 상단 가장자리 →
+       프로필 행 하단(= intro 밴드가 시작되는 지점)"까지 세로로 정확히 채울 수 있다.
+       top·right는 inner의 padding(40px/28px)을 상쇄해 히어로 실제 가장자리까지 bleed하고,
+       bottom:0은 프로필 행(그리드 area) 하단에 크롭 없이 flush — "붕 뜬 작은 사진"이 아니라
+       우측 전체를 채우는 세로 이미지로 보이게 한다. 고정 280px 높이 대신 height:auto로 두 변
+       (top/bottom) 사이 거리를 그대로 채워, 텍스트 콘텐츠양에 따라 달라지는 실제 행 높이에 맞춘다. */
+    position: absolute;
+    top: calc(-40px * var(--about-scale));
+    right: calc(-28px * var(--about-scale));
+    bottom: 0;
+    width: calc(230px * var(--about-scale));
+    height: auto;
   }
-  .about-cert {
-    padding-left: 0;
+  .about-hero-photo img {
+    /* 세로로 길어진 컨테이너가 네이티브 345:417보다 세로로 길어지면 cover가 좌우를 크롭한다.
+       인물 얼굴은 이미지 상단·중앙에 있으므로 top 고정으로 얼굴을 보존하고, 남는 크롭은
+       바닥(하체 쪽)에서만 일어나게 한다(center만 쓰면 얼굴이 위아래로 잘릴 수 있음). */
+    object-position: center top;
+  }
+  .about-hero-text {
+    grid-area: text;
+    margin-top: 0;
+  }
+  .about-hero-intro {
+    grid-area: intro;
+    margin-top: 0;
+  }
+  /* twisted grid 태블릿 전용 위치 — 직접 조정 (데스크톱 기본값 상속하지 않고 이 구간 독립 제어) */
+  .about-hero {
+    --about-art-left: -5%;
+    --about-art-top: -25%;
+    --about-art-width: 120%;
   }
 }
 
-@media (width < 640px) {
-  .about-hero-greeting,
-  .about-hero-nickname {
-    white-space: normal;
-    word-break: keep-all;
+/* ══════════════════ HERO 모바일(<650): 세로 스택 + 사진을 TWINCE와 인사말 사이 ══════════════════ */
+@media (width < 650px) {
+  .about-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    gap: 0; /* display:contents로 프로필 자식이 flex item → 개별 margin으로 간격 제어 */
+    padding: calc(24px * var(--about-scale)) calc(28px * var(--about-scale)) 0; /* 상단 패딩 축소, 하단은 마지막 아이템(intro)이 배경으로 흡수 */
   }
-  /* 연도 레일이 콘텐츠 위로 오는 세로 스택 */
+  /* 텍스트 래퍼 해제 → 자식(로고·인사·닉네임·연락처)이 inner의 flex item이 되어 order로 사진 삽입 */
+  .about-hero-text {
+    display: contents;
+  }
+  .about-hero .profile-logotype {
+    order: 1;
+  }
+  .about-hero-photo {
+    order: 2;
+    margin-top: calc(-8px * var(--about-scale)); /* TWINCE 여백으로 위로 tuck (사진은 좌측, 배지는 우측이라 미충돌) */
+    margin-left: calc(-10px * var(--about-scale)); /* 살짝 왼쪽으로 bleed */
+    /* 확대 + 하단 crop(네이티브 338 → 275) → 상체 하부가 잘려 텍스트와 더 붙음 */
+    width: calc(280px * var(--about-scale));
+    height: calc(275px * var(--about-scale));
+  }
+  .about-hero-photo img {
+    object-position: center top; /* 하단(상체 하부)이 잘리도록 위쪽 고정 */
+  }
+  /* greeting·nickname·contacts 묶음 = frosted glass 패널 — 뒤 twisted-grid를 이 영역에서 흐림 */
+  .about-hero-blurb {
+    order: 3;
+    /* full-bleed 유리 밴드 — border·radius·margin 없이 폭을 꽉 채우고 내부 여백은 padding으로 */
+    width: 100vw;
+    margin-inline: calc(50% - 50vw); /* 컨테이너 패딩을 뚫고 뷰포트 폭까지 */
+    padding: calc(20px * var(--about-scale)) calc(28px * var(--about-scale)); /* margin 대신 내부 여백 */
+    background: color-mix(in srgb, var(--color-bg-pure) 10%, transparent); /* SUNWOO HA 배지 glass tint */
+    backdrop-filter: blur(calc(6px * var(--about-scale)));
+    -webkit-backdrop-filter: blur(calc(6px * var(--about-scale)));
+  }
+  .about-hero-blurb .about-hero-greeting {
+    margin-top: 0; /* 상단 여백은 패널 padding이 담당 */
+  }
+  .about-hero-blurb .profile-contacts {
+    margin-top: calc(16px * var(--about-scale)); /* 패널 내 간격 축소(기본 45 과함) */
+  }
+  .about-hero-intro {
+    order: 6;
+    margin-top: 0; /* blurb 패널과 붙임(꽉 참) — 간격은 blurb padding-bottom + intro padding-top */
+  }
+  /* twisted grid 모바일 전용 위치 — 직접 조정 (데스크톱 knob이 세로 긴 inner에서 화면 밖).
+     좁은 폭(≲416px)에서 아트가 %비례로 함께 줄어 프레임 안에 funnel 전체가 들어와 버리는 문제:
+     아트 크기는 뷰포트폭에 선형(240%)인데 hero 높이는 텍스트 리플로우로 좁을수록 오히려 커져
+     (798@360 vs 730@430) 아트가 프레임 대비 작아져 상하좌우로 안 삐져나감 → 완결된 hourglass가 노출.
+     → width/left에 절대 px "하한"을 겹쳐(max/min) 임계폭 아래에선 아트가 더 안 줄고 그 자리에 고정.
+     그러면 창이 좁아질수록 같은 크기의 아트가 더 크롭된다(우측부터 잘림) — funnel이 "덜 보이는" 방향.
+     교차점 = 하한값이 %값과 같아지는 폭(≈416px)이라 그 위(태블릿 경계까지)는 기존 튜닝값 그대로,
+     아래로만 거동이 바뀐다. max/min은 교차점에서 연속(값 점프 없음)이라 breakpoint 추가와 달리 매끄럽다. */
+  .about-hero {
+    --about-art-left: min(-230px, -55%); /* 하한: 좁아져도 -230px보다 덜 왼쪽으로 안 감(좌측 앵커 고정) */
+    --about-art-top: -15%;
+    --about-art-width: max(1000px, 240%); /* 하한: 좁아져도 1000px 밑으로 안 줄어 계속 프레임을 넘침 */
+  }
+}
+
+/* ══════════════════ EXPERIENCE <640: 연도 레일 가로 스택 ══════════════════ */
+@media (width < 640px) {
   .about-year {
     grid-template-columns: 1fr;
     row-gap: calc(12px * var(--about-scale));
-  }
-  .about-year-line {
-    display: none;
   }
   .about-year-rail {
     flex-direction: row;

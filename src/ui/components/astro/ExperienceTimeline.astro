@@ -1,21 +1,20 @@
 ---
-// EXPERIENCE 타임라인 — Figma 4816:895. 연도 레일(185px) | 콘텐츠(1fr) 그리드.
-// 데이터는 experience.data.ts에서 import만(수정 금지). 2026 블록 아래에만 가로 구분선.
-// CERTIFICATIONS는 연도 블록과 달리 레일에 라벨+리스트를 세로로 쌓는다.
+// EXPERIENCE 타임라인 — Figma 4816:895. 연도 = 4변 보더 행 박스(레일 130px | 콘텐츠), gap 없이 세로로 이어 붙임.
+// 콘텐츠 내부 아이템은 masonry(columns:2)로 높이순 패킹. 데이터는 experience.data.ts에서 import.
+// CERTIFICATIONS는 연도 블록과 달리 레일에 라벨+리스트를 세로로 쌓는 같은 계열 박스.
 import { EXPERIENCE_YEARS, CERTIFICATIONS } from "../../layouts/about/experience.data.ts";
 ---
 <section class="about-experience">
   <h2 class="about-exp-title">EXPERIENCE</h2>
 
   <div class="about-exp-body">
-    {EXPERIENCE_YEARS.map((yearBlock, i) => (
-      <div class:list={["about-year", { "about-year--divided": i === 0 }]}>
+    {EXPERIENCE_YEARS.map((yearBlock) => (
+      <div class:list={["about-year", { "about-year--merge-up": yearBlock.mergeUp }]}>
         <div class="about-year-rail">
           <span class="about-year-label">{yearBlock.year}</span>
           {yearBlock.railLabel && (
             <span class="about-rail-label">{yearBlock.railLabel}</span>
           )}
-          <span class="about-year-line" aria-hidden="true"></span>
         </div>
 
         <div class="about-year-content">
@@ -25,7 +24,17 @@ import { EXPERIENCE_YEARS, CERTIFICATIONS } from "../../layouts/about/experience
                 <h3 class="about-item-title">{item.title}</h3>
                 {item.period && <span class="about-item-period">{item.period}</span>}
               </div>
-              {item.mention && <span class="about-item-mention">{item.mention}</span>}
+              {item.mention && (
+                <span class="about-item-mention">
+                  {item.mention.map((seg) => (
+                    seg.href ? (
+                      <a class="about-mention-link" href={seg.href} target="_blank" rel="noopener noreferrer">{seg.text}</a>
+                    ) : (
+                      <span>{seg.text}</span>
+                    )
+                  ))}
+                </span>
+              )}
               <ul class="about-item-bullets">
                 {item.bullets.map((b) => (
                   <li>{b}</li>
@@ -37,8 +46,8 @@ import { EXPERIENCE_YEARS, CERTIFICATIONS } from "../../layouts/about/experience
       </div>
     ))}
 
+    <h3 class="about-cert-title">CERTIFICATIONS</h3>
     <div class="about-cert">
-      <h3 class="about-cert-title">CERTIFICATIONS</h3>
       <ul class="about-cert-list">
         {CERTIFICATIONS.map((c) => (
           <li>{c}</li>
