@@ -100,6 +100,20 @@
   overflow: hidden;
   min-height: calc(542px * var(--root-scale));
 }
+/* 패널 전체를 /about로 라우팅 — stretched link.
+   콘텐츠(레일·본문)는 pointer-events:none로 클릭을 커버로 통과시키고, 연락처 링크만 재활성화 */
+.profile-art-cover {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.profile-art > .art-rail,
+.profile-art > .profile-body {
+  pointer-events: none;
+}
+.profile-art .profile-contacts {
+  pointer-events: auto;
+}
 /* 세로 레일 공통(u-rail) — art/explore/hero 레일이 공유. 폭·gap·font-size는 각 컨텍스트 스케일 소유 */
 :is(.art-rail, .topics-band .explore-rail, .series-hero .hero-rail) {
   display: flex;

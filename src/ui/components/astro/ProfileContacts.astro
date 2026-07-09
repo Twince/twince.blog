@@ -1,0 +1,27 @@
+---
+// 프로필 연락처 4링크(instagram/github/discord/email) — root·about 공유.
+// 스타일은 .profile-contacts(root.css)가 기본, about은 .about-hero 스코프에서 크기만 오버라이드.
+import { Image } from "astro:assets";
+import EmailIcon from "../../assets/icons/email.svg";
+import GithubIcon from "../../assets/icons/github.svg";
+import InstagramIcon from "../../assets/icons/instagram.svg";
+import discordIcon from "../../assets/icons/discord.png";
+---
+<address class="profile-contacts">
+  <a href="mailto:contact@twince.blog">
+    <EmailIcon aria-hidden="true" />
+    <span class="contact-text">contact@twince.blog</span>
+  </a>
+  <a href="https://github.com/twince" target="_blank" rel="noopener noreferrer" aria-label="GitHub: twince">
+    <GithubIcon aria-hidden="true" />
+    <span class="contact-text">twince</span>
+  </a>
+  <a href="https://www.instagram.com/twince_o" target="_blank" rel="noopener noreferrer">
+    <InstagramIcon aria-hidden="true" />
+    <span class="contact-text">twince_o</span>
+  </a>
+  <!-- <a href="https://discord.com/users/twince_" target="_blank" rel="noopener noreferrer" aria-label="Discord: twince_">
+    <Image src={discordIcon} alt="" aria-hidden="true" width="20" height="20" />
+    <span class="contact-text">twince_</span>
+  </a> -->
+</address>

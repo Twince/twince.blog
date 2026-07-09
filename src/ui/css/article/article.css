@@ -327,7 +327,7 @@
   }
   figcaption {
     color: var(--color-article-image-caption);
-    font-size: var( --size-article-image-caption);
+    font-size: var(--size-article-image-caption);
     margin-left: 4px;
     margin-bottom: 1.1rem;
     margin-top: .22rem;
