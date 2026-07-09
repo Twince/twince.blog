@@ -440,7 +440,7 @@
 
 /* 스크롤 게이트 — 진행률 전역 변수만 여기서 초기화.
    컨트롤 스타일·bob 애니메이션은 ScrollGateControl.astro 스코프로 이동
-   (bob이 .gate-control의 transform을 덮어써 센터링/도킹 translate가 깨지던 버그) */
+   (bob이 .gate-control의 transform을 덮어써 센터링 translate가 깨지던 버그) */
 :root {
   --gate-progress: 0;
 }

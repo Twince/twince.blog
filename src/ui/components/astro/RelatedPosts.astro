@@ -65,9 +65,22 @@ const description = isMatchingEmpty
     width: 100%;
     min-height: calc(100dvh - var(--header-h)); /* 풀뷰포트 섹션 — 콘텐츠가 더 크면 자연 확장 */
     background-color: var(--color-bg-elevated);
-    /* 상단 88px = 게이트 컨트롤(도킹 12 + 높이 60) + 여백 16 */
+    /* 상단 88px = 관련 포스트 헤더의 상단 여백(게이트 컨트롤은 in-flow라 자체 마진이 간격을 소유) */
     padding: 88px calc(23px * var(--root-scale, 1)) calc(48px * var(--root-scale, 1));
     border-top: 1px solid var(--color-border-primary);
+  }
+
+  /* 게이트 통과 전 수납 — 스크롤 컨테이너에 height 0으로 기여(경계 아래 콘텐츠 제거).
+     그러면 아래로의 오버스크롤을 브라우저 네이티브 클램프가 막아 바운스가 구조적으로 불가능.
+     JS(scrollGateObserver)가 data-collapsed를 토글한다. 높이 transition 없음 —
+     전개는 snap 스크롤 tween이 담당하고, 여기서 height 애니메이션을 걸면 tween과 경합한다. */
+  .related-posts[data-collapsed] {
+    min-height: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-top-width: 0;
+    overflow: hidden;
   }
 
   .related-posts-inner {
