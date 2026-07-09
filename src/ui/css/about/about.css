@@ -28,6 +28,8 @@
   --about-art-width: 120%;
   --about-art-rotate: -1deg;
   --about-art-opacity: 0.1;
+  /* 데스크톱(≥1024) hero 고정 높이 노브 — 렌더 390 @ scale 0.9 (433.33 = 390/0.9). 직접 조절 */
+  --about-hero-h: calc(433.33px * var(--about-scale));
   /* 3열 인플로우 컬럼 폭 + 각 블록 상단 오프셋(Figma raw) */
   --about-photo-col: calc(355px * var(--about-scale));
   --about-text-col: calc(432px * var(--about-scale));
@@ -343,7 +345,7 @@
    사진이 더 크면 hero overflow:hidden이 크롭. */
 @media (width >= 1024px) {
   .about-hero-inner {
-    height: calc(433.33px * var(--about-scale)); /* = 390 @ scale 0.9 — 고정 px 대신 --about-scale 연동(knob 재튜닝 시 텍스트 clip 방지) */
+    height: var(--about-hero-h); /* 고정 높이 노브(.about-hero에 선언) — --about-scale 연동 */
     grid-template-rows: 100%; /* 행을 컨테이너 높이로 고정 → 사진이 행을 못 키움(높이 지배 방지) */
   }
   /* 사진: in-flow인 채 하단만 고정. 행이 고정이라 더 커지면 위(top)로 넘쳐 .about-hero overflow:hidden이 crop
