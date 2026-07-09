@@ -25,9 +25,11 @@ export const HeadingObserver = {
   bind(idList: string[]) {
     if(!observer) throw new Error("HeadingObserver.init() must be called first")
     activeId = null;
-    const headings = Array.from(idList.map((id) => document.querySelector(`#${CSS.escape(id)}`))) //TODO: slug hash로 수정 or 정합화 로직 수정
-    if(headings.length === 0 || headings === null) {
-      console.error("heading이 존재하지 않음");  
+    const headings = idList
+      .map((id) => document.querySelector(`#${CSS.escape(id)}`))
+      .filter((el): el is Element => el !== null); //TODO: slug hash로 수정 or 정합화 로직 수정
+    if(headings.length === 0) {
+      console.error("heading이 존재하지 않음");
       return;
     }
     headings.forEach((heading) => observer?.observe(heading));
@@ -35,13 +37,11 @@ export const HeadingObserver = {
   disconnect() {
     if(!observer) throw new Error("HeadingObserver.init() must be called first")
     observer.disconnect();
+    observer = null; // 리셋해야 재init 가능 (init의 if(observer) return 가드)
+    activeId = null;
   },
 
   getActiveId(): ActiveId {
     return activeId;
   }
-}
-
-export function createHaadingObserver() {
-
 }

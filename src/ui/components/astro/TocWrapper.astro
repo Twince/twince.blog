@@ -1,6 +1,5 @@
 ---
-import { getEntry, render } from "astro:content";
-const { slug } = Astro.props;
+import { getEntry } from "astro:content";
 import { Toc } from "../react/Toc"
 import { validateToc } from "../../../service/post/utils/tocValidator"
 import type { TocNode } from "../../../service/post/types/TocGenrator";
@@ -8,7 +7,11 @@ import type { TocProps } from "../../types/TocProps";
 import { collectTocIds } from "../../utils/collectTocIds";
 import { flattenToc } from "../../utils/flattenToc";
 
+interface Props {
+  slug: string;
+}
 
+const { slug } = Astro.props;
 const entry = await getEntry('posts', slug)
 const validatedToc: TocNode[] | null = validateToc(entry?.data.toc)
 
@@ -18,11 +21,7 @@ const tocProps: TocProps = {
   idList: collectTocIds(validatedToc),
   flattenToc: flattenToc(validatedToc)
 }
-
-const { Content } = await render(entry);
-// flattenToc, collectionIds를 props로 내리기
 ---
-<aside class="flex items-start">
-  <div></div>
-    <Toc {...tocProps} client:load />
+<aside class="flex items-start mx-17">
+    <Toc {...tocProps} client:idle />
 </aside>

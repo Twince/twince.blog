@@ -1,0 +1,39 @@
+/* ============================================================
+   PRIMITIVE TOKENS — 불변 팔레트 (테마와 무관, 절대 swap 안 됨)
+   숫자식 명명. plain :root에 둬서 Tailwind 유틸리티를 생성하지 '않는다'
+   → 직접 소비 불가, 오직 semantic 별칭이 var()로 참조한다.
+   명명: hue 가족 + 단계(↑=어두움, Tailwind 관례). white/black은 anchor로 분리.
+   값: 디자인 실측 hex → oklch 정확 변환.
+   ============================================================ */
+:root {
+  /* --- anchor (순백/순흑 — 텍스트엔 직접 안 씀) --- */
+  --white: oklch(1 0 0);   /* #FFFFFF */
+  --black: oklch(0 0 0);   /* #000000 */
+
+  /* --- gray: neutral ramp (light → dark) --- */
+  --gray-50:  oklch(0.9791 0 0); /* #F8F8F8  page bg(L) */
+  --gray-75:  oklch(0.97 0 0);   /* hero 표면(L) — page bg보다 한 단계 낮음 */
+  --gray-100: oklch(0.9551 0 0); /* #F0F0F0  text(D) / blockquote bg(L) */
+  --gray-200: oklch(0.9189 0 0); /* #E4E4E4  border / hover */
+  --gray-300: oklch(0.8884 0 0); /* #DADADA  codeblock bg (#CECECE 흡수) */
+  --gray-400: oklch(0.7668 0 0); /* #B3B3B3  muted surface / control border (#B0B0B0·#AEAEAE 흡수) */
+  --gray-500: oklch(0.6234 0 0); /* #878787  quaternary (#949494 흡수) */
+  --gray-600: oklch(0.5103 0 0); /* #666666  caption */
+  --gray-700: oklch(0.3979 0 0); /* #474747  tertiary */
+  --gray-800: oklch(0.2768 0 0); /* #282828  secondary */
+  --gray-900: oklch(0.2350 0 0); /* #1E1E1E  inverse / elevated surface(D) */
+  --gray-925: oklch(0.2000 0 0); /* ≈#161616  hero 표면(D) — 950↔900 사이 전용 스텝 */
+  --gray-950: oklch(0.1822 0 0); /* #121212  primary text(L) / page bg(D) */
+
+  --gray-850: oklch(0.3211 0 0);            /* #333333  코드 언어 배지 bg (테마 불변) */
+
+  /* --- slate: 차가운(푸른기) 다크 뉴트럴 — gray와 별개 hue 계열(~222), article 잉크용 --- */
+  --slate-500: oklch(0.6022 0.0195 264.42); /* #7B818D  코드라인 번호 (테마 불변) */
+  --slate-700: oklch(0.3170 0.0228 219.08); /* #25353A  article title */
+  --slate-800: oklch(0.3087 0.0195 229.78); /* #263238  codefence bg */
+  --slate-900: oklch(0.2932 0.0231 219.21); /* #1F2F34  article content */
+
+  /* --- accent (단일 step, 필요 시 -400/-600 확장) --- */
+  --brand-500:  oklch(0.6921 0.1726 53.88);  /* #EB7805  brand orange (로고·카테고리 마커) */
+  --accent-500: oklch(0.4936 0.2873 273.98); /* #4326FF  link / active blue */
+}

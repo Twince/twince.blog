@@ -1,0 +1,220 @@
+/* ══ SERIES 페이지 — Figma series(4305:1497 목록 / 4305:1568 상세) ══
+   치수 = (Figma raw 정수) × --series-scale. 컬럼 1100px(헤더·root와 동일 축). */
+.series-page {
+  --series-scale: 1.1;
+
+  /* 목록 */
+  --series-page-title: calc(25px * var(--series-scale));
+  --series-item-title: calc(22px * var(--series-scale));
+  --series-item-slug:  calc(8px * var(--series-scale));
+  --series-item-desc:  max(12px, calc(10px * var(--series-scale)));
+  --series-item-meta:  max(12px, calc(9px * var(--series-scale)));
+
+  /* 상세 히어로 */
+  --series-label:      calc(12px * var(--series-scale));
+  --series-hero-title: calc(27px * var(--series-scale));
+  --series-hero-desc:  max(12px, calc(10px * var(--series-scale)));
+  --series-rail:       calc(9px * var(--series-scale));
+
+  /* 상세 카드는 row 카드 재사용 — root row 카드 컨텍스트(1.1)와 정합 */
+  --card-scale: 1.1;
+}
+
+.series-column {
+  max-width: 1100px;
+  margin-inline: auto;
+  min-height: 100%;
+  border-inline: 1px solid var(--color-border-primary);
+  background-color: var(--color-bg-hero);
+}
+
+/* ── 목록 ─────────────────────────────────────────────────────── */
+.series-page-title {
+  padding: calc(72px * var(--series-scale)) calc(25px * var(--series-scale))
+           calc(20px * var(--series-scale));
+  font-size: var(--series-page-title);
+  font-weight: var(--font-weight-title);
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+.series-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: calc(20px * var(--series-scale)); /* Figma: 행 pitch 230 − 높이 210 */
+  padding-top: calc(20px * var(--series-scale));
+}
+
+.series-item {
+  border-block: 1px solid var(--color-border-primary);
+  transition: box-shadow 150ms ease-out;
+}
+.series-item:hover { box-shadow: var(--u-hover-ring); }
+.series-item:hover .series-item-title { color: var(--color-brand-hover); }
+
+.series-item-link {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(40px * var(--series-scale));
+  min-height: calc(210px * var(--series-scale));
+  padding: calc(26px * var(--series-scale)) calc(32px * var(--series-scale))
+           calc(26px * var(--series-scale)) calc(42px * var(--series-scale));
+}
+.series-item-text { min-width: 0; }
+.series-item-slug {
+  font-family: var(--font-jetbrain-mono);
+  font-size: var(--series-item-slug);
+  font-weight: 300;
+  color: var(--color-text-quaternary);
+}
+.series-item-title {
+  margin-top: calc(27px * var(--series-scale));
+  font-size: var(--series-item-title);
+  font-weight: var(--font-weight-title);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  word-break: keep-all;
+  transition: color 150ms ease-out;
+}
+.series-item-desc {
+  margin-top: calc(27px * var(--series-scale));
+  max-width: calc(300px * var(--series-scale));
+  font-size: var(--series-item-desc);
+  line-height: 1.3;
+  color: var(--color-text-tertiary);
+  word-break: keep-all;
+}
+
+/* 우측: 겹친 썸네일 덱 + 메타 */
+.series-item-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: calc(12px * var(--series-scale));
+  flex-shrink: 0;
+}
+.series-deck {
+  position: relative;
+  /* 폭을 장수에서 파생 — 고정폭이면 메타(justify-between)의 tally가 덱 우측 끝 밖으로 밀림 */
+  width: calc(((var(--n, 1) - 1) * 24px + 153px) * var(--series-scale));
+  height: calc(103px * var(--series-scale));
+}
+.series-deck .deck-thumb {
+  position: absolute;
+  top: 0;
+  left: calc(var(--i) * 24px * var(--series-scale));
+  width: calc(153px * var(--series-scale));
+  height: calc(103px * var(--series-scale));
+  object-fit: cover;
+  border-radius: calc(6px * var(--series-scale));
+}
+.series-item-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-size: var(--series-item-meta);
+  color: var(--color-text-quaternary);
+}
+.series-tally {
+  font-family: var(--font-jetbrain-mono);
+  font-size: calc(7px * var(--series-scale));
+  letter-spacing: 2px;
+}
+
+/* ── 상세 ─────────────────────────────────────────────────────── */
+.series-hero {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  min-height: calc(370px * var(--series-scale));
+  border-bottom: 1px solid var(--color-border-primary);
+}
+/* 세로 슬러그 레일 — 공통 선언은 root.css의 u-rail :is() 그룹이 소유 */
+.series-hero .hero-rail {
+  position: relative;
+  gap: calc(8px * var(--series-scale));
+  flex-shrink: 0;
+  width: calc(19px * var(--series-scale));
+  font-size: var(--series-rail);
+  z-index: 1;
+}
+/* root의 .rail-arrow(hover 은닉·--root-* 토큰)와 달리 시리즈 히어로에선 상시 노출 */
+.series-hero .rail-arrow {
+  position: static;
+  width: var(--series-rail);
+  height: auto;
+  opacity: 1;
+  transform: rotate(-90deg);
+}
+.series-hero-body {
+  position: relative;
+  z-index: 1;
+  padding: calc(52px * var(--series-scale)) 0 0 calc(75px * var(--series-scale));
+}
+.series-hero-label {
+  font-size: var(--series-label);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+.series-hero-title {
+  margin-top: calc(28px * var(--series-scale));
+  max-width: calc(340px * var(--series-scale));
+  font-size: var(--series-hero-title);
+  font-weight: var(--font-weight-title);
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  word-break: keep-all;
+}
+.series-hero-desc {
+  margin-top: calc(40px * var(--series-scale));
+  max-width: calc(260px * var(--series-scale));
+  font-size: var(--series-hero-desc);
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  word-break: keep-all;
+}
+
+.series-posts {
+  padding: calc(20px * var(--series-scale)) calc(28px * var(--series-scale))
+           calc(96px * var(--series-scale));
+}
+.series-posts-meta {
+  display: flex;
+  flex-direction: column;
+  gap: calc(3px * var(--series-scale));
+  font-size: var(--series-item-meta);
+  color: var(--color-text-quaternary);
+}
+.series-empty {
+  padding: calc(96px * var(--series-scale)) 0;
+  text-align: center;
+  font-size: calc(13px * var(--series-scale));
+  color: var(--color-text-quaternary);
+}
+.series-posts-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: calc(40px * var(--series-scale)) calc(30px * var(--series-scale));
+  margin-top: calc(40px * var(--series-scale));
+}
+@media (width >= 768px) {
+  .series-posts-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ── 모바일(<768) ─────────────────────────────────────────────── */
+@media (width < 768px) {
+  .series-column { border-inline: none; }
+  .series-page-title { padding: 48px 28px 16px; font-size: 20px; }
+  .series-item-link { padding: 24px 28px; min-height: 0; flex-direction: column; gap: 16px; }
+  .series-deck { display: none; }  /* 덱만 숨기고 메타는 유지 */
+  .series-item-title { margin-top: 12px; font-size: 18px; }
+  .series-item-desc { margin-top: 12px; font-size: 11px; }
+
+  .series-hero { min-height: 0; }
+  .series-hero .hero-rail { display: none; }
+  .series-hero-body { padding: 40px 28px 36px; }
+  .series-hero-title { font-size: 22px; margin-top: 16px; }
+  .series-hero-desc { margin-top: 20px; font-size: 11px; }
+  .series-posts { padding: 20px 28px 64px; }
+}

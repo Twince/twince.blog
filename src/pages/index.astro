@@ -1,20 +1,4 @@
 ---
-import BaseLayout from "../ui/layouts/BaseLayout.astro";
-import ArticleLayout from "../ui/layouts/article/ArticleLayout.astro";
-
-import { PostService } from "../service/post/fetch/postServicer";
-import TocWrapper from "../ui/components/astro/TocWrapper.astro";
-import tailwindcss from "@tailwindcss/vite";
-
-// const blogPosts = await PostService.getPublsihedPosts();
-// console.log(blogPosts);
-// console.log(JSON.stringify(blogPosts[0].topics[0]['id']))
-
-// const filteredPosts = await PostService.getPostWithCategories(['dev','design']);
-// const filteredPosts = await PostService.getPostsWithTopic('DESIGN');
-// console.log(filteredPosts);
-
+import RootLayout from "../ui/layouts/root/RootLayout.astro";
 ---
-<BaseLayout>
-	<!-- <ArticleLayout /> -->
-</BaseLayout>
+<RootLayout />

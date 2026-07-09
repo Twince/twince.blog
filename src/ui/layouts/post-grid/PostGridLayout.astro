@@ -1,26 +1,36 @@
 ---
-import { PostService } from "../../../service/post/fetch/postServicer";
-import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
+interface Props {
+  direction: "row" | "col";
+}
 
+import { PostService } from "../../../service/post/fetch/postServicer";
+import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
+import ColDirectionPost from "../../components/astro/ColDirectionPost.astro";
+import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
+
+const { direction = "col" } = Astro.props;
 const posts = await PostService.getPublishedPosts();
+const cards = posts
+  .map((post) => PostService.convertToSummaryMapper(post))
+  .filter((card): card is PostCardWithThumbnail => card !== null);
+
+// row: md+ 2열(카드는 <1024에서 CSS가 col 시안으로 변형). 가로 인셋은 소비 페이지 소유.
+// col: 3열 그리드.
+const gridClass = direction === "row"
+  ? "post-grid grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10"
+  : "post-grid grid justify-items-center grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3";
 ---
 <div>
-  <ul class="post-grid grid item-center mx-2 grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3 max-w-[1400px]">
-      { posts.map((post) => 
+  <ul class={gridClass}>
+      { cards.map((card) =>
       (<li class="
       post-item
       py-1 px-1 rounded-[1px]
       transition-all duration-150 ease-in-out
-
-      hover:-translate-y-1
-      ">
-        <ColDirectionPost 
-        slug={post.slug} 
-        thumbnail={post.thumbnail} 
-        title={post.title} 
-        description={post.description} 
-        categories={post.categories} 
-        />
+      hover:-translate-y-1">
+        { direction === "col"
+          ? <ColDirectionPost {...card} />
+          : <RowDirectionPost {...card} /> }
       </li>)
       )}
   </ul>

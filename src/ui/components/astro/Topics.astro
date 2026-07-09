@@ -1,0 +1,27 @@
+---
+// 토픽 칩 밴드 — Figma 3917:772
+import { getCollection } from "astro:content";
+
+const topics = await getCollection("topics");
+
+// TODO(사용자): 칩 라우팅 결정 시 <li>를 <a>로 교체
+const chips = topics.map((topic) => ({
+  id: topic.data.id,
+  title: topic.data.title,
+  description: topic.data.description,
+}));
+---
+<div class="topics-band">
+  <span class="explore-rail" aria-hidden="true"><span class="rail-label">TOPICS</span></span>
+  <ul class="topics-grid">
+    {chips.map((chip) => (
+      <li class="topic-chip">
+        <span class="topic-hash" aria-hidden="true">#</span>
+        <div>
+          <p class="topic-name">{chip.title}</p>
+          <p class="topic-desc">{chip.description}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>

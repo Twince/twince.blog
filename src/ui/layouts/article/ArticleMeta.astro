@@ -1,6 +1,6 @@
 ---
-const { date, readingTime, categories } = Astro.props;
-import Categories from "../../components/astro/Categories.astro";
+const { date, readingTime, tags } = Astro.props;
+import Tags from "../../components/astro/Tags.astro";
 import { formatDateTime } from "../../utils/formatDateTime";
 
 const displayDate = formatDateTime(date);
@@ -15,5 +15,5 @@ const displayTime = readingTime.length === 2
     <p>|</p>
     <p class="pl-2">{displayTime}</p>
   </div>
-  <Categories categories={categories} />
+  <Tags tags={tags} />
 </div>

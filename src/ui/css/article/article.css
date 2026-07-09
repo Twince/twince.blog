@@ -23,8 +23,8 @@
   margin-left: 5px;
 }
 
-.article-categories{
-  font-size: var(--size-article-categories);
+.article-tags{
+  font-size: var(--size-article-tags);
   font-weight: 600;
   color: var(--color-text-secondary);
   border: 1px solid var(--color-border-primary);
@@ -79,7 +79,7 @@
     font-weight: 400;
     color: var(--color-article-content);
     margin: 0 0 1.8rem 0;
-    line-height: 1.68rem;
+    line-height: 1.65;
   }
   p:has(img) {
     margin: 0 0 .9rem 0;
@@ -117,7 +117,7 @@
     content: counter(code-line);
     font-size: 12px;
     text-align: right;
-    color: #7b818d;
+    color: var(--color-code-linenum);
     padding-right: 15px;
   }
   pre[data-language] {
@@ -133,8 +133,8 @@
     font-weight: 600;
     padding: 2px 6px;
     border-radius: 4px;
-    background: #333;
-    color: white;
+    background: var(--color-badge-lang-bg);
+    color: var(--color-badge-lang-text);
     text-transform: uppercase;
   }
 
@@ -142,9 +142,9 @@
     margin-left: 6px;
     margin-bottom: 1rem;
     padding: 16px 12px;
-    border-left: 2.5px solid var(--color-border-blockqoute);
+    border-left: 2.5px solid var(--color-border-blockquote);
     border-radius: 2px;
-    background-color: var(--color-bg-article-blockqoute);
+    background-color: var(--color-bg-article-blockquote);
   }
   blockquote > * {
     /* font-family: var(--font-pretendard); */
@@ -201,7 +201,7 @@
   }
 
   table > thead {
-    background-color: var(--color-bg-article-blockqoute);
+    background-color: var(--color-bg-article-blockquote);
   }
 
    table th,td {
@@ -236,14 +236,14 @@
   }
 
   section.footnotes {
-    margin-top: 1rem;
+    margin-top: 2rem;
     padding-top: 2rem;
-    padding-bottom: 4rem;
+    padding-bottom: 1rem;
     border-top: 1px solid var(--color-article-divider);
     h2 {display: none;}
     li {
       font-size: var(--size-article-footnotes);
-      color: var(--color-text-tertiary);
+      color: var(--color-article-content);
       margin-left: 0.6rem;
       padding-left: 0.3rem;
     }
@@ -261,12 +261,61 @@
     p {
       margin-bottom: 0.8rem;
     }
+    /* 마지막 각주의 잔여 p 마진 제거 — 아래 게이트 컨트롤과의 여백은 padding+컨트롤 마진이 소유 */
+    li:last-child p:last-of-type {
+      margin-bottom: 0;
+    }
   }
-  section.footnotes::before {
-    content: "각주";
-    margin-top: 5rem;
+  /* 각주 토글 (rehypeFootnotesToggle이 details/summary로 변환) */
+  /* 펼침/접힘 높이 애니메이션 — ::details-content 미지원 브라우저는 즉시 전환으로 폴백 */
+  section.footnotes details {
+    interpolate-size: allow-keywords;
+  }
+  section.footnotes details::details-content {
+    block-size: 0;
+    overflow-y: clip;
+    transition: block-size 250ms ease-out, content-visibility 250ms allow-discrete;
+  }
+  section.footnotes details[open]::details-content {
+    block-size: auto;
+  }
+
+  section.footnotes .footnotes-summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    list-style: none; /* 기본 ▶ 마커 제거 — 화살표 아이콘이 대신함 */
+    user-select: none;
     font-size: 1.5rem;
     font-weight: 700;
+    color: var(--color-article-title);
+    margin-bottom: 1rem;
+  }
+  section.footnotes .footnotes-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  section.footnotes .footnotes-count {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-text-tertiary);
+    margin-left: -4px; /* summary gap(8px)보다 타이트하게 — "각주"에 붙임 */
+  }
+
+  /* arrow_left(←) 재사용: 닫힘 ▸(180°, 옆 방향) → 열림 ▾(270°) — 시계방향 90° 회전 */
+  .footnotes-toggle-arrow {
+    flex-shrink: 0;
+    transform: rotate(180deg);
+    transition: transform 200ms ease-out;
+  }
+  details[open] > .footnotes-summary .footnotes-toggle-arrow {
+    transform: rotate(270deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .footnotes-toggle-arrow {
+      transition: none;
+    }
   }
 }
 
@@ -285,8 +334,113 @@
     line-height: 1.3rem;
   }
 }
-@media (max-width: 1140px) {
-  #side-bar {
-    display: none;
-  }
+/* ── 사이드바 등장: 페이지 로드 후 ArticleLayout 스크립트가 data-reveal="shown" 토글, 시각은 CSS.
+   레이아웃(컬럼)은 고정하고 transform만 전환 — 리플로우 없이 본문이 살짝 밀림.
+   --sidebar-push로 이동량 조절(0 = 안 밀림, 190px = 완전 중앙 기준). ── */
+.article-grid {
+  --sidebar-push: 96px;
+  display: grid;
+  grid-template-columns: 1fr 380px;
+}
+.sidebar-cell { overflow: hidden; }
+
+#article-wrapper {
+  transform: translateX(var(--sidebar-push));
+  transition: transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.article-grid[data-reveal="shown"] #article-wrapper { transform: none; }
+
+#side-bar {
+  opacity: 0;
+  transform: translateX(24px);
+  pointer-events: none;
+  transition: opacity 300ms ease-out, transform 400ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+.article-grid[data-reveal="shown"] #side-bar {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* no-JS: 사이드바 상시 노출(기본 UX 보존) */
+@media (scripting: none) {
+  #article-wrapper { transform: none; }
+  #side-bar { opacity: 1; transform: none; pointer-events: auto; }
+}
+/* 아티클 <1024: 사이드바 미사용, 본문 이동 없음 */
+@media (width < 1024px) {
+  .article-grid,
+  .article-grid[data-reveal="shown"] { grid-template-columns: 1fr 0px; }
+  #article-wrapper { transform: none; }
+  #side-bar { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #article-wrapper, #side-bar { transition: none; }
+}
+
+/* 긴 TOC는 사이드바 안에서 내부 스크롤(클리핑 셀에 잘리지 않게) */
+#side-bar > aside {
+  overflow-y: auto;
+  min-height: 0;
+  scrollbar-width: none;
+}
+
+/* 이웃 포스트 화살표 — 에셋 svg의 fill=black 하드코딩 무력화(다크 추종) */
+.neighbor-arrow path { fill: currentColor; }
+.neighbor-arrow { transition: color 150ms ease-out, transform 250ms ease-out; }
+#side-bar a:hover .neighbor-arrow { color: var(--color-brand-hover); }
+
+/* 이웃 포스트 hover 라벨: 라벨(w 0→40px) 확장이 제목을 40px 밀고, 화살표는 반대로 20px(1/2).
+   라벨 translateX는 벌어진 간격의 중앙 보정값. shrink-0: 좁아질 때 줄어드는 쪽은 min-w-0 텍스트 컬럼 */
+.neighbor-label {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 6px;  /* 화살표(mt-1.5 + h-5)와 같은 y 라인 */
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-neighbor-post-description);
+  color: var(--color-text-quaternary);
+  transition: width 250ms ease-out, opacity 200ms ease-out, transform 250ms ease-out;
+}
+.neighbor-text { transition: transform 250ms ease-out; }
+
+#side-bar a:hover .neighbor-label {
+  width: 40px;
+  opacity: 1;
+}
+
+#side-bar a:hover .neighbor-arrow-next { transform: translateX(-20px); }
+#side-bar a:hover .neighbor-label-next { transform: translateX(-18px); }
+
+#side-bar a:hover .neighbor-text-prev { transform: translateX(-40px); }
+#side-bar a:hover .neighbor-arrow-prev { transform: translateX(-20px); }
+#side-bar a:hover .neighbor-label-prev { transform: translateX(-24px); }
+
+/* desc 상한 2줄 클램프. 하한 예약(-reserved)은 두 이웃이 모두 정상일 때만 컴포넌트가 부여
+   — 폴백 혼합 시 예약하면 1줄 desc의 유령 빈 줄이 아래 칸 위 여백으로 보임 */
+.neighbor-desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.neighbor-desc-reserved {
+  min-height: 2.5rem; /* leading-5(1.25rem) × 2줄 */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .neighbor-arrow, .neighbor-label, .neighbor-text { transition: none; }
+}
+
+/* 스크롤 게이트 — 진행률 전역 변수만 여기서 초기화.
+   컨트롤 스타일·bob 애니메이션은 ScrollGateControl.astro 스코프로 이동
+   (bob이 .gate-control의 transform을 덮어써 센터링/도킹 translate가 깨지던 버그) */
+:root {
+  --gate-progress: 0;
 }

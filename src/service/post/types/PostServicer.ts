@@ -1,20 +1,29 @@
 //imports
 import type { CollectionEntry } from "astro:content";
+import type { ResolvedPost } from "./Resolver";
 
 // types
 export type rawPost = CollectionEntry<'posts'>
 
-export interface PostSummaryBase {
-    slug: string | null;
-    title: string | null;
-    description: string | null;
-    categories: string[] | null;
-};
+export interface PostSummary {
+  slug: string;
+  title: string;
+  description: string;
+}
 
-export interface PostSummaryWithThumbnail extends PostSummaryBase {
-  thumbnail: {
-      src: string;
-      alt: string;
-  }
+export type NeighborSummary = PostSummary;
+
+export interface PostCardSummary extends PostSummary {
+  /**
+   * topics 배열의 첫 번째 항목(가장 높은 우선순위) topic의 id 값. INSIGHT 라벨로 표시.
+   * topics 배열이 비어있으면 null.
+   */
+  topic: string | null;
+  tags: string[];
+}
+
+// 카드 + 썸네일 (썸네일 없는 post list는 PostCardSummary를 직접 사용)
+export interface PostCardWithThumbnail extends PostCardSummary {
+  thumbnail: ResolvedPost['thumbnail']; // src = ImageMetadata — 타입의 단일 출처는 Resolver
 }
 

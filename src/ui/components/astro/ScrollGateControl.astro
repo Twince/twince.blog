@@ -1,0 +1,180 @@
+---
+import { Icon } from 'astro-icon/components';
+
+const RING_RADIUS = 21.6; // 기존 24에서 10% 축소
+---
+
+{/* 스크롤 게이트 컨트롤: in-flow(문서 흐름 내), 도킹 전환은 --gate-y(상수 translateY, CSS 상태 셀렉터가 결정).
+    chevron이 --gate-progress에 따라 progress 링으로 모프(크로스페이드) */}
+<div class="gate-control" data-gate="hidden">
+  <svg class="gate-ring" viewBox="0 0 60 60" width="60" height="60" aria-hidden="true">
+    <circle
+      class="gate-ring-progress"
+      cx="30"
+      cy="30"
+      r={RING_RADIUS}
+      fill="none"
+      stroke-width="3"
+      style={`--ring-circ: ${2 * Math.PI * RING_RADIUS}`}
+    />
+  </svg>
+
+  <div class="gate-icon-layer gate-icon-down">
+    <Icon name="chevron_down" class="gate-icon" />
+  </div>
+
+  <div class="gate-icon-layer gate-icon-up">
+    <Icon name="chevron_up" class="gate-icon" />
+  </div>
+
+  <button
+    class="gate-button"
+    aria-label="관련 포스트 미리보기"
+    title="계속 스크롤하면 관련 글을 볼 수 있어요"
+  />
+</div>
+
+<style>
+  .gate-control {
+    position: relative;
+    /* auto = 본문 컬럼 중앙, 상 12px = 각주와의 여백, 하 48px = 경계 도달 시 뷰포트 하단과의 간격 */
+    margin: 12px auto 48px;
+    width: 60px;
+    height: 60px;
+    z-index: 10;
+    flex-shrink: 0;
+    opacity: 0;
+    pointer-events: none;
+    /* 도킹 이동은 translateY(--gate-y)만 — 값은 CSS 상태 셀렉터가 결정(JS 지오메트리 없음) */
+    transform: translateY(var(--gate-y, 0px));
+    transition:
+      opacity 200ms ease-out,
+      transform 350ms cubic-bezier(0.45, 0, 0.55, 1);
+  }
+
+  .gate-control:not([data-gate='hidden']) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* 도착 계열: 컨트롤을 섹션 상단 12px 지점으로 — 48(하단 마진)+60(컨트롤)+12(상단 오프셋), 뷰포트 무관 상수 */
+  .gate-control[data-gate='snapping-forward'],
+  .gate-control[data-gate='arrived'],
+  .gate-control[data-gate='charging-back'] {
+    --gate-y: 120px;
+  }
+
+  /* ===== progress 링 (모프 대상) ===== */
+  .gate-ring {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg); /* 12시 방향에서 arc 시작 */
+    opacity: 0;
+    transition: opacity 100ms ease-in-out;
+  }
+
+  .gate-ring-progress {
+    stroke: var(--color-brand-primary); /* 브랜드 오렌지 */
+    stroke-dasharray: var(--ring-circ, 150);
+    stroke-dashoffset: calc(var(--ring-circ, 150) * (1 - var(--gate-progress, 0)));
+    stroke-linecap: round;
+  }
+
+  /* 충전/snap 중에만: progress가 커질수록 arc가 떠오름 (아이콘과 크로스페이드) — 양방향 공통 */
+  .gate-control[data-gate='charging'] .gate-ring,
+  .gate-control[data-gate='charging-back'] .gate-ring,
+  .gate-control[data-gate='snapping-forward'] .gate-ring {
+    opacity: clamp(0, calc(var(--gate-progress, 0) * 1.8), 1);
+  }
+
+  /* ===== 아이콘 레이어 ===== */
+  .gate-icon-layer {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 100ms ease-in-out;
+  }
+
+  .gate-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--color-text-primary); /* 테마 추종 (라이트/다크 모두 가시) */
+  }
+
+  /* chevron→링 모프: progress가 커질수록 chevron은 줄어들며 사라짐 (양방향 대칭) */
+  .gate-icon-down .gate-icon {
+    transform: scale(calc(1 - var(--gate-progress, 0) * 0.5));
+  }
+
+  .gate-control[data-gate='charging-back'] .gate-icon-up .gate-icon {
+    transform: scale(calc(1 - var(--gate-progress, 0) * 0.5));
+  }
+
+  .gate-control[data-gate='ready'] .gate-icon-down,
+  .gate-control[data-gate='charging'] .gate-icon-down,
+  .gate-control[data-gate='snapping-back'] .gate-icon-down {
+    opacity: clamp(0, calc(1 - var(--gate-progress, 0) * 1.8), 1);
+  }
+
+  .gate-control[data-gate='snapping-forward'] .gate-icon-up,
+  .gate-control[data-gate='arrived'] .gate-icon-up {
+    opacity: 1;
+  }
+
+  .gate-control[data-gate='charging-back'] .gate-icon-up {
+    opacity: clamp(0, calc(1 - var(--gate-progress, 0) * 1.8), 1);
+  }
+
+  /* 대기 bob — control이 아니라 아이콘 레이어에 건다
+     (control의 transform은 센터링+도킹용이라 keyframe이 덮어쓰면 위치가 깨짐)
+     ready=chevron-down, arrived=chevron-up 대칭 */
+  @keyframes gate-bob {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .gate-control[data-gate='ready'] .gate-icon-down,
+  .gate-control[data-gate='arrived'] .gate-icon-up {
+    animation: gate-bob 2s ease-in-out infinite;
+  }
+
+  .gate-control[data-gate='charging'] .gate-icon-down,
+  .gate-control[data-gate='charging-back'] .gate-icon-up {
+    animation: none;
+  }
+
+  /* 불가시 버튼 — 키보드/보조기기의 게이트 통과 경로 */
+  .gate-button {
+    all: unset;
+    position: absolute;
+    inset: 0;
+    cursor: pointer;
+  }
+
+  .gate-button:focus-visible {
+    outline: 2px solid var(--color-brand-hover);
+    outline-offset: 2px;
+    border-radius: 50%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gate-control,
+    .gate-ring,
+    .gate-icon-layer {
+      transition: none;
+    }
+
+    .gate-control[data-gate='ready'] .gate-icon-down,
+    .gate-control[data-gate='arrived'] .gate-icon-up {
+      animation: none;
+    }
+  }
+</style>

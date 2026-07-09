@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# obsidian editor state (local only)
+.obsidian/
+
+# untitled/scratch notes
+무제.md

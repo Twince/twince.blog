@@ -7,19 +7,19 @@
 
   .post-title {
     font-size: var(--size-post-title);
-    color: var(--color-article-title);
-    font-weight: 700;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-title);
   }
   .post-description {
-    font-size: var(--size-article-image-caption);
-    color: var(--color-article-image-caption);
+    font-size: var(--size-post-description);
+    color: var(--color-text-secondary);
     font-weight: 400;
     line-height: 1.4;
   }
 }
 
-.post-grid .categories-wrapper {
-  .article-categories {
+.post-grid .tags-wrapper {
+  .article-tags {
     font-size: 10px;
   }
   margin-top: 6px;
@@ -27,5 +27,127 @@
 }
 
 .post-item:hover .post-title {
-  color: var(--color-text-active);
+  color: var(--color-brand-hover);
+}
+
+:root {
+  --card-scale: 1.2; /* 전역 기본. 컨텍스트(.root-page 등)가 override하는 knob */
+}
+
+/* row 카드 치수 = Figma raw(정수) × --card-scale — 비율 고정, knob 하나로 리사이즈.
+   ★ 파생 토큰은 소비 지점에 선언해야 함: :root에 두면 var()가 :root에서 치환돼
+     컨텍스트의 --card-scale override가 무시된다. */
+.row-post-card {
+  --card-row-title:  calc(15px  * var(--card-scale));
+  --card-row-topic:  calc(11px  * var(--card-scale));
+  --card-row-desc:   calc(10px  * var(--card-scale));
+  --card-row-tag:    calc(8px   * var(--card-scale));
+  --card-row-thumb:  calc(188px * var(--card-scale));
+  --card-row-gap:    calc(20px  * var(--card-scale));
+  --card-row-stack:  calc(15px  * var(--card-scale));
+  --card-row-radius: calc(7px   * var(--card-scale));
+
+  gap: var(--card-row-gap);
+  align-items: center;
+
+  .row-post-thumbnail {
+    width: var(--card-row-thumb);
+    aspect-ratio: 188 / 128;
+    object-fit: cover;
+    border-radius: var(--card-row-radius);
+    flex-shrink: 0;
+  }
+
+  .row-post-text { gap: var(--card-row-stack); }
+  .row-post-main { display: flex; flex-direction: column; gap: 3px; }
+
+  .row-post-topic {
+    font-size: var(--card-row-topic);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-primary);
+    line-height: 1.15;
+  }
+  .post-title      { font-size: var(--card-row-title); line-height: 1.25; }
+  .post-description { font-size: var(--card-row-desc);  line-height: 1.35; }
+  .tags-wrapper    { margin: 0; } /* Tags의 mt-8 무력화 */
+}
+/* 3-class 특이도: 위의 .post-grid 쪽 10px 규칙을 이기기 위함 */
+.row-post-card .tags-wrapper .article-tags {
+  font-size: var(--card-row-tag);
+}
+
+/* 카드 chip 보더는 article 태그와 구분(border-control) */
+.post-grid .tags-wrapper .article-tags {
+  border-color: var(--color-border-control);
+}
+
+/* col 카드 치수 = Figma vertical-post-card(4200:801) raw × --card-scale */
+.col-post-card {
+  --card-col-w:      calc(260px * var(--card-scale));
+  --card-col-title:  calc(15px  * var(--card-scale));
+  --card-col-desc:   calc(10px  * var(--card-scale));
+  --card-col-tag:    calc(8px   * var(--card-scale));
+  --card-col-radius: calc(7px   * var(--card-scale));
+
+  width: var(--card-col-w);
+  max-width: 100%;
+
+  .col-post-thumbnail {
+    display: block; /* inline 베이스라인 갭 제거 */
+    width: 100%;
+    aspect-ratio: 260 / 176;
+    object-fit: cover;
+    border-radius: var(--card-col-radius);
+    border: 1px solid var(--color-article-image); /* Figma #CECECE ≈ gray-300 별칭 */
+  }
+  .col-post-text {
+    margin-top: calc(6px * var(--card-scale));
+    padding-inline: calc(3px * var(--card-scale));
+  }
+  .tags-wrapper { margin: 0; }
+  .col-post-main {
+    margin-top: calc(10px * var(--card-scale));
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .post-title      { font-size: var(--card-col-title); line-height: 1.2; }
+  .post-description { font-size: var(--card-col-desc); line-height: 1.2; }
+}
+.col-post-card .tags-wrapper .article-tags { font-size: var(--card-col-tag); }
+
+/* <1024(모바일+태블릿): row 카드를 마크업 그대로 col 시안(4114:1165)으로 변형
+   — 태블릿에서 축소된 row 카드가 너무 작아 보이는 문제도 함께 해소 */
+@media (width < 1024px) {
+  .row-post-card {
+    flex-direction: column;
+    align-items: stretch;
+    /* 가로용 gap이 세로로 그대로 남아 썸네일↔칩이 벌어짐 → 절반으로 */
+    gap: calc(var(--card-row-gap) / 2);
+
+    .row-post-thumbnail {
+      width: 100%;
+      aspect-ratio: 317 / 215;
+    }
+    /* 시안 절대값(--card-scale 비적용) */
+    .row-post-text { gap: 4px; padding-top: 8px; }
+    .row-post-topic { display: none; }
+    .tags-wrapper { order: -1; }
+    .post-title      { font-size: 16px; }
+    .post-description { font-size: 12px; }
+  }
+}
+
+/* 모바일(<768): col 카드 시안 절대 스펙 */
+@media (width < 768px) {
+  .col-post-card {
+    width: 100%;
+
+    .col-post-thumbnail { aspect-ratio: 317 / 215; }
+    .col-post-text { margin-top: 8px; }
+    .post-title      { font-size: 16px; }
+    .post-description { font-size: 12px; }
+  }
 }

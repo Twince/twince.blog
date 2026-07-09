@@ -1,0 +1,439 @@
+<div style="padding:1rem 0;font-family:var(--font-sans)">
+<h2 class="sr-only">3D twisted ribbon with divergent ends — convergence and divergence</h2>
+
+<style>
+  .editor-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+  @media (max-width: 700px) { .editor-grid { grid-template-columns: 1fr; } }
+  .panel { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 14px 16px; max-height: 80vh; overflow-y: auto; }
+  .panel-section { margin-bottom: 16px; border-bottom: 1px solid var(--color-border-tertiary); padding-bottom: 12px; }
+  .panel-section:last-child { border-bottom: none; }
+  .panel-section.highlight { background: var(--color-background-info); margin: 0 -8px 16px; padding: 12px 8px; border-radius: 6px; border-bottom: none; }
+  .section-title { font-size: 10px; letter-spacing: 0.08em; color: var(--color-text-tertiary); margin-bottom: 10px; text-transform: uppercase; font-weight: 500; }
+  .control-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 12px; }
+  .control-label { min-width: 90px; color: var(--color-text-secondary); }
+  .control-row input[type="range"] { flex: 1; min-width: 0; }
+  .control-row input[type="number"] { width: 56px; padding: 2px 4px; background: transparent; border: 1px solid var(--color-border-tertiary); border-radius: 4px; color: var(--color-text-primary); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .control-row select { padding: 2px 4px; background: transparent; border: 1px solid var(--color-border-tertiary); border-radius: 4px; color: var(--color-text-primary); font-size: 11px; }
+  .preset-btn { padding: 4px 8px; background: transparent; border: 1px solid var(--color-border-secondary); border-radius: 4px; color: var(--color-text-primary); font-size: 11px; cursor: pointer; margin: 0 4px 4px 0; }
+  .preset-btn:hover { background: var(--color-background-primary); }
+  .action-btn { padding: 8px 12px; background: var(--color-text-primary); color: var(--color-background-primary); border: none; border-radius: 6px; font-size: 12px; cursor: pointer; font-weight: 500; }
+  .action-btn.secondary { background: transparent; border: 1px solid var(--color-border-secondary); color: var(--color-text-primary); }
+  .action-row { display: flex; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+  .info-text { font-size: 10px; color: var(--color-text-tertiary); margin-top: 4px; }
+  .modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; border-radius: 8px; }
+  .modal-overlay.active { display: flex; }
+  .modal-box { background: var(--color-background-primary); border-radius: var(--border-radius-md); padding: 20px; max-width: 700px; width: 100%; max-height: 80vh; display: flex; flex-direction: column; gap: 12px; }
+  .modal-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .modal-textarea { width: 100%; min-height: 280px; padding: 10px; background: var(--color-background-secondary); border: 1px solid var(--color-border-tertiary); border-radius: 6px; font-family: var(--font-mono); font-size: 11px; color: var(--color-text-primary); resize: vertical; }
+  .modal-help { font-size: 11px; color: var(--color-text-secondary); line-height: 1.5; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .editor-wrap { position: relative; }
+  .status-msg { font-size: 11px; margin-top: 4px; min-height: 14px; }
+</style>
+
+<div class="editor-wrap">
+<div class="editor-grid">
+  <div>
+    <svg viewBox="0 0 600 600" style="width:100%;background:transparent;border:1px solid var(--color-border-tertiary);border-radius:8px" id="svg-main"></svg>
+    <div style="display:flex;gap:12px;margin-top:8px;font-size:11px;color:var(--color-text-tertiary);flex-wrap:wrap">
+      <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="show-edges" checked> 가장자리 강조</label>
+      <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="show-vertical" checked> 세로선</label>
+      <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="show-horizontal" checked> 가로선</label>
+      <label style="display:flex;gap:4px;align-items:center;cursor:pointer"><input type="checkbox" id="depth-shading"> 깊이 음영</label>
+    </div>
+  </div>
+
+  <div class="panel">
+
+    <div class="panel-section">
+      <div class="section-title">Presets</div>
+      <button class="preset-btn" data-preset="diverge">★ 발산 (Diverge)</button>
+      <button class="preset-btn" data-preset="saved">Saved (360°)</button>
+      <button class="preset-btn" data-preset="horn">나팔 (Horn)</button>
+      <button class="preset-btn" data-preset="asymptotic">점근 (Asymptotic)</button>
+      <button class="preset-btn" data-preset="asymmetric">비대칭 (한쪽만)</button>
+      <button class="preset-btn" data-preset="converge">수렴 (Converge)</button>
+    </div>
+
+    <div class="panel-section highlight">
+      <div class="section-title">⬥ Width Profile (수렴/발산)</div>
+      <div class="control-row">
+        <span class="control-label">Mode</span>
+        <select id="wp-mode" data-param="widthProfile">
+          <option value="uniform">Uniform (일정)</option>
+          <option value="diverge" selected>Diverge (양끝 발산)</option>
+          <option value="converge">Converge (양끝 수렴)</option>
+          <option value="asymmetric">Asymmetric (한쪽 발산)</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <span class="control-label">Flare 강도</span>
+        <input type="range" id="flare-amount" min="0" max="300" value="120" data-param="flareAmount">
+        <input type="number" id="flare-amount-num" value="1.20" step="0.01">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Flare 곡선</span>
+        <input type="range" id="flare-power" min="40" max="300" value="160" data-param="flarePower">
+        <input type="number" id="flare-power-num" value="1.60" step="0.01">
+      </div>
+      <div class="info-text">곡선 &lt;1: 점근적 / =1: 원뿔 / &gt;1: 나팔(가속)</div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">Ribbon</div>
+      <div class="control-row">
+        <span class="control-label">Twist°</span>
+        <input type="range" id="twist" min="0" max="720" value="360" data-param="twist">
+        <input type="number" id="twist-num" value="360" step="1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Width</span>
+        <input type="range" id="width" min="5" max="100" value="40" data-param="width">
+        <input type="number" id="width-num" value="0.40" step="0.01">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Length</span>
+        <input type="range" id="length" min="50" max="300" value="220" data-param="length">
+        <input type="number" id="length-num" value="2.20" step="0.01">
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">Grid 밀도</div>
+      <div class="control-row">
+        <span class="control-label">Vertical</span>
+        <input type="range" id="v-density" min="2" max="40" value="8" data-param="vDensity">
+        <input type="number" id="v-density-num" value="8" step="1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Horizontal</span>
+        <input type="range" id="h-density" min="2" max="100" value="30" data-param="hDensity">
+        <input type="number" id="h-density-num" value="30" step="1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Segments</span>
+        <input type="range" id="segments" min="40" max="200" value="120" data-param="segments">
+        <input type="number" id="segments-num" value="120" step="1">
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">Twist 곡선</div>
+      <div class="control-row">
+        <span class="control-label">Falloff</span>
+        <select id="twist-falloff" data-param="twistFalloff">
+          <option value="linear" selected>Linear</option>
+          <option value="ease">Ease</option>
+          <option value="center">Center</option>
+          <option value="ends">Ends</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <span class="control-label">Offset</span>
+        <input type="range" id="twist-offset" min="-100" max="100" value="0" data-param="twistOffset">
+        <input type="number" id="twist-offset-num" value="0" step="1">
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">Camera</div>
+      <div class="control-row">
+        <span class="control-label">Distance</span>
+        <input type="range" id="cam-dist" min="20" max="100" value="50" data-param="camDist">
+        <input type="number" id="cam-dist-num" value="5.0" step="0.1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Rot X°</span>
+        <input type="range" id="cam-rx" min="-90" max="90" value="0" data-param="camRx">
+        <input type="number" id="cam-rx-num" value="0" step="1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Rot Y°</span>
+        <input type="range" id="cam-ry" min="-90" max="90" value="0" data-param="camRy">
+        <input type="number" id="cam-ry-num" value="0" step="1">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Rot Z°</span>
+        <input type="range" id="cam-rz" min="-180" max="180" value="0" data-param="camRz">
+        <input type="number" id="cam-rz-num" value="0" step="1">
+      </div>
+    </div>
+
+    <div class="panel-section">
+      <div class="section-title">Style</div>
+      <div class="control-row">
+        <span class="control-label">Stroke</span>
+        <input type="range" id="stroke" min="20" max="300" value="50" data-param="stroke">
+        <input type="number" id="stroke-num" value="0.50" step="0.01">
+      </div>
+      <div class="control-row">
+        <span class="control-label">Opacity</span>
+        <input type="range" id="opacity" min="20" max="100" value="80" data-param="opacity">
+        <input type="number" id="opacity-num" value="0.80" step="0.01">
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn" id="view-svg-btn">View SVG code</button>
+      <button class="action-btn secondary" id="view-params-btn">View params</button>
+      <button class="action-btn secondary" id="reset-btn">Reset</button>
+    </div>
+    <div class="status-msg" id="status-msg"></div>
+
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">SVG Code</div>
+    <div class="modal-help">텍스트가 자동 선택돼 있어요. Cmd/Ctrl+C로 복사하거나 Copy 버튼을 누르세요.</div>
+    <textarea class="modal-textarea" id="modal-textarea" readonly></textarea>
+    <div class="modal-actions">
+      <button class="action-btn secondary" id="modal-select-all">Select all</button>
+      <button class="action-btn" id="modal-copy">Copy</button>
+      <button class="action-btn secondary" id="modal-close">Close</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(function() {
+
+  const savedParams = {
+    twist: 360, width: 40, length: 220,
+    vDensity: 8, hDensity: 30, segments: 120,
+    widthProfile: 'diverge', flareAmount: 120, flarePower: 160,
+    twistFalloff: 'linear', twistOffset: 0,
+    camDist: 50, camRx: 0, camRy: 0, camRz: 0,
+    stroke: 50, opacity: 80,
+  };
+  let state = Object.assign({}, savedParams);
+
+  const presets = {
+    'diverge':    { ...savedParams, widthProfile: 'diverge', flareAmount: 120, flarePower: 160 },
+    'saved':      { ...savedParams, widthProfile: 'uniform', flareAmount: 0 },
+    'horn':       { ...savedParams, widthProfile: 'diverge', flareAmount: 220, flarePower: 250 },
+    'asymptotic': { ...savedParams, widthProfile: 'diverge', flareAmount: 180, flarePower: 60 },
+    'asymmetric': { ...savedParams, widthProfile: 'asymmetric', flareAmount: 200, flarePower: 180 },
+    'converge':   { ...savedParams, widthProfile: 'converge', flareAmount: 80, flarePower: 160 },
+  };
+
+  const conv = {
+    twist: v => v, width: v => v / 100, length: v => v / 100,
+    vDensity: v => v, hDensity: v => v, segments: v => v,
+    flareAmount: v => v / 100, flarePower: v => v / 100,
+    twistOffset: v => v,
+    camDist: v => v / 10, camRx: v => v, camRy: v => v, camRz: v => v,
+    stroke: v => v / 100, opacity: v => v / 100,
+  };
+
+  // ===== Width profile: s ∈ [0,1] → 너비 배율 =====
+  function widthAt(s, st) {
+    const mode = st.widthProfile;
+    if (mode === 'uniform') return 1;
+    const flare = conv.flareAmount(st.flareAmount);
+    const power = conv.flarePower(st.flarePower);
+    if (mode === 'diverge') {
+      const d = Math.abs(s - 0.5) * 2;          // 0 중앙 → 1 양끝
+      return 1 + flare * Math.pow(d, power);
+    }
+    if (mode === 'converge') {
+      const d = Math.abs(s - 0.5) * 2;
+      return 1 / (1 + flare * Math.pow(d, power)); // 양끝이 좁아짐
+    }
+    if (mode === 'asymmetric') {
+      return 1 + flare * Math.pow(s, power);     // 위는 좁고 아래로 갈수록 발산
+    }
+    return 1;
+  }
+
+  function centerlinePoint(s, length) {
+    const halfLen = length / 2;
+    return [0, -halfLen + s * length, 0];
+  }
+  function centerlineTangent() { return [0, 1, 0]; }
+
+  function twistProgress(s, mode, offset) {
+    const sC = Math.max(0, Math.min(1, s + offset / 200));
+    if (mode === 'linear') return sC;
+    if (mode === 'ease') return sC * sC * (3 - 2 * sC);
+    if (mode === 'center') { const x = sC - 0.5; return 0.5 + Math.atan(x * 6) / (2 * Math.atan(3)); }
+    if (mode === 'ends') return 0.5 - 0.5 * Math.cos(sC * Math.PI);
+    return sC;
+  }
+
+  function ribbonPoint(s, t, st) {
+    const length = conv.length(st.length);
+    const baseWidth = conv.width(st.width) * widthAt(s, st);
+    const totalTwist = st.twist * Math.PI / 180;
+    const center = centerlinePoint(s, length);
+    const tangent = centerlineTangent();
+    const twistAmount = twistProgress(s, st.twistFalloff, st.twistOffset) * totalTwist;
+
+    const upZ = [0, 0, 1];
+    let nx = tangent[1]*upZ[2] - tangent[2]*upZ[1];
+    let ny = tangent[2]*upZ[0] - tangent[0]*upZ[2];
+    let nz = tangent[0]*upZ[1] - tangent[1]*upZ[0];
+    let nlen = Math.sqrt(nx*nx+ny*ny+nz*nz);
+    let normal = nlen < 0.001 ? [1,0,0] : [nx/nlen, ny/nlen, nz/nlen];
+    const binormal = [
+      tangent[1]*normal[2]-tangent[2]*normal[1],
+      tangent[2]*normal[0]-tangent[0]*normal[2],
+      tangent[0]*normal[1]-tangent[1]*normal[0]
+    ];
+    const cos = Math.cos(twistAmount), sin = Math.sin(twistAmount);
+    const wx = cos*normal[0] + sin*binormal[0];
+    const wy = cos*normal[1] + sin*binormal[1];
+    const wz = cos*normal[2] + sin*binormal[2];
+    return [
+      center[0] + t*baseWidth*wx,
+      center[1] + t*baseWidth*wy,
+      center[2] + t*baseWidth*wz
+    ];
+  }
+
+  function project(p, st) {
+    const camDist = conv.camDist(st.camDist);
+    const rx = st.camRx*Math.PI/180, ry = st.camRy*Math.PI/180, rz = st.camRz*Math.PI/180;
+    let [x,y,z] = p;
+    let x1 = x*Math.cos(rz)-y*Math.sin(rz), y1 = x*Math.sin(rz)+y*Math.cos(rz), z1 = z;
+    let x2 = x1*Math.cos(ry)+z1*Math.sin(ry), y2 = y1, z2 = -x1*Math.sin(ry)+z1*Math.cos(ry);
+    let x3 = x2, y3 = y2*Math.cos(rx)-z2*Math.sin(rx), z3 = y2*Math.sin(rx)+z2*Math.cos(rx);
+    const factor = camDist/(camDist - z3);
+    return [x3*factor, y3*factor, z3];
+  }
+
+  function computeBBox(st) {
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    const segs = st.segments, samples = [-1,-0.5,0,0.5,1];
+    for (let i=0;i<=segs;i++){ const s=i/segs;
+      for (let t of samples){ const p=project(ribbonPoint(s,t,st),st);
+        if(p[0]<minX)minX=p[0]; if(p[0]>maxX)maxX=p[0]; if(p[1]<minY)minY=p[1]; if(p[1]>maxY)maxY=p[1];
+      }}
+    return {minX,minY,maxX,maxY};
+  }
+
+  function render() {
+    const svg = document.getElementById('svg-main');
+    svg.innerHTML = '';
+    const vbW=600,vbH=600,cx=300,cy=300,padding=0.85;
+    const bbox = computeBBox(state);
+    const bboxW = bbox.maxX-bbox.minX||1, bboxH = bbox.maxY-bbox.minY||1;
+    const bcx=(bbox.minX+bbox.maxX)/2, bcy=(bbox.minY+bbox.maxY)/2;
+    const scale = Math.min((vbW*padding)/bboxW,(vbH*padding)/bboxH);
+    function toScreen(p){ return [cx+(p[0]-bcx)*scale, cy+(p[1]-bcy)*scale]; }
+
+    const ns='http://www.w3.org/2000/svg';
+    const stroke = conv.stroke(state.stroke), opacity = conv.opacity(state.opacity);
+    const segs = state.segments, vDens = state.vDensity, hDens = state.hDensity;
+    const showEdges = document.getElementById('show-edges').checked;
+    const showV = document.getElementById('show-vertical').checked;
+    const showH = document.getElementById('show-horizontal').checked;
+    const depthShading = document.getElementById('depth-shading').checked;
+    const avgDepth = pts => { let s=0; for(let p of pts)s+=p[2]; return s/pts.length; };
+
+    const allLines = [];
+    if (showV) {
+      for (let k=0;k<=vDens;k++){ const t=-1+2*(k/vDens); const pts=[];
+        for (let i=0;i<=segs;i++){ const s=i/segs; pts.push(project(ribbonPoint(s,t,state),state)); }
+        const isEdge=(k===0||k===vDens); const sw=(isEdge&&showEdges)?stroke*1.5:stroke;
+        allLines.push({points:pts,stroke:sw,depth:avgDepth(pts)});
+      }
+    }
+    if (showH) {
+      for (let k=1;k<hDens;k++){ const s=k/hDens; const pts=[]; const sub=24;
+        for (let j=0;j<=sub;j++){ const t=-1+2*(j/sub); pts.push(project(ribbonPoint(s,t,state),state)); }
+        allLines.push({points:pts,stroke:stroke,depth:avgDepth(pts)});
+      }
+    }
+    if (depthShading) allLines.sort((a,b)=>a.depth-b.depth);
+
+    allLines.forEach(line=>{
+      let d='';
+      for (let i=0;i<line.points.length;i++){ const sp=toScreen(line.points[i]); d+=(i===0?'M ':' L ')+sp[0].toFixed(2)+' '+sp[1].toFixed(2); }
+      const path=document.createElementNS(ns,'path');
+      path.setAttribute('d',d); path.setAttribute('fill','none');
+      path.setAttribute('stroke','currentColor'); path.setAttribute('stroke-width',line.stroke);
+      let op=opacity;
+      if (depthShading){ op=opacity*(0.3+0.7*((line.depth+3)/6)); op=Math.max(0.1,Math.min(1,op)); }
+      path.setAttribute('opacity',op); path.setAttribute('stroke-linecap','round');
+      svg.appendChild(path);
+    });
+  }
+
+  function generateSvgCode() {
+    const size=800,cx=400,cy=400,padding=0.85;
+    const bbox=computeBBox(state);
+    const bboxW=bbox.maxX-bbox.minX||1, bboxH=bbox.maxY-bbox.minY||1;
+    const bcx=(bbox.minX+bbox.maxX)/2, bcy=(bbox.minY+bbox.maxY)/2;
+    const scale=Math.min((size*padding)/bboxW,(size*padding)/bboxH);
+    function toScreen(p){ return [cx+(p[0]-bcx)*scale, cy+(p[1]-bcy)*scale]; }
+    const stroke=conv.stroke(state.stroke), opacity=conv.opacity(state.opacity), segs=state.segments;
+    const showEdges=document.getElementById('show-edges').checked;
+    const showV=document.getElementById('show-vertical').checked;
+    const showH=document.getElementById('show-horizontal').checked;
+    let out='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+size+' '+size+'" width="'+size+'" height="'+size+'">\n';
+    if (showV){
+      for (let k=0;k<=state.vDensity;k++){ const t=-1+2*(k/state.vDensity); let d='';
+        for (let i=0;i<=segs;i++){ const s=i/segs; const p=toScreen(project(ribbonPoint(s,t,state),state)); d+=(i===0?'M ':' L ')+p[0].toFixed(2)+' '+p[1].toFixed(2); }
+        const isEdge=(k===0||k===state.vDensity); const sw=(isEdge&&showEdges)?stroke*1.5:stroke;
+        out+='  <path d="'+d+'" fill="none" stroke="currentColor" stroke-width="'+sw+'" opacity="'+opacity+'" stroke-linecap="round"/>\n';
+      }
+    }
+    if (showH){
+      for (let k=1;k<state.hDensity;k++){ const s=k/state.hDensity; let d=''; const sub=24;
+        for (let j=0;j<=sub;j++){ const t=-1+2*(j/sub); const p=toScreen(project(ribbonPoint(s,t,state),state)); d+=(j===0?'M ':' L ')+p[0].toFixed(2)+' '+p[1].toFixed(2); }
+        out+='  <path d="'+d+'" fill="none" stroke="currentColor" stroke-width="'+stroke+'" opacity="'+opacity+'"/>\n';
+      }
+    }
+    out+='</svg>';
+    return out;
+  }
+
+  const modal=document.getElementById('modal'), modalTitle=document.getElementById('modal-title'), modalTextarea=document.getElementById('modal-textarea');
+  function openModal(title,content){ modalTitle.textContent=title; modalTextarea.value=content; modal.classList.add('active'); setTimeout(()=>{modalTextarea.focus();modalTextarea.select();},50); }
+  function closeModal(){ modal.classList.remove('active'); }
+  document.getElementById('view-svg-btn').addEventListener('click',()=>openModal('SVG Code',generateSvgCode()));
+  document.getElementById('view-params-btn').addEventListener('click',()=>openModal('Parameters (JSON)',JSON.stringify(state,null,2)));
+  document.getElementById('modal-close').addEventListener('click',closeModal);
+  document.getElementById('modal-select-all').addEventListener('click',()=>{modalTextarea.focus();modalTextarea.select();});
+  function showStatus(msg,ok){ const s=document.getElementById('status-msg'); s.textContent=msg; s.style.color=ok?'var(--color-text-success)':'var(--color-text-danger)'; setTimeout(()=>{s.textContent='';},2500); }
+  function tryCopy(text){ if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(()=>showStatus('✓ 클립보드에 복사됨',true),()=>fallbackCopy(text)); } else fallbackCopy(text); }
+  function fallbackCopy(text){ try{ modalTextarea.value=text; modalTextarea.focus(); modalTextarea.select(); const ok=document.execCommand('copy'); showStatus(ok?'✓ 복사됨 (fallback)':'✗ 직접 선택하세요',ok); }catch(e){ showStatus('✗ 직접 선택하세요',false); } }
+  document.getElementById('modal-copy').addEventListener('click',()=>tryCopy(modalTextarea.value));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&modal.classList.contains('active'))closeModal(); });
+
+  function syncFromSlider(param){ const el=document.querySelector('[data-param="'+param+'"]'); if(!el)return;
+    if(el.tagName==='SELECT'){ state[param]=el.value; return; }
+    const v=parseInt(el.value); state[param]=v; const numEl=document.getElementById(el.id+'-num');
+    if(numEl){ const c=conv[param]?conv[param](v):v; numEl.value=(typeof c==='number'&&!Number.isInteger(c))?c.toFixed(2):c; }
+  }
+  function syncFromNumber(param,val){ const slider=document.querySelector('[data-param="'+param+'"]'); if(!slider||slider.tagName==='SELECT')return;
+    let sv;
+    if(['twist','segments','camRx','camRy','camRz','twistOffset','vDensity','hDensity'].indexOf(param)>=0) sv=parseFloat(val);
+    else if(param==='camDist') sv=parseFloat(val)*10;
+    else sv=parseFloat(val)*100;
+    sv=Math.max(parseInt(slider.min),Math.min(parseInt(slider.max),sv)); slider.value=sv; state[param]=sv;
+  }
+  document.querySelectorAll('[data-param]').forEach(el=>{ el.addEventListener('input',()=>{ syncFromSlider(el.dataset.param); render(); }); });
+  document.querySelectorAll('input[type="number"]').forEach(el=>{ el.addEventListener('change',()=>{ const sliderId=el.id.replace('-num',''); const slider=document.getElementById(sliderId); if(slider&&slider.dataset.param){ syncFromNumber(slider.dataset.param,el.value); render(); } }); });
+  ['show-edges','show-vertical','show-horizontal','depth-shading'].forEach(id=>document.getElementById(id).addEventListener('change',render));
+
+  document.querySelectorAll('.preset-btn').forEach(btn=>{ btn.addEventListener('click',()=>{ const p=presets[btn.dataset.preset]; if(!p)return; Object.assign(state,p); applyToUI(); render(); }); });
+
+  function applyToUI(){
+    Object.keys(state).forEach(param=>{ const el=document.querySelector('[data-param="'+param+'"]'); if(!el)return;
+      if(el.tagName==='SELECT'){ el.value=state[param]; }
+      else { el.value=state[param]; const numEl=document.getElementById(el.id+'-num');
+        if(numEl&&conv[param]){ const v=conv[param](state[param]); numEl.value=(typeof v==='number'&&!Number.isInteger(v))?v.toFixed(2):v; }
+        else if(numEl){ numEl.value=state[param]; } }
+    });
+  }
+  document.getElementById('reset-btn').addEventListener('click',()=>{ Object.assign(state,savedParams); applyToUI(); render(); });
+
+  applyToUI();
+  render();
+})();
+</script>
+</div>

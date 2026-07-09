@@ -1,0 +1,36 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../ui/layouts/BaseLayout.astro";
+import SeriesListItem from "../ui/components/astro/SeriesListItem.astro";
+import { PostService } from "../service/post/fetch/postServicer";
+
+// 기존 공개 API 조합(getCollection + getPostsWithSeries)으로 목록 구성.
+// EDGE(사용자): 시리즈마다 필터를 도는 N+1 순회 — getSeriesCards() 설계 시 1-pass 집계로 개선.
+const seriesEntries = await getCollection("series");
+const items = await Promise.all(
+  seriesEntries.map(async (entry) => {
+    const posts = (await PostService.getPostsWithSeries(entry.data.id)).filter(
+      (post): post is NonNullable<typeof post> => post !== null
+    );
+    return {
+      id: entry.data.id,
+      title: entry.data.title,
+      description: entry.data.description,
+      postCount: posts.length,
+      thumbnails: posts.slice(0, 5).map((post) => post.thumbnail),
+    };
+  })
+);
+---
+<BaseLayout>
+  <div class="w-full h-full overflow-y-scroll no-scrollbar">
+    <div class="series-page">
+      <div class="series-column">
+        <h1 class="series-page-title">시리즈 모아보기</h1>
+        <ul class="series-list">
+          {items.map((item) => <SeriesListItem {...item} />)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

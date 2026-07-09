@@ -45,7 +45,9 @@ const getHeadingDepth = (node: Element): number => {
 
 const extractText = (children: Element): string => {
   let result: string = "";
-  visit(children, "text", (node: Text) => (result += node.value));
+  visit(children, "text", (node: Text) => {
+    result += node.value; // 표현식 화살표는 문자열이 visitor 반환값으로 흘러 타입 에러
+  });
   return result;
 };
 

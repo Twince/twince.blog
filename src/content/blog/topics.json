@@ -1,7 +1,32 @@
 [
   {
-    "id": "DEV",
+    "id": "dev",
     "title": "DEV",
     "description": "기술을 통해 세상을 바라보기"
+  },
+  {
+    "id": "insights",
+    "title": "INSIGHTS",
+    "description": "개인적인 생각과 통찰"
+  },
+  {
+    "id": "design",
+    "title": "DESIGN",
+    "description": "사람은 본능적으로 미적인것에 끌린다"
+  },
+  {
+    "id": "marketing",
+    "title": "MARKETING",
+    "description": "후킹한 컨텐츠 만들기"
+  },
+  {
+    "id": "memoir",
+    "title": "MEMOIR",
+    "description": "자신을 회고하며"
+  },
+  {
+    "id": "founders",
+    "title": "FOUNDERS",
+    "description": "zero to one, one to hundred"
   }
 ]

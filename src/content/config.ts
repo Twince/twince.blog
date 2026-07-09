@@ -1,5 +1,5 @@
 import { defineCollection, reference } from "astro:content";
-import { glob, file } from 'astro/loaders'
+import { file } from 'astro/loaders'
 import { z } from 'astro/zod';
 import { tocGenerator } from "../service/post/observe/tocGenerator";
 import type { TocNode } from "../service/post/types/TocGenrator";
@@ -20,7 +20,7 @@ const readingTime = z.union([
   // }) -> 해당 로직은 resolver에서 처리하는 것이 맞다고 판단. 보류(`25.12.25)
 ])
 
-const categories = z.array(z.string()).optional().default([])
+const tags = z.array(z.string()).optional().default([])
 
 const tocNode:z.ZodType<TocNode> = z.object({
   id: z.string(),
@@ -90,7 +90,7 @@ loader: {
     description: z.string(),
     date: z.coerce.date(),
     status: z.enum(['draft', 'published']),
-    categories: categories,
+    tags: tags,
     topics: z.array(reference('topics')),
     series: z.array(reference('series').optional()),
     readingTime: readingTime, // length가 1이면 읽는 시간이 index[0] ~ index[1] 만큼 소요
@@ -100,7 +100,7 @@ loader: {
       src: image(),
       alt: z.string().optional()
     }).optional(),
-    toc: tocNode.optional(),
+    toc: z.array(tocNode).optional(), // loader가 TocNode[]를 주입 — 단일 노드 스키마는 타입 거짓말이었음
     seo: seo.optional(),
   })
 })

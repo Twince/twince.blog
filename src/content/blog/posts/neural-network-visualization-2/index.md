@@ -1,14 +1,14 @@
 ---
 title: 인공지능 시각화 EP 2 - 디자인과 UX 설계
-description: This is the first post of my new Astro blog.
+description: UX는 무엇을 지향해야하는가?
 date: 2025-10-30
 status: published
-categories:
-  - DESIGN
-  - DEV
+tags:
+  - design
+  - dev
 topics:
-  - DEV
-  - DESIGN
+  - dev
+  - design
 series:
   - neural-network-viz
 readingTime:

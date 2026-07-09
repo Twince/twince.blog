@@ -1,0 +1,77 @@
+---
+/*
+  giscus 댓글 (GitHub Discussions 기반) — 각주 아래 배치.
+  ── 활성화 절차 (아직 미완 — CATEGORY_ID가 비어 있으면 렌더링 안 함) ──
+  1. https://github.com/Twince/twince.blog → Settings → Features → Discussions 활성화
+  2. https://github.com/apps/giscus 앱 설치 (해당 리포에)
+  3. https://giscus.app 에서 리포 입력 → 카테고리(Announcements 권장) 선택
+     → 생성된 data-category / data-category-id 값을 아래 상수에 채움
+*/
+const REPO = 'Twince/twince.blog';
+const REPO_ID = 'R_kgDOQk2RFQ'; // GitHub API node_id (조회 완료)
+const CATEGORY = '';            // TODO: giscus.app에서 선택한 카테고리명
+const CATEGORY_ID = '';         // TODO: giscus.app이 발급한 DIC_… id
+
+const enabled = REPO_ID !== '' && CATEGORY_ID !== '';
+---
+
+{enabled && (
+  <div
+    id="giscus-container"
+    class="giscus-container"
+    data-repo={REPO}
+    data-repo-id={REPO_ID}
+    data-category={CATEGORY}
+    data-category-id={CATEGORY_ID}
+  ></div>
+)}
+
+<style>
+  .giscus-container {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+    border-top: 1px solid var(--color-article-divider);
+  }
+</style>
+
+<script>
+  const container = document.getElementById('giscus-container');
+
+  if (container) {
+    const currentTheme = () =>
+      document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+
+    const attrs: Record<string, string> = {
+      'data-repo': container.dataset.repo ?? '',
+      'data-repo-id': container.dataset.repoId ?? '',
+      'data-category': container.dataset.category ?? '',
+      'data-category-id': container.dataset.categoryId ?? '',
+      'data-mapping': 'pathname',
+      'data-strict': '1',
+      'data-reactions-enabled': '1',
+      'data-emit-metadata': '0',
+      'data-input-position': 'bottom',
+      'data-theme': currentTheme(),
+      'data-lang': 'ko',
+    };
+    for (const [key, value] of Object.entries(attrs)) {
+      script.setAttribute(key, value);
+    }
+    container.appendChild(script);
+
+    // 사이트 테마 토글(:root[data-theme]) ↔ giscus iframe 테마 동기화
+    new MutationObserver(() => {
+      const iframe = document.querySelector('iframe.giscus-frame') as HTMLIFrameElement | null;
+      iframe?.contentWindow?.postMessage(
+        { giscus: { setConfig: { theme: currentTheme() } } },
+        'https://giscus.app'
+      );
+    }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  }
+</script>
