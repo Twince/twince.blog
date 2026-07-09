@@ -1,0 +1,49 @@
+---
+// EXPERIENCE 타임라인 — Figma 4816:895. 연도 레일(185px) | 콘텐츠(1fr) 그리드.
+// 데이터는 experience.data.ts에서 import만(수정 금지). 2026 블록 아래에만 가로 구분선.
+// CERTIFICATIONS는 연도 블록과 달리 레일에 라벨+리스트를 세로로 쌓는다.
+import { EXPERIENCE_YEARS, CERTIFICATIONS } from "../../layouts/about/experience.data.ts";
+---
+<section class="about-experience">
+  <h2 class="about-exp-title">EXPERIENCE</h2>
+
+  <div class="about-exp-body">
+    {EXPERIENCE_YEARS.map((yearBlock, i) => (
+      <div class:list={["about-year", { "about-year--divided": i === 0 }]}>
+        <div class="about-year-rail">
+          <span class="about-year-label">{yearBlock.year}</span>
+          {yearBlock.railLabel && (
+            <span class="about-rail-label">{yearBlock.railLabel}</span>
+          )}
+          <span class="about-year-line" aria-hidden="true"></span>
+        </div>
+
+        <div class="about-year-content">
+          {yearBlock.items.map((item) => (
+            <article class="about-item">
+              <div class="about-item-head">
+                <h3 class="about-item-title">{item.title}</h3>
+                {item.period && <span class="about-item-period">{item.period}</span>}
+              </div>
+              {item.mention && <span class="about-item-mention">{item.mention}</span>}
+              <ul class="about-item-bullets">
+                {item.bullets.map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+            </article>
+          ))}
+        </div>
+      </div>
+    ))}
+
+    <div class="about-cert">
+      <h3 class="about-cert-title">CERTIFICATIONS</h3>
+      <ul class="about-cert-list">
+        {CERTIFICATIONS.map((c) => (
+          <li>{c}</li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>

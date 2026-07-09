@@ -1,11 +1,9 @@
 ---
 // 프로필 히어로 패널 — Figma 3917:741. 치수/타이포는 root.css의 --root-* 토큰이 통제.
-import { Image } from "astro:assets";
+// 로고타입·연락처는 ProfileLogotype/ProfileContacts로 추출(about 히어로와 공유). 마크업·클래스 불변.
 import TwistedGridMotion from "./TwistedGridMotion.astro";
-import EmailIcon from "../../assets/icons/email.svg";
-import GithubIcon from "../../assets/icons/github.svg";
-import InstagramIcon from "../../assets/icons/instagram.svg";
-import discordIcon from "../../assets/icons/discord.png";
+import ProfileLogotype from "./ProfileLogotype.astro";
+import ProfileContacts from "./ProfileContacts.astro";
 ---
 <div class="profile-art">
   <div class="twisted-art" aria-hidden="true">
@@ -21,27 +19,8 @@ import discordIcon from "../../assets/icons/discord.png";
   <div class="profile-body">
     <p class="profile-quote">“Towards,<br />What Lies Beyond Development”</p>
 
-    <h1 class="profile-logotype">
-      TWINCE<span class="profile-badge">SUNWOO HA</span>
-    </h1>
+    <ProfileLogotype />
 
-    <address class="profile-contacts">
-      <a href="https://www.instagram.com/twince_o" target="_blank" rel="noopener noreferrer">
-        <InstagramIcon aria-hidden="true" />
-        <span class="contact-text">twince_o</span>
-      </a>
-      <a href="https://github.com/twince" target="_blank" rel="noopener noreferrer" aria-label="GitHub: twince">
-        <GithubIcon aria-hidden="true" />
-        <span class="contact-text">twince</span>
-      </a>
-      <a href="https://discord.com/users/twince_" target="_blank" rel="noopener noreferrer" aria-label="Discord: twince_">
-        <Image src={discordIcon} alt="" aria-hidden="true" width="20" height="20" />
-        <span class="contact-text">twince_</span>
-      </a>
-      <a href="mailto:contact@twince.blog">
-        <EmailIcon aria-hidden="true" />
-        <span class="contact-text">contact@twince.blog</span>
-      </a>
-    </address>
+    <ProfileContacts />
   </div>
 </div>

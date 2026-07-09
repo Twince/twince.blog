@@ -1,0 +1,379 @@
+/* ══ ABOUT 페이지 — Figma about(4138:1240) / hero(4738:150) / experience(4816:895) ══
+   치수 = (Figma raw 정수) × --about-scale. 크기 조정은 --about-scale 하나로.
+   콘텐츠 컬럼 --about-col(1300px) 중앙. 색은 전부 semantic 토큰(라이트/다크 자동).
+   #1f1f1f/검정→text-primary · #565656→text-secondary · #707070→text-tertiary
+   · #9e9e9e→text-quaternary · 보더 #cbcbcb→border-primary.
+   반응형: ≥1024 시안 충실 / <1024 선형 스택. */
+.about-page {
+  --about-scale: 1;
+  --about-col: 1300px;
+}
+
+/* ══════════════════ HERO (4738:150) ══════════════════ */
+.about-hero {
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border-primary);
+  /* 배경은 페이지 bg 유지(root-hero와 달리 bg-hero 아님) */
+
+  /* --- 공유 컴포넌트(ProfileLogotype/ProfileContacts)가 소비하는 root 토큰 안전판 --- */
+  --root-scale: 1;
+
+  /* --- 튜닝 노브(사용자 직접 조정) --------------------------------- */
+  /* 배경 아트 위치 — Figma 비율(1300 컬럼 기준) */
+  --about-art-left: -11.9%;
+  --about-art-top: -19.8%;
+  --about-art-width: 63.9%;
+  --about-art-rotate: -8deg;
+  --about-art-opacity: 0.1;
+  /* 3열 인플로우 컬럼 폭 + 각 블록 상단 오프셋(Figma raw) */
+  --about-photo-col: calc(355px * var(--about-scale));
+  --about-text-col: calc(432px * var(--about-scale));
+  --about-photo-top: calc(18px * var(--about-scale)); /* 사진 컨테이너 top */
+  --about-text-top: calc(142px * var(--about-scale)); /* TWINCE top */
+  --about-intro-top: calc(153px * var(--about-scale)); /* 소개문 top */
+  --about-contacts-top: calc(50px * var(--about-scale)); /* 닉네임↔contact 간격 */
+  /* SUNWOO HA 배지 오프셋(TWINCE 우측 하단 겹침) */
+  --about-badge-right: calc(-30px * var(--about-scale));
+  --about-badge-bottom: calc(8px * var(--about-scale));
+}
+.about-hero-inner {
+  position: relative;
+  isolation: isolate;
+  max-width: var(--about-col);
+  margin-inline: auto;
+  min-height: calc(448px * var(--about-scale));
+  display: grid;
+  grid-template-columns: var(--about-photo-col) var(--about-text-col) 1fr;
+  align-items: start;
+}
+
+/* 배경 아트 — 1300 컬럼 기준 절대배치. stroke=currentColor로 테마 추종 */
+.about-hero-art {
+  position: absolute;
+  left: var(--about-art-left);
+  top: var(--about-art-top);
+  width: var(--about-art-width);
+  transform: rotate(var(--about-art-rotate));
+  transform-origin: center;
+  opacity: var(--about-art-opacity);
+  color: var(--color-text-primary);
+  pointer-events: none;
+  z-index: 0;
+}
+.about-hero-art .twisted-grid-motion {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* 사진: 컨테이너 404×451 overflow-hidden(하단 크롭), 사진 345×529 오프셋 */
+.about-hero-photo {
+  position: relative;
+  z-index: 0;
+  width: calc(404px * var(--about-scale));
+  height: calc(451px * var(--about-scale));
+  margin-top: var(--about-photo-top);
+  overflow: hidden;
+}
+.about-hero-photo img {
+  position: absolute;
+  left: calc(9px * var(--about-scale));
+  top: calc(13px * var(--about-scale));
+  width: calc(345px * var(--about-scale));
+  height: calc(529px * var(--about-scale));
+  max-width: none;
+  object-fit: cover;
+}
+
+/* 텍스트 블록(중앙) — TWINCE/greeting/nickname/contacts */
+.about-hero-text {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--about-text-top);
+}
+.about-hero-greeting {
+  margin-top: calc(10px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(24px * var(--about-scale));
+  font-weight: 700;
+  line-height: normal;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.about-hero-nickname {
+  margin-top: calc(8px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(16px * var(--about-scale));
+  font-weight: 500;
+  line-height: normal;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* 소개문(오른쪽) — 줄마다 <p>, 빈 줄은 zero-width space */
+.about-hero-intro {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--about-intro-top);
+  font-family: var(--font-pretendard);
+  font-size: calc(16px * var(--about-scale));
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+.about-hero-intro-gap {
+  font-size: calc(8px * var(--about-scale));
+  line-height: 1;
+}
+
+/* --- 공유 컴포넌트 크기 오버라이드(.about-hero 스코프) --------------
+   root.css의 --root-* 의존 속성을 전부 재정의 → root 픽셀 불변, about만 확대 */
+.about-hero .profile-logotype {
+  margin-top: 0;
+  font-size: calc(80px * var(--about-scale));
+  color: var(--color-text-primary);
+}
+.about-hero .profile-badge {
+  right: var(--about-badge-right);
+  bottom: var(--about-badge-bottom);
+  height: calc(29px * var(--about-scale));
+  padding-inline: calc(9px * var(--about-scale));
+  font-size: calc(18px * var(--about-scale));
+  backdrop-filter: blur(calc(6px * var(--about-scale)));
+}
+.about-hero .profile-contacts {
+  margin-top: var(--about-contacts-top);
+  gap: calc(6px * var(--about-scale));
+  padding-left: 0;
+}
+.about-hero .profile-contacts a {
+  gap: calc(6px * var(--about-scale));
+  font-size: calc(11.6px * var(--about-scale));
+}
+.about-hero .profile-contacts svg,
+.about-hero .profile-contacts img {
+  width: calc(11px * var(--about-scale));
+}
+
+/* ══════════════════ EXPERIENCE (4816:895) ══════════════════ */
+.about-experience {
+  max-width: var(--about-col);
+  margin-inline: auto;
+  padding-top: calc(88px * var(--about-scale));
+  padding-bottom: calc(120px * var(--about-scale));
+  padding-left: var(--about-exp-inset);
+
+  /* 튜닝 노브 */
+  --about-exp-inset: calc(115px * var(--about-scale)); /* 콘텐츠 좌측 인셋(title/year 정렬) */
+  --about-rail: calc(185px * var(--about-scale)); /* 연도 레일 폭 */
+  --about-item-gap: calc(32px * var(--about-scale)); /* 아이템 간 세로 간격 */
+  --about-year-gap: calc(48px * var(--about-scale)); /* 연도 블록 간 간격 */
+}
+.about-exp-title {
+  margin-left: calc(1px * var(--about-scale));
+  margin-bottom: calc(30px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(32px * var(--about-scale));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+.about-exp-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--about-year-gap);
+}
+
+/* 연도 블록 = 레일(185) | 콘텐츠(1fr) */
+.about-year {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--about-rail) 1fr;
+  align-items: stretch;
+}
+/* 2026 블록 아래에만 가로 구분선(Figma x53 w813) */
+.about-year--divided::after {
+  content: "";
+  position: absolute;
+  left: calc(-62px * var(--about-scale)); /* 인셋 115 대비 x53 */
+  bottom: calc(-1 * var(--about-year-gap) / 2);
+  width: calc(813px * var(--about-scale));
+  height: 1px;
+  background: var(--color-border-primary);
+}
+
+.about-year-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.about-year-label {
+  padding-left: calc(5px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(36px * var(--about-scale));
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}
+.about-rail-label {
+  margin-top: calc(10px * var(--about-scale));
+  padding-left: calc(9px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(19px * var(--about-scale));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-text-quaternary);
+}
+/* 세로 타임라인 — 연도 라벨 아래부터 블록 끝까지(flex:1) */
+.about-year-line {
+  flex: 1;
+  width: 1px;
+  min-height: calc(24px * var(--about-scale));
+  margin-top: calc(12px * var(--about-scale));
+  margin-left: calc(9px * var(--about-scale));
+  background: var(--color-border-primary);
+}
+
+.about-year-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--about-item-gap);
+  padding-left: calc(5px * var(--about-scale));
+}
+
+/* 아이템 */
+.about-item-head {
+  display: flex;
+  align-items: baseline;
+  gap: calc(10px * var(--about-scale));
+  flex-wrap: wrap;
+}
+.about-item-title {
+  font-family: var(--font-pretendard);
+  font-size: calc(18px * var(--about-scale));
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--color-text-primary);
+  white-space: pre-line; /* \n → 두 줄 */
+}
+.about-item-period {
+  font-family: var(--font-pretendard);
+  font-size: calc(11px * var(--about-scale));
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-text-quaternary);
+  white-space: nowrap;
+}
+.about-item-mention {
+  display: block;
+  margin-top: calc(4px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(10.5px * var(--about-scale));
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-text-quaternary);
+}
+.about-item-bullets {
+  margin-top: calc(8px * var(--about-scale));
+  padding-left: calc(23px * var(--about-scale));
+  list-style: disc;
+  font-family: var(--font-pretendard);
+  font-size: calc(15px * var(--about-scale));
+  font-weight: 500;
+  line-height: 1.45;
+  color: var(--color-text-tertiary);
+  word-break: keep-all;
+}
+.about-item-bullets li {
+  margin: 0;
+}
+
+/* CERTIFICATIONS — 레일에 라벨+리스트를 세로로(연도 블록과 다름) */
+.about-cert {
+  padding-left: calc(58px * var(--about-scale)); /* 라벨 x173 vs 인셋 115 */
+}
+.about-cert-title {
+  margin-bottom: calc(14px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(27px * var(--about-scale));
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-text-primary);
+}
+.about-cert-list {
+  list-style: none;
+  padding-left: calc(10px * var(--about-scale)); /* 리스트 x183 vs 라벨 x173 */
+  display: flex;
+  flex-direction: column;
+  gap: calc(6px * var(--about-scale));
+  font-family: var(--font-pretendard);
+  font-size: calc(15px * var(--about-scale));
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--color-text-tertiary);
+}
+
+/* ══════════════════ 반응형 <1024: 선형 스택 ══════════════════ */
+@media (width < 1024px) {
+  .about-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-height: 0;
+    gap: calc(24px * var(--about-scale));
+    padding: calc(40px * var(--about-scale)) calc(28px * var(--about-scale));
+  }
+  .about-hero-photo,
+  .about-hero-text,
+  .about-hero-intro {
+    margin-top: 0;
+  }
+  .about-hero-intro {
+    white-space: normal;
+    word-break: keep-all;
+  }
+  .about-hero-intro-gap {
+    display: none;
+  }
+  .about-hero-intro p + p {
+    margin-top: calc(4px * var(--about-scale));
+  }
+
+  .about-experience {
+    padding-left: calc(28px * var(--about-scale));
+    padding-right: calc(28px * var(--about-scale));
+    --about-exp-inset: calc(28px * var(--about-scale));
+    --about-rail: calc(110px * var(--about-scale));
+  }
+  .about-year--divided::after {
+    left: 0;
+    width: 100%;
+  }
+  .about-cert {
+    padding-left: 0;
+  }
+}
+
+@media (width < 640px) {
+  .about-hero-greeting,
+  .about-hero-nickname {
+    white-space: normal;
+    word-break: keep-all;
+  }
+  /* 연도 레일이 콘텐츠 위로 오는 세로 스택 */
+  .about-year {
+    grid-template-columns: 1fr;
+    row-gap: calc(12px * var(--about-scale));
+  }
+  .about-year-line {
+    display: none;
+  }
+  .about-year-rail {
+    flex-direction: row;
+    align-items: baseline;
+    gap: calc(12px * var(--about-scale));
+  }
+}

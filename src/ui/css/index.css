@@ -6,6 +6,7 @@
 
 @import "./post-grid/postGrid.css";
 @import "./root/root.css";
+@import "./about/about.css";
 @import "./series/series.css";
 @import "./article/article.css";
 @import "./toc/toc.css";

@@ -1,0 +1,13 @@
+---
+// ABOUT 페이지 — Figma about(4138:1240). root처럼 자체 스크롤 페이지.
+// hero(4738:150) + experience(4816:895) 두 섹션.
+import BaseLayout from "../BaseLayout.astro";
+import AboutHero from "../../components/astro/AboutHero.astro";
+import ExperienceTimeline from "../../components/astro/ExperienceTimeline.astro";
+---
+<BaseLayout>
+  <div class="about-page h-full overflow-y-auto no-scrollbar">
+    <AboutHero />
+    <ExperienceTimeline />
+  </div>
+</BaseLayout>
