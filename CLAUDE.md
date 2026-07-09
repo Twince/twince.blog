@@ -388,6 +388,22 @@ comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc
 - **전이 라벨**: 두 브랜치가 같은 기능을 독립 진화시켰을 때의 머지는 '텍스트 충돌 해소'가 아니라 '어느 쪽 구조가 이겼는지'를
   먼저 정하고(여기선 UI/root의 수납-클램프), 그 위에 다른 쪽의 직교한 개선(in-flow 컨트롤·최신 토큰)을 재적용하는 것 — 축이 다른 결정은 서로 포팅 가능하다.
 
+**게이트 전수 스윕 사이클(2026-07-10, HEAD df4c2bd): 잔존 버그 0, 관찰 2건 중 1건 수정**
+- 머지 후 단방향 수납 게이트를 11항목 전수 점검 — **잔존 버그 0**. 관찰 2건:
+  ① (수정 완료) snap tween(350ms) 구간 네이티브 스크롤 가드. df4c2bd의 리스너는 전부 passive라, tween의 animate
+  루프가 프레임마다 scrollTop을 절대 재대입하는 동안 사용자 휠/터치가 프레임 사이에 끼어들면 실기기에서 미세 지터가
+  생길 수 있었다(상태 무결성은 무관 — 순수 시각 품질). → `triggerRelease()`의 tween 시작 직전(reduced-motion 즉시
+  경로 제외)에 `attachTweenGuard()`로 wheel·touchmove를 **non-passive**로 부착(핸들러는 preventDefault만), `finish()`와
+  `disconnect()`에서 해제. 7차 전이 라벨("preventDefault 리스너는 필요한 구간에서만 존재") 그대로 — 상시가 아니라
+  350ms 한정. 기존 passive 충전 리스너는 releaseRafId 체크로 이미 tween 중 조기 반환이라 무간섭.
+  ② (백로그) giscus 활성화 시 iframe 높이 변화가 경계를 옮김 — container ResizeObserver → `ScrollGateObserver.sync()`
+  와이어링 필요(각주 토글과 동일 패턴).
+- **7차 미스터리 확정**: 그때 기록한 "wrapper의 정체불명 non-passive scroll 리스너"는 `Toc.tsx:48`의 scroll 리스너로 확정.
+  scroll 이벤트는 cancelable이 아니라 non-passive여도 성능 무해 — 실질 무해, 조치 불필요.
+- 검증: guard-test.mjs 10항목(tween 중 wheel defaultPrevented=true / 종료 후 해제·네이티브 스크롤 복원 / tween 중
+  대량 휠에도 arrived@relTop 무결성 유지 / 모바일 390×844 터치 충전→snap 정상 = 가드가 터치 충전 안 깸 / reduced-motion
+  경로 tween 없음·가드 미부착) 전부 통과. 기존 회귀 test-gate-4321.mjs 27/27 유지. tsc 신규 에러 0(기존 Toc.tsx 4건만).
+
 ### 리뷰 백로그 (2026-07-04 전체 코드베이스 Opus 리뷰 — 급하지 않으나 기록)
 - TwistedGridMotion 121KB 인라인 SMIL + reduced-motion 탈출구 없음(SMIL은 CSS로 못 멈춤 → matchMedia + pauseAnimations() 필요).
 - 히어로 인터랙티브 섹션(profile/칩)이 링크가 아님(cursor/hover만) — 라우팅 EDGE 채울 때 <a>로 해소(의도된 상태).

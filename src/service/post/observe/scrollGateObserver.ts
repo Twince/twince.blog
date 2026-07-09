@@ -58,6 +58,30 @@ function easeInOutQuad(t: number) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
+// snapping-forward tween 구간(RELEASE_DURATION)만의 네이티브 스크롤 가드.
+// tween의 animate 루프는 프레임마다 scrollTop을 절대 재대입한다 — 즉 이 구간엔 tween이
+// scrollTop을 '소유'한다. 그런데 나머지 리스너가 전부 passive라, 사용자의 휠/터치가
+// 프레임 사이에 끼어들어 네이티브 스크롤을 유발하면 tween 목표와 경합해 미세 지터가 생긴다
+// (상태 무결성은 무관 — 순수 시각 품질). 그래서 tween 동안만 wheel/touchmove를 non-passive로
+// 가로채 preventDefault한다. non-passive의 비용은 핸들러 실행이 아니라 '리스너의 존재 자체'
+// (브라우저가 매 이벤트 JS 응답을 대기해 컴포지터 스크롤을 죽인다)이므로, 상시 부착하지 않고
+// tween 시작~종료(350ms)에만 부착/해제한다 — 7차 전이 라벨의 패턴.
+function preventNativeScroll(e: Event) {
+  e.preventDefault();
+}
+
+function attachTweenGuard() {
+  if (!scrollRootEl) return;
+  scrollRootEl.addEventListener('wheel', preventNativeScroll, { passive: false });
+  scrollRootEl.addEventListener('touchmove', preventNativeScroll, { passive: false });
+}
+
+function detachTweenGuard() {
+  if (!scrollRootEl) return;
+  scrollRootEl.removeEventListener('wheel', preventNativeScroll);
+  scrollRootEl.removeEventListener('touchmove', preventNativeScroll);
+}
+
 function prefersReducedMotion() {
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
@@ -263,6 +287,7 @@ function triggerRelease() {
   setState('snapping-forward');
 
   const finish = () => {
+    detachTweenGuard(); // 부착 안 된 경로(reduced-motion)에서도 removeEventListener는 no-op
     raw = 0;
     updateProgress();
     setState('arrived');
@@ -270,11 +295,13 @@ function triggerRelease() {
   };
 
   if (prefersReducedMotion()) {
+    // tween 없는 즉시 이동 — 경합할 프레임 구간이 없으니 가드 불필요
     scrollRoot.scrollTop = startTarget;
     finish();
     return;
   }
 
+  attachTweenGuard(); // tween 시작 직전 — finish()에서 반드시 해제
   startReleaseTime = Date.now();
   releaseStartScroll = scrollRoot.scrollTop;
 
@@ -339,6 +366,7 @@ export const ScrollGateObserver = {
       scrollRootEl.removeEventListener('touchstart', onTouchStart);
       scrollRootEl.removeEventListener('touchmove', onTouchMove);
       scrollRootEl.removeEventListener('wheel', onWheel);
+      detachTweenGuard(); // tween 중 disconnect돼도 가드 리스너 누수 방지(scrollRootEl null화 전)
     }
     scrollRootEl = null;
 
