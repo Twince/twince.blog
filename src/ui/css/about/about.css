@@ -174,7 +174,7 @@
   --about-item-gap: calc(32px * 1.15 * var(--about-scale)); /* 아이템 간 세로 간격 — 기존 32에서 +15% 완화 */
 }
 .about-exp-title {
-  margin-left: calc(var(--about-exp-inset) + 1px * var(--about-scale));
+  margin-left: 0; /* year 박스 좌측 테두리(섹션 좌측)에 정렬 */
   margin-bottom: calc(30px * var(--about-scale));
   font-family: var(--font-pretendard);
   font-size: calc(25px * 1.1); /* series-page-title과 동일 렌더값(25 × series-scale 1.1) */
@@ -313,8 +313,8 @@
 /* CERTIFICATIONS 타이틀 — EXPERIENCE처럼 박스 밖 섹션 헤딩(exp-title과 동일 좌측 정렬) */
 .about-cert-title {
   margin-top: calc(40px * var(--about-scale)); /* 연도 스택과 분리 */
-  margin-left: calc(var(--about-exp-inset) + 1px * var(--about-scale));
-  margin-bottom: calc(14px * var(--about-scale));
+  margin-left: 0; /* year 박스 좌측 테두리에 정렬(exp-title과 동일) */
+  margin-bottom: calc(30px * var(--about-scale)); /* exp-title과 동일 하단 여백(스타일 일관) */
   font-family: var(--font-pretendard);
   font-size: calc(27px * var(--about-scale));
   font-weight: 700;
