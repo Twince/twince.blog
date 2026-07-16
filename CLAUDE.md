@@ -265,11 +265,13 @@ Astro 블로그. 레이어 분리가 명확하다:
 - a11y: gate 버튼 :focus-visible + 상태별 aria-label, TwistedGridMotion reduced-motion pauseAnimations, 각주 없는 img alt="".
 - 토큰: raw hex(#7b818d/#333)→primitive(slate-500/gray-850)+semantic(code-linenum/badge-lang), text-gray-800→text-text-secondary,
   u-rail :is() 통합, --u-hover-ring 단일 출처(index.css), localStorage theme 화이트리스트, index.css 레거시 @tailwind 3줄 제거.
-**decision 17건(사용자 결정 대기)** — 최우선: ① **sorter comparator 반전**(실버그 — '최신순'이 제목순으로 동작 중.
+**decision 17건(사용자 결정 대기)** — ① **✅해결(2026-07-14 커밋 160bf36)**: sorter comparator 반전(실버그 — '최신순'이 제목순으로 동작 중.
 힌트: 조기 반환 조건이 반대 — timeDiff==0일 때 0을 반환하면 tiebreak이 죽고, 날짜가 다를 때 title 비교가 실행된다.
 comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc.tsx 정비(li onClick→a href, null 규약, 폴링→IO 구독).
 ③ TOC 이중 생성 파이프라인 일원화. ④ tocGenerator/markdownToHast를 plugins로 이동(레이어명 정합). ⑤ getPostDetail 서비스 계약.
-⑥ series 스키마 optional 위치. ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
+⑥ series 스키마 optional 위치 — 현재 `z.array(reference('series').optional())`라 **원소별** undefined(`(Reference|undefined)[]`)라서
+소비처가 원소 `?.` 가드 필요. 의도는 필드 전체 optional일 확률 높음 → `z.array(reference('series')).optional()`로 옮기면 원소 non-null.
+파급(getPostsWithSeries·ResolvedPost·seriesServicer 가드)이라 보류; seriesServicer의 getSeriesCount는 `if(!ref)return` 가드로 진행(스키마 어느 쪽이든 안전). ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
 ⑨⑩ 기존 EDGE(getSeriesCards/limit/칩 라우팅). ⑪ gate DOM 계약·reset()·핫패스 캐시. ⑫ 의존성 취약점 36건+CSP.
 ⑬ .card-tag 분리+!important 해체. ⑭ quaternary 라이트 대비 3.0:1. ⑮ no-scrollbar. ⑯ SMIL 외부화. ⑰ nnv-4 중복 에셋.
 ⑱ 뷰포트 연동 스케일(D안) — 큰 모니터에서 1100px 고정 컬럼 전체가 작게 읽히는 문제. 사이트 전체(root·posts·series)
