@@ -4,9 +4,10 @@ description: UX는 무엇을 지향해야하는가?
 date: 2025-10-30
 status: published
 tags:
-  - design
-  - dev
+  - DESIGN
+  - PHILOSOPHY
 topics:
+  - memoir
   - dev
   - design
 series:
