@@ -139,14 +139,6 @@
   font-size: var(--series-rail);
   z-index: 1;
 }
-/* root의 .rail-arrow(hover 은닉·--root-* 토큰)와 달리 시리즈 히어로에선 상시 노출 */
-.series-hero .rail-arrow {
-  position: static;
-  width: var(--series-rail);
-  height: auto;
-  opacity: 1;
-  transform: rotate(-90deg);
-}
 .series-hero-body {
   position: relative;
   z-index: 1;
