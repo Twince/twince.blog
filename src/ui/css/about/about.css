@@ -324,8 +324,7 @@
 /* 리스트만 담은 독립 박스(타이틀은 위로 빠짐) */
 .about-cert {
   border: 1px solid var(--color-border-primary);
-  padding: calc(34px * var(--about-scale)) calc(32px * var(--about-scale))
-           calc(34px * var(--about-scale)) calc(var(--about-exp-inset) + 58px * var(--about-scale)); /* 연도 라벨 대비 +58 들여쓰기 */
+  padding: calc(34px * var(--about-scale));
 }
 .about-cert-list {
   list-style: disc;
