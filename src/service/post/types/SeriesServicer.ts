@@ -18,7 +18,10 @@
 // ════════════════════════════════════════════════════════════════════
 
 export interface SeriesCardSummary {
-  // TODO(사용자): 필드를 설계하세요.
+  id: string;
+  title: string;
+  count: number;
+  description: string;
 }
 
 // TODO(사용자): 구현 후 RootLayout.astro의 MOCK_SERIES를 이 함수 호출로 교체하세요.
