@@ -4,6 +4,7 @@
 import BaseLayout from "../BaseLayout.astro";
 import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
 import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
+import Footer from "../Footer.astro";
 
 interface Props {
   series: { id: string; title: string; description: string };
@@ -46,5 +47,6 @@ const { series, posts, index } = Astro.props;
         </section>
       </div>
     </div>
+    <Footer />
   </div>
 </BaseLayout>

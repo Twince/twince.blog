@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../ui/layouts/BaseLayout.astro";
 import PostGridLayout from "../ui/layouts/post-grid/PostGridLayout.astro";
+import Footer from "../ui/layouts/Footer.astro";
 ---
 <BaseLayout>
   <div class="w-full h-full overflow-y-scroll no-scrollbar">
@@ -11,5 +12,6 @@ import PostGridLayout from "../ui/layouts/post-grid/PostGridLayout.astro";
         <PostGridLayout direction="col" />
       </div>
     </div>
+    <Footer />
   </div>
 </BaseLayout>

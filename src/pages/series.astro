@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../ui/layouts/BaseLayout.astro";
 import SeriesListItem from "../ui/components/astro/SeriesListItem.astro";
 import { PostService } from "../service/post/fetch/postServicer";
+import Footer from "../ui/layouts/Footer.astro";
 
 // 기존 공개 API 조합(getCollection + getPostsWithSeries)으로 목록 구성.
 // EDGE(사용자): 시리즈마다 필터를 도는 N+1 순회 — getSeriesCards() 설계 시 1-pass 집계로 개선.
@@ -32,5 +33,6 @@ const items = await Promise.all(
         </ul>
       </div>
     </div>
+    <Footer />
   </div>
 </BaseLayout>

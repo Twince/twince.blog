@@ -1,0 +1,37 @@
+---
+// 사이트 푸터 — 각 페이지 스크롤 컨테이너의 맨 아래(콘텐츠 마지막 형제)에 렌더.
+// 앱셸 구조상 body는 스크롤하지 않으므로 BaseLayout <main> 뒤가 아니라 각 페이지 내부에 둔다.
+// 페이지별 스케일 변수(--root-scale 등)에 의존하지 않는 고정 반응형 값 — 어느 컨텍스트에서도 동일.
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <p>© {year} TWINCE. ALL RIGHTS RESERVED.</p>
+</footer>
+
+<style>
+  .site-footer {
+    width: 100%;
+    padding: 24px 0;
+    border-top: 1px solid var(--color-border-primary);
+    background: transparent; /* 페이지/섹션 배경 상속 */
+    text-align: center;
+  }
+
+  .site-footer p {
+    margin: 0;
+    font-family: var(--font-jetbrain-mono);
+    font-weight: 300;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--color-text-quaternary);
+  }
+
+  @media (width < 768px) {
+    .site-footer {
+      padding: 16px 0;
+    }
+    .site-footer p {
+      font-size: 10px;
+    }
+  }
+</style>

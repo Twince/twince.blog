@@ -3,6 +3,7 @@ import { PostService } from '../../../service/post/fetch/postServicer';
 import type { PostCardWithThumbnail } from '../../../service/post/types/PostServicer';
 import ColDirectionPost from './ColDirectionPost.astro';
 import Tags from './Tags.astro';
+import Footer from '../../layouts/Footer.astro';
 
 interface Props {
   currentSlug: string;
@@ -58,6 +59,10 @@ const description = isMatchingEmpty
       ))}
     </ul>
   </div>
+
+  {/* 게이트 불변식: 푸터는 #related-posts 섹션 '내부' 마지막 자식 — data-collapsed(overflow:hidden)일 때
+      함께 접혀 "경계 아래 스크롤 콘텐츠 0"을 유지. 섹션 뒤 형제로 두면 불변식이 깨진다. */}
+  <Footer />
 </section>
 
 <style>
@@ -111,6 +116,11 @@ const description = isMatchingEmpty
     font-size: var(--size-post-description);
     color: var(--color-text-secondary);
     margin: 0;
+  }
+
+  /* 푸터는 섹션 내부 마지막 자식 — 그리드와의 간격만 부여(수납 시 함께 접힘) */
+  .related-posts > :global(.site-footer) {
+    margin-top: calc(48px * var(--root-scale, 1));
   }
 
   /* 카드 그리드 (2x3, col-post-card 스케일 override) */

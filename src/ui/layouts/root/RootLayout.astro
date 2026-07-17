@@ -6,6 +6,7 @@ import ProfileArt from "../../components/astro/ProfileArt.astro"
 import Topics from "../../components/astro/Topics.astro"
 import SeriesLayouts from "./SeriesLayouts.astro"
 import PostGridLayout from "../post-grid/PostGridLayout.astro"
+import Footer from "../Footer.astro"
 
 // MOCK — EDGE(사용자): getSeriesCards() 구현 후 교체. #1만 실데이터(series.json)와 일치.
 const MOCK_SERIES = [
@@ -50,5 +51,7 @@ const MOCK_SERIES = [
       <h2 class="root-section-title">올라온 포스트</h2>
       <PostGridLayout direction="row" />
     </section>
+
+    <Footer />
   </div>
 </BaseLayout>
