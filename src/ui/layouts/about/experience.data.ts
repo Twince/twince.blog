@@ -34,10 +34,13 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
     year: "2026",
     items: [
       {
-        title: "숭실대학교 축제 서비스 SINGAL 기획 및 개발, 운영",
+        title: "숭실대학교 축제 서비스 SINGAL 기획 고도화 및 개발, 운영",
+        mention: [{ text: "@Ren" }, { text: "@Emily" }, { text: "@Max" }, { text: "@Dean" }],
         bullets: [
-          "사용자 관점에서의 서비스 설계 및 흐름 제시",
-          "3일간 운영 - 총 등록자 수 3,089명",
+          "대동제 3일의 기간동안 서로의 프로필을 구경하고 마음에 드는 연락처를 얻을 수 있는 소개팅 서비스",
+          "퍼포먼스 관점에서의 유저 사용 흐름과 접근성을 고려한 프로덕트 고도화 기획 - Unique User 3,089명 / 지난 분기 대비 87%p 수익률 증가",
+          "Mixpanel등을 이용한 데이터 로깅 및 분석, 액션 플랜 수립",
+          "AI Driven한 빠른 프로덕트 리팩토링 및 프론트엔드 개발 진행(온보딩 및 프로덕트 기획 고도화, 서비스 리팩토링, QA 포함 - 전체 10일)",
         ],
       },
     ],
@@ -59,22 +62,19 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         bullets: [
           "바닥부터 구현하는 AI 신경망 시각화 프로젝트",
           "MVC 아키텍쳐 설계 / EventBus 기반 실시간 숫자추론",
-          "Vanilla JS를 통한 CNN 구현 / weight-training",
-          "인터렉티브 UX 설계 / Vanilla Canvas 인터렉션",
+          "Vanilla JS를 통한 CNN 구현 / MNEST 데이터 셋을 활용한 자체 weight-training",
+          "멀티플랫폼 성능 계선을 위한 PreTrained weight 분리",
+          "인터렉티브 UX 설계 / Vanilla Canvas 인터렉션 구현",
         ],
       },
       {
-        title: "진급평가 성적 우수자 포상",
-        bullets: ["858기 진급평가 우수자"],
-      },
-      {
-        title: "특급병사 / 체력검정 특급",
-        bullets: ["2025년 하반기 체력검정 만점"],
-      },
-      {
-        title: "대대 우수 사격자",
-        bullets: ["부품정비대대 사격성적 최우수 병사"],
-      },
+        title: "군복무 중 수상 및 포상",
+        bullets: [
+          "병 858기 진급평가 우수자 수상",
+          "특급병사 / 체력검정 특급 (2025 하반기 체력검정 만점)",
+          "대대 사격 성적 최우수 병사"
+        ],
+      }
     ],
   },
   {
@@ -84,12 +84,12 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
     items: [
       {
         title: "YOURSSU PM Vice Lead",
-        period: "2024.3 ~ 2024.5",
+        period: "2024.4 ~ 2024.5",
         bullets: ["@Yourssu PM팀 신설"],
       },
       {
         title: "교내동아리 멘토",
-        period: "2024.2 ~ 2024.5",
+        period: "2024.3 ~ 2024.5",
         bullets: ["교내소모임 UNTITLE 멘토", "학부생 대상 커피챗 진행"],
       },
       {
@@ -115,7 +115,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         mention: [{ text: "@jonghokim27", href: "https://github.com/jonghokim27" }],
         bullets: [
           "숭실대학교 IT대학(정보과학관) 테라스 예약 및 학부 공지 시스템 기획",
-          "서비스 UX 설계 및 모바일 UI 디자인",
+          "직관적인 예약 확인 및 사용성 관점을 우선으로 한 서비스 모바일 UX 설계 - 시간 선택 섹션 기반 휭 스크롤 예약 UI",
           "Apple App Store 및 Google Playstore 출시",
         ],
       },
@@ -125,6 +125,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         bullets: [
           "서울시 동작구와 연계하는 골목상권 살리기 프로젝트",
           "전통시장 활성화 소상공인시장진흥공단 - 남성역 골목시장 활성화 유공",
+          "시장 방문 및 일손 돕기 진행",
           "시장 정보를 담고 있는 static 웹페이지 배포",
         ],
       },
@@ -132,7 +133,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "숭실대학교 특별기구, 제 1대 IT 지원위원회 PM / DL,\n총학생회 신설 디지털혁신국 합류",
         bullets: [
           "교내 IT 서비스 개발 및 기술 지원담당을 위한 특별기구에서 디자인 리딩 및 PM",
-          "숭실대학교 총학생회 홈페이지 리브랜딩 기획 및 UX/UI 디자인",
+          "개발·기획 부서 간 커뮤니케이션 및 요구사항 조율",
+          "숭실대학교 총학생회 홈페이지 활성화를 위한 리브랜딩 제시 및 UX/UI 초안 설계",
         ],
       },
       {
@@ -174,8 +176,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "숭실대학교 입학",
         bullets: [
           "글로벌미디어학부 학생회 홍보국 소속",
-          "학부 카드뉴스 및 캘린더 디자인 / 템플릿 제작",
-          "@Yourssu 프론트엔드팀 합류",
+          "학부 카드뉴스 및 캘린더 리뉴얼 작업 / 템플릿 제작",
+          "학술 중앙동아리 @Yourssu 프론트엔드팀 합류",
         ],
       },
       {
@@ -188,10 +190,11 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         ],
       },
       {
-        title: "2022 대동제 IT대학 포스터 메인 디자인",
+        title: "2022 대동제 축제 IT대학 포스터 메인 디자인",
         bullets: [
           "Adobe Photoshop / Illustrator를 이용한 그래픽 구현",
           "대동제 IT단과대학 디자인 컨셉 기획",
+          "컨셉 디자인 에셋 및 템플릿 제작",
         ],
       },
     ],
@@ -203,22 +206,25 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "장애 인식개선 컨텐츠 공모전 교육부장관상",
         bullets: [
           "사회 문제 및 장애인식 개선을 주제로 그래픽 부문 교육부장관상 수상",
-          "팀 총괄 및 기획, 모션 그래픽 편집을 통한 영상 컨텐츠 제작",
+          "팀 총괄 및 디렉팅 - 영상의 흐름 및 주제 기획",
+          "'틀림이 아닌 다름'을 주제로 쉽게 놓칠 수 있는 일상의 문화적 현상을 자각할 수 있도록 모션 그래픽 편집을 통한 영상 컨텐츠 제작",
         ],
       },
       {
         title: "인천항만공사 아이디어톤 최우수상",
         bullets: [
           "항만공사 활성화를 위한 서비스 기획 및 컨텐츠 디자인",
-          "문제점 재정의 및 스마트 인천항을 위한 온라인 입국 심사 서비스 기획",
+          "현재 겪고 있는 기관의 문제점을 재정의 - 입국 심사에서의 병목 현상 도출",
+          "자동화된 인천항을 위한 온라인 입국 심사 서비스 기획",
         ],
       },
       {
         title: "온라인 수업 서비스 ZUDA - 기획 및 UX 설계",
         bullets: [
           "코로나 펜데믹 대비 효과적인 수업을 위한 서비스 주다(ZUDA) 기획",
-          "서비스 UX/UI 설계 및 디자인",
-          "react-parallax를 이용한 인터렉티브 웹 디자인 구현",
+          "기성 온라인 플랫폼의 정보 파편화 문제를 기반으로, 참여자와 교사가 실시간으로 인터렉션할 수 있는 대시보드 UX 제시",
+          "뉴모피즘과 플랫 디자인 트랜드를 혼합한 UI 디자인 도입시도",
+          "react-parallax를 이용한 인터렉티브 웹 디자인 및 구현",
         ],
       },
     ],
