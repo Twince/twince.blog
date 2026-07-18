@@ -24,8 +24,9 @@ const { series } = Astro.props;
       </span>
       {item.thumbnail ? (
         <div class="series-thumb-wrap" aria-hidden="true">
-          {/* 2레이어 크로스페이드: 아래=원색, 위=지면 duotone. url() 필터는 CSS 보간이 안 되어
-              hover 해금을 mono 레이어 opacity 페이드로 처리. 같은 src라 네트워크 비용 0(캐시 공유). */}
+          {/* 2레이어 크로스페이드: 아래=원색, 위=대기 상태 레이어. hover 시 위 레이어 opacity 페이드.
+              대기 레이어 2단 폴백: line 에셋(저작된 라인 아트, mask 방식 — 선 색은 테마 토큰이 소유)
+              있으면 그것, 없으면 런타임 엣지 필터(같은 src Image — 캐시 공유, 네트워크 비용 0). */}
           <Image
             src={item.thumbnail.src}
             alt=""
@@ -33,13 +34,20 @@ const { series } = Astro.props;
             widths={[336, 672]}
             sizes="336px"
           />
-          <Image
-            src={item.thumbnail.src}
-            alt=""
-            class="series-thumb series-thumb-mono"
-            widths={[336, 672]}
-            sizes="336px"
-          />
+          {item.thumbnail.line ? (
+            <div
+              class="series-thumb series-thumb-line"
+              style={`--line-mask:url(${item.thumbnail.line.src})`}
+            />
+          ) : (
+            <Image
+              src={item.thumbnail.src}
+              alt=""
+              class="series-thumb series-thumb-mono"
+              widths={[336, 672]}
+              sizes="336px"
+            />
+          )}
         </div>
       ) : (
         <p class="series-desc">{item.description}</p>

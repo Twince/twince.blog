@@ -44,7 +44,13 @@ export const series = defineCollection({
     id: z.string(),
     title: z.string(),
     description: z.string(),
-    thumbnail: thumbnail(image).optional()
+    /* line = 카드 대기 상태용 라인 아트(SVG, mask 소비 — 장식이라 alt 불필요).
+       thumbnail 안에 중첩: 원본 없는 라인은 무의미하므로 구조가 불변식을 보장.
+       optional 2단 폴백: thumbnail 없음→덱/desc, line 없음→런타임 엣지 필터.
+       공유 팩토리는 그대로 두고 series 호출부에서 .extend() — 형태는 공유, 확장은 사용처. */
+    thumbnail: thumbnail(image).extend({
+      line: image().optional()
+    }).optional()
   })
 })
 

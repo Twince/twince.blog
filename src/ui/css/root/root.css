@@ -389,6 +389,37 @@
 :root[data-theme="light"] .series-thumb-mono {
   filter: url(#thumb-edge-light);
 }
+/* 저작된 라인 아트 레이어(에셋 있는 시리즈) — 2겹 구조:
+   div 자체 = 불투명 배경판(카드 배경색 — 마스크 레이어는 대부분 투명이라 아래 원색을 못
+   가리므로 판이 필요), ::after = SVG 마스크된 선(선 색 = 테마 토큰 — currentColor 불가한
+   <img> 한계의 우회). 마스크 URL은 인라인 --line-mask 커스텀 프로퍼티로 전달(pseudo에 상속됨).
+   .series-thumb 클래스 공유로 clip-path 사선·hover 수평화·transition 상속, clip은 후손도 잘라줌. */
+.series-thumb-line {
+  position: absolute;
+  inset: 0;
+  /* 대기 존을 "될락 말락" 1%만 분리 — 혼합 끝점을 text-primary로 두면 라이트(어두워짐)/
+     다크(밝아짐 = 다크 UI의 elevation 관례)가 자동으로 각자 옳은 방향이 된다. 테마 분기 0줄. */
+  background-color: color-mix(in oklch, var(--color-bg-hero), var(--color-text-primary) 1%);
+}
+.series-thumb-line::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* 잉크 = 보더→텍스트 토큰 사이의 보간 — 새 상수 없이 기존 시맨틱 두 점의 관계로 정의
+     (테마 자동 정합). --line-ink-mix = 사다리 위 위치 노브: 0%=구조선과 동일, 100%=본문 텍스트.
+     스윕(15/30/45) 비교로 30% 채택 — 구조선보다 반 스텝 위, 조용하지만 판독 가능. */
+  background-color: color-mix(in oklch,
+    var(--color-border-primary),
+    var(--color-text-primary) var(--line-ink-mix, 5%));
+  -webkit-mask-image: var(--line-mask);
+  mask-image: var(--line-mask);
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
 /* hover: 컷 중점(y=dy)을 회전축으로 수평화 — 정점 수가 같아 clip-path가 부드럽게 보간되고,
    스트로크(::before)는 중점(top:dy) 기준 배치라 회전만 풀면 엣지와의 정렬이 저절로 유지된다 */
 .series-col:hover .series-thumb {
@@ -399,7 +430,8 @@
     0 100%
   );
 }
-.series-col:hover .series-thumb-mono {
+.series-col:hover .series-thumb-mono,
+.series-col:hover .series-thumb-line {
   opacity: 0; /* 컬러 해금 — 원색 레이어 크로스페이드 */
 }
 .series-thumb-wrap::before {
@@ -409,8 +441,8 @@
   left: 50%;
   width: calc(100.983cqw + 2px); /* 폭/cos8° + slack(초과분은 .series-col overflow가 클리핑) */
   height: 1px;
-  /* 히어로 스트로크보다 존재감 낮게 — 약 40% 불투명도 */
-  background: color-mix(in oklch, var(--color-border-primary) 40%, transparent);
+  /* 사이트 구조선(보더)과 동일 톤 — 컷 엣지도 같은 괘선 계열로 통일 */
+  background: var(--color-border-primary);
   transform: translate(-50%, -50%) rotate(-8deg); /* 음수=반시계 → 우측이 위("/") */
   z-index: 1;
   pointer-events: none;
