@@ -4,7 +4,7 @@
 시리즈 카드 대기 상태 레이어(thumbnail.line)용 에셋 생성기.
 
 컨벤션(배치 모드 — 권장 워크플로):
-  각 시리즈 폴더에 소스를 `thumbnail-line.png`로 두면, 인자 없이 실행 시
+  각 시리즈 폴더에 소스를 `thumbnail-line.png`(또는 .jpg/.jpeg)로 두면, 인자 없이 실행 시
   전 시리즈를 스캔해 소스가 산출물(thumbnail-line.svg)보다 새것인 경우만 재생성한다.
     python3 scripts/trace-line-art.py          # = pnpm run thumbnail-trace
   ※ 산출 SVG는 커밋한다(빌드/CI에 potrace·pillow 의존성이 생기지 않게).
@@ -29,7 +29,7 @@ from PIL import Image, ImageFilter
 THRESHOLD = 128  # 명도 임계 — 선/지면 이진화 기준(0~255)
 DILATE = 3       # 기본 선 굵힘 커널(홀수, 0=원본) — 사이트 채택값
 SERIES_DIR = Path("src/content/blog/series")
-SRC_NAME = "thumbnail-line.png"
+SRC_NAMES = ("thumbnail-line.png", "thumbnail-line.jpg", "thumbnail-line.jpeg")
 OUT_NAME = "thumbnail-line.svg"
 
 
@@ -52,7 +52,13 @@ def trace(src: Path, dst: Path, dilate: int = DILATE) -> None:
 
 def batch() -> None:
     regenerated = skipped = 0
-    for src in sorted(SERIES_DIR.glob(f"*/{SRC_NAME}")):
+    sources = sorted(p for name in SRC_NAMES for p in SERIES_DIR.glob(f"*/{name}"))
+    seen: dict = {}
+    for src in sources:
+        if src.parent in seen:
+            print(f"warn: {src.parent.name} — 소스 중복({seen[src.parent].name}, {src.name}) → {seen[src.parent].name} 사용")
+            continue
+        seen[src.parent] = src
         dst = src.parent / OUT_NAME
         if dst.exists() and dst.stat().st_mtime >= src.stat().st_mtime:
             skipped += 1

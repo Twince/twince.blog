@@ -8,7 +8,7 @@ hover 시 원본 컬러가 드러난다("도면 → 실물" 크로스페이드).
 
 ```
 1. 라인 PNG 생성    — 원본 썸네일과 같은 구도, 흰 바탕 + 검은 선 (생성형 출력 그대로 OK)
-2. 저장             — src/content/blog/series/<id>/thumbnail-line.png
+2. 저장             — src/content/blog/series/<id>/thumbnail-line.png (.jpg/.jpeg도 가능)
 3. 트레이스         — pnpm run thumbnail-trace
 4. 참조             — series.json 해당 시리즈 thumbnail에 "line": "./<id>/thumbnail-line.svg"
 ```
@@ -25,7 +25,7 @@ hover 시 원본 컬러가 드러난다("도면 → 실물" 크로스페이드).
 - **구도 일치가 품질의 핵심** — hover 크로스페이드가 같은 자리에서 도면→실물로 바뀌는
   구조라, 라인 버전은 원본과 같은 구도여야 한다. 생성형 프롬프트 예:
   *"same composition, clean black line art on white background"*
-- 흰 바탕 + 검은 선. 회색 음영은 50% 임계 이진화에서 사라진다(의도된 동작).
+- 흰 바탕 + 검은 선. 회색 음영은 50% 임계 이진화에서 사라진다(의도된 동작 — JPEG 압축 아티팩트도 같은 원리로 정리됨).
 - 해상도는 원본 썸네일과 비슷하면 충분(현재 ~1600px 폭 기준으로 검증됨).
 
 ## 폴백 사다리
