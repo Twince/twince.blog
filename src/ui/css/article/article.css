@@ -59,7 +59,7 @@
     font-size: var(--size-article-sub-heading);
     color: var(--color-article-title);
     font-weight: 700;
-    margin: 3rem 0 0.5rem 0;
+    margin: 55px 0 0.5rem 0;
   }
 
   h2 + h4 {
