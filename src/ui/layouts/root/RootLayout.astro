@@ -7,31 +7,10 @@ import Topics from "../../components/astro/Topics.astro"
 import SeriesLayouts from "./SeriesLayouts.astro"
 import PostGridLayout from "../post-grid/PostGridLayout.astro"
 import Footer from "../Footer.astro"
+import { SeriesService } from "../../../service/post/fetch/seriesServicer"
 
-// MOCK — EDGE(사용자): getSeriesCards() 구현 후 교체. #1만 실데이터(series.json)와 일치.
-const MOCK_SERIES = [
-  {
-    id: "neural-network-viz",
-    title: "나는 AI를 어떻게 만들었을까?",
-    description:
-      "re:zero부터 시작하는 인공신경망 시각화 프로젝트. 군복무 중 개발했던 첫 프로젝트에 관한 이야기입니다. 산전수전 A to Z",
-    postCount: 6,
-  },
-  {
-    id: "building-blog",
-    title: "자체 블로그 구축하기",
-    description:
-      "여러분이 보고 계신 이 블로그 맞습니다. 백지에서 시작하는 블로그 자체 개발 프로젝트. 개발을 진행하며 무슨 일들이 있었을까요?",
-    postCount: 4,
-  },
-  {
-    id: "learning-language",
-    title: "직관이 언어를 학습하기까지",
-    description:
-      "토익 400부터 980까지. 언어를 공부가 아닌 언어로 학습하는 과정을 담았습니다.",
-    postCount: 5,
-  },
-];
+// 실데이터: getSeriesCards() (series.json + 역참조 postCount 집계). MOCK 제거 완료.
+const series = await SeriesService.getSeriesCards();
 
 // TODO(사용자 EDGE): 최근 포스트 개수 제한(limit prop vs 래퍼) — 시안은 최신 4개
 ---
@@ -41,14 +20,14 @@ const MOCK_SERIES = [
       <div class="root-hero-inner">
         <ProfileArt />
         <div class="root-hero-right flex flex-col">
-          <SeriesLayouts series={MOCK_SERIES} />
+          <SeriesLayouts series={series} />
           <Topics />
         </div>
       </div>
     </section>
 
     <section class="root-recent post-grid-text-package">
-      <h2 class="root-section-title">올라온 포스트</h2>
+      <h2 class="root-section-title">최근 포스트</h2>
       <PostGridLayout direction="row" />
     </section>
 
