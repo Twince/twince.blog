@@ -10,11 +10,14 @@ const year = new Date().getFullYear();
 
 <style>
   .site-footer {
+    --footer-h: 50px; /* 고정 높이 노브 — 모든 페이지 동일 */
     width: 100%;
-    padding: 24px 0;
+    height: var(--footer-h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-top: 1px solid var(--color-border-primary);
     background: transparent; /* 페이지/섹션 배경 상속 */
-    text-align: center;
   }
 
   .site-footer p {
@@ -27,9 +30,6 @@ const year = new Date().getFullYear();
   }
 
   @media (width < 768px) {
-    .site-footer {
-      padding: 16px 0;
-    }
     .site-footer p {
       font-size: 10px;
     }
