@@ -9,7 +9,7 @@ const DEFAULT_THUMBNAIL = {
   alt: "Post Thumbnail",
 };
 
-// post collectoin 필드 평탄화 및 데이터 정합성 보장
+// post collection 필드 평탄화 및 데이터 정합성 보장
 export const resolvePost = (post: CollectionEntry<"posts">): ResolvedPost => {
   const { id, data } = post; // Astro5 content-layer: entry에 .slug/.render 없음
   return {

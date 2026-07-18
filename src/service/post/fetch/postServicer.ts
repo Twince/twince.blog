@@ -1,9 +1,7 @@
-// module imports
 import { getCollection, getEntry } from "astro:content";
 import { resolvePost } from "../utils/resolver";
 import { sortPosts } from "../utils/sorter";
 
-// type imports
 import type {
   PostCardWithThumbnail,
   NeighborSummary,
@@ -11,7 +9,6 @@ import type {
 } from "../types/PostServicer";
 import type { ResolvedPost } from "../types/Resolver";
 
-// type definition(about module domain)
 type NullableSummary = PostCardWithThumbnail | null;
 
 type Mapper<from, to> = (resolvedPosts: ResolvedPost) => NullableSummary;
@@ -25,11 +22,10 @@ type NeighborPosts = {
   previous: NeighborSummary | null;
 } | null;
 
-// logic
 let cachedPosts: ResolvedPost[] | null = null;
 
 export const PostService = {
-  // status가 'publihed'인 Post만 fetch(프로덕트 빌드된 기준)
+  // status가 'published'인 Post만 fetch(프로덕트 빌드된 기준)
   async getPublishedPosts(): Promise<ResolvedPost[]> {
     if (cachedPosts) return cachedPosts;
 
@@ -54,7 +50,6 @@ export const PostService = {
     };
   },
 
-  // 특정 Post의 slug를 기준으로 이전 글과 다음 글 fetch
   async getPostWithNeighbors(slug: string): Promise<NeighborPosts> {
     const allPosts = await this.getPublishedPosts();
     const currentIndex = allPosts.findIndex((post) => post.slug === slug);
@@ -139,7 +134,6 @@ export const PostService = {
   async getRelatedPosts(currentSlug: string, tags: string[]): Promise<TaggedPosts[]> {
     if (tags.length === 0) return [];
 
-    // 2개 이상 겹치는 포스트 필터링
     const matched = await this.getPostWithTags(tags, 2);
 
     // null 제거 + 자신 제외 + 6개 cap

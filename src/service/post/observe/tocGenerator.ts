@@ -1,7 +1,5 @@
-// module
 import { visit } from "unist-util-visit";
 
-// type
 import type { TocNode } from "../types/TocGenrator";
 import type { Root, Element, Text } from "hast";
 
@@ -13,8 +11,8 @@ export const tocGenerator = {
       if (!isHeading(node)) return;
 
       const depth = getHeadingDepth(node);
-      const text = extractText(node); // 현재 headings의 text값을 title로 지정
-      const id = slugify(text); // ex. Title Example -> title-example 형태로 변환
+      const text = extractText(node);
+      const id = slugify(text);
 
       node.properties = node.properties || {};
       node.properties.id = id;
@@ -26,10 +24,11 @@ export const tocGenerator = {
         children: [],
       };
 
-      while (stack.length > 0 && stack.at(-1)!.depth >= depth) stack.pop(); // stack.length가 0보다 크고, stack의 현재 값에 대해 부모가 되어줄 수 없으면 pop
-      if (stack.length === 0) tocNode.push(toc); // stack이 없으면 그 요소는 그냥 tocNode에 push
-      if (stack.length > 0) stack.at(-1)!.children.push(toc); // 현재 depth가 stack의 top보다 더 하위라면 child로 push (stack.length > 0)
-      stack.push(toc); // 현재 노드는 이후의 부모 노드의 후보가 됨.
+      // 스택 = 조상 후보. 자기보다 깊거나 같은 top을 걷어내면 남는 top이 부모(없으면 루트)
+      while (stack.length > 0 && stack.at(-1)!.depth >= depth) stack.pop();
+      if (stack.length === 0) tocNode.push(toc);
+      if (stack.length > 0) stack.at(-1)!.children.push(toc);
+      stack.push(toc);
     });
     return tocNode;
   },

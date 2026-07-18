@@ -4,7 +4,6 @@ import { PostService } from "./postServicer";
 
 export const SeriesService = {
   async getSeriesCount(): Promise<Map<string, number>> {
-    // publishedPosts 받기
     const publishedPosts = await PostService.getPublishedPosts();
     const counts = new Map<string, number>();
 
@@ -14,7 +13,6 @@ export const SeriesService = {
         counts.set(ref.id, (counts.get(ref.id) ?? 0) + 1);
       })
     })
-    // map으로 반환
     return counts;
   },
   async getSeriesCards(): Promise<SeriesCardSummary[]> {

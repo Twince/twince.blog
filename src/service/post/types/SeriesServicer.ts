@@ -1,4 +1,3 @@
-// ═══ EDGE(사용자 핵심 로직) — 여기 채워보세요 ═══════════════════════
 // root 히어로의 시리즈 쇼케이스(SeriesLayouts.astro)가 소비할 view-model과
 // 그것을 만드는 서비스의 '계약'을 설계하는 자리입니다.
 //
@@ -34,7 +33,3 @@ export interface SeriesCardSummary {
   thumbnail: NonNullable<SeriesData['thumbnail']> | null;
 }
 
-// TODO(사용자): 구현 후 RootLayout.astro의 MOCK_SERIES를 이 함수 호출로 교체하세요.
-// (구현 위치 제안: service/post/fetch/seriesServicer.ts — postServicer와 대칭)
-//
-// export async function getSeriesCards(): Promise<SeriesCardSummary[]> { ... }
