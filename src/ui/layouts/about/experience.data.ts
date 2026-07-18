@@ -37,8 +37,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "숭실대학교 축제 서비스 SINGAL 기획 고도화 및 개발, 운영",
         mention: [{ text: "@Ren" }, { text: "@Emily" }, { text: "@Max" }, { text: "@Dean" }],
         bullets: [
-          "대동제 3일의 기간동안만 서로의 프로필을 구경하고 마음에 드는 연락처를 얻을 수 있는 소개팅 서비스",
-          "퍼포먼스 관점에서의 유저 사용 흐름과 접근성을 고려한 프로덕트 고도화 기획 - Unique User 3,089명 / 지난 분기 대비 87%p 수익률 증가",
+          "축제 기간동안 서로의 프로필을 구경하고 마음에 드는 연락처를 얻을 수 있는 소개팅 서비스",
+          "퍼포먼스 관점에서의 유저 사용 흐름과 접근성을 고려한 프로덕트 고도화 기획 - 운영 3일간 Unique User 3,089명 / 지난 분기 대비 87%p 수익률 증가",
           "Mixpanel등을 이용한 데이터 로깅 및 분석, 액션 플랜 수립",
           "AI Driven한 빠른 프로덕트 리팩토링 및 프론트엔드 개발 진행(온보딩 및 프로덕트 기획 고도화, 서비스 리팩토링, QA 포함 - 전체 10일)",
         ],
@@ -200,7 +200,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
     ],
   },
   {
-    year: "2021 ~",
+    year: "2021",
     items: [
       {
         title: "장애 인식개선 컨텐츠 공모전 교육부장관상",
