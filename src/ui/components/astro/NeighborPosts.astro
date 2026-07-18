@@ -16,9 +16,11 @@ const LIST_ICON_PATH = "M2 1.5H8M2 3.5H8M2 5.5H8M2 7.5H5.5"; // root series-coun
 // 두 이웃이 모두 있을 때만 desc 2줄 예약(두 칸 높이 동일) — 폴백 혼합 시엔 유령 빈 줄 방지를 위해 해제
 const hasBoth = !!(next && previous);
 ---
+{/* 세로 시퀀스 매핑: 위 슬롯(←, 좌측 정렬) = 이전 글(뒤로/과거), 아래 슬롯(→, 우측 정렬) = 다음 글(앞으로/미래)
+    — 슬롯의 시각 문법(화살표 방향·정렬·슬라이드)은 고정, 데이터·라벨만 의미에 따라 배선 */}
 <div class="w-full h-fit flex flex-col border-t-1 border-border-primary">
-  {next ? (
-  <a href={`/posts/${next.slug}`} class="z-10 relative pl-12 pt-6 pb-5 block overflow-hidden
+  {previous ? (
+  <a href={`/posts/${previous.slug}`} class="z-10 relative pl-12 pt-6 pb-5 block overflow-hidden
     text-text-secondary
     before:absolute before:inset-0 before:-z-10
     before:bg-[linear-gradient(to_left,var(--color-bg-primary),var(--color-bg-lite-hover))]
@@ -28,12 +30,12 @@ const hasBoth = !!(next && previous);
     hover:before:delay-0
     ">
     <div class="flex">
-      <Icon name="arrow_left" class="neighbor-arrow neighbor-arrow-next shrink-0 w-5 h-5 mt-1.5 mr-4 text-text-primary" />
-      <span class="neighbor-label neighbor-label-next" aria-hidden="true">다음 글</span>
+      <Icon name="arrow_left" class="neighbor-arrow neighbor-arrow-prev shrink-0 w-5 h-5 mt-1.5 mr-4 text-text-primary" />
+      <span class="neighbor-label neighbor-label-prev" aria-hidden="true">이전 글</span>
       {/* min-w-0 없으면 truncate/break-keep 콘텐츠의 min-content가 row를 넘쳐 화살표·라벨이 밀려남 */}
       <div class="neighbor-text flex flex-col min-w-0">
-        <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[24ch]  min-w-[5ch] truncate">{next.title}</span>
-        <span class:list={["neighbor-desc block text-[var(--color-article-image-caption)] break-keep max-w-[26ch] mt-0.5 leading-5", { "neighbor-desc-reserved": hasBoth }]}>{next.description}</span>
+        <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[24ch]  min-w-[5ch] truncate">{previous.title}</span>
+        <span class:list={["neighbor-desc block text-[var(--color-article-image-caption)] break-keep max-w-[26ch] mt-0.5 leading-5", { "neighbor-desc-reserved": hasBoth }]}>{previous.description}</span>
       </div>
     </div>
   </a>
@@ -53,13 +55,13 @@ const hasBoth = !!(next && previous);
       </svg>
       <div class="flex flex-col min-w-0">
         <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] truncate">목록보기</span>
-        <span class="block text-[var(--color-article-image-caption)] mt-0.5 leading-5">다음 글이 없어요</span>
+        <span class="block text-[var(--color-article-image-caption)] mt-0.5 leading-5">이전 글이 없어요</span>
       </div>
     </div>
   </a>
   )}
-  {previous ? (
-  <a href={`/posts/${previous.slug}`} class="z-10 relative pl-20 pr-4 pt-6 pb-5 mb-3 block overflow-hidden
+  {next ? (
+  <a href={`/posts/${next.slug}`} class="z-10 relative pl-20 pr-4 pt-6 pb-5 mb-3 block overflow-hidden
     text-text-secondary
     before:absolute before:inset-0 before:-z-10
     before:bg-[linear-gradient(to_left,var(--color-bg-lite-hover),var(--color-bg-primary))]
@@ -68,12 +70,12 @@ const hasBoth = !!(next && previous);
     hover:before:translate-x-0 hover:before:opacity-100
     hover:before:delay-0">
     <div class="flex">
-      <div class="neighbor-text neighbor-text-prev flex flex-col min-w-0">
-        <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[27ch] min-w-[5ch] truncate">{previous.title}</span>
-        <span class:list={["neighbor-desc block text-[var(--color-article-image-caption)] break-keep max-w-[26ch] mt-0.5 leading-5", { "neighbor-desc-reserved": hasBoth }]}>{previous.description}</span>
+      <div class="neighbor-text neighbor-text-next flex flex-col min-w-0">
+        <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] max-w-[27ch] min-w-[5ch] truncate">{next.title}</span>
+        <span class:list={["neighbor-desc block text-[var(--color-article-image-caption)] break-keep max-w-[26ch] mt-0.5 leading-5", { "neighbor-desc-reserved": hasBoth }]}>{next.description}</span>
       </div>
-      <span class="neighbor-label neighbor-label-prev" aria-hidden="true">이전 글</span>
-      <Icon name="arrow_right" class="neighbor-arrow neighbor-arrow-prev shrink-0 w-5 h-5 mt-1.5 ml-3 text-text-primary" />
+      <span class="neighbor-label neighbor-label-next" aria-hidden="true">다음 글</span>
+      <Icon name="arrow_right" class="neighbor-arrow neighbor-arrow-next shrink-0 w-5 h-5 mt-1.5 ml-3 text-text-primary" />
     </div>
   </a>
   ) : (
@@ -91,7 +93,7 @@ const hasBoth = !!(next && previous);
       </svg>
       <div class="flex flex-col min-w-0">
         <span class="text-neighbor-post-title font-bold text-[var(--color-article-title)] truncate">목록보기</span>
-        <span class="block text-[var(--color-article-image-caption)] mt-0.5 leading-5">이전 글이 없어요</span>
+        <span class="block text-[var(--color-article-image-caption)] mt-0.5 leading-5">다음 글이 없어요</span>
       </div>
     </div>
   </a>

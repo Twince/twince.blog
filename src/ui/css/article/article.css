@@ -469,12 +469,14 @@
   opacity: 1;
 }
 
-#side-bar a:hover .neighbor-arrow-next { transform: translateX(-20px); }
-#side-bar a:hover .neighbor-label-next { transform: translateX(-18px); }
-
-#side-bar a:hover .neighbor-text-prev { transform: translateX(-40px); }
+/* 위 슬롯(이전 글, ← 좌측 정렬): 라벨 확장이 제목을 밀고 화살표는 반대로 */
 #side-bar a:hover .neighbor-arrow-prev { transform: translateX(-20px); }
-#side-bar a:hover .neighbor-label-prev { transform: translateX(-24px); }
+#side-bar a:hover .neighbor-label-prev { transform: translateX(-18px); }
+
+/* 아래 슬롯(다음 글, → 우측 정렬): 텍스트 컬럼이 라벨 폭만큼 왼쪽으로 */
+#side-bar a:hover .neighbor-text-next { transform: translateX(-40px); }
+#side-bar a:hover .neighbor-arrow-next { transform: translateX(-20px); }
+#side-bar a:hover .neighbor-label-next { transform: translateX(-24px); }
 
 /* desc 상한 2줄 클램프. 하한 예약(-reserved)은 두 이웃이 모두 정상일 때만 컴포넌트가 부여
    — 폴백 혼합 시 예약하면 1줄 desc의 유령 빈 줄이 아래 칸 위 여백으로 보임 */
