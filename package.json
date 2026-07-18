@@ -6,7 +6,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "thumbnail-trace": "python3 scripts/trace-line-art.py"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
