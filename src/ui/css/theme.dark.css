@@ -43,6 +43,10 @@
   --font-weight-display: 800;
   --font-weight-title:   600;
 
+  /* ── accent: 링크/active 블루 — 라이트용 최대 채도 블루(#4326FF)는 다크 표면에서
+     너무 어둡고(대비↓) 채도가 최대라 진동/글로우 → 같은 hue에서 L↑·C↓ 스텝으로 교체 ── */
+  --color-text-active: var(--accent-300);
+
   /* ── border ──────────────────────────────────────────────── */
   --color-border-primary:    var(--gray-800);
   --color-border-badge:      color-mix(in srgb, var(--white) 25%, transparent); /* 다크: 투명 백으로 반전 */
