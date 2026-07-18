@@ -11,6 +11,7 @@
   --series-item-meta:  max(12px, calc(9px * var(--series-scale)));
 
   /* 상세 히어로 */
+  --series-hero-h:     320px; /* 히어로 높이 노브 — min-height·사선 dx·스트로크 길이가 전부 이 값에서 파생 */
   --series-label:      calc(12px * var(--series-scale));
   --series-hero-title: calc(27px * var(--series-scale));
   --series-hero-desc:  max(12px, calc(10px * var(--series-scale)));
@@ -43,6 +44,7 @@
   flex-direction: column;
   gap: calc(20px * var(--series-scale)); /* Figma: 행 pitch 230 − 높이 210 */
   padding-top: calc(20px * var(--series-scale));
+  padding-bottom: calc(20px * var(--series-scale)); /* 마지막 아이템 보더 ↔ 푸터 보더 분리(상단 리듬 대칭) */
 }
 
 .series-item {
@@ -108,6 +110,14 @@
   object-fit: cover;
   border-radius: calc(6px * var(--series-scale));
 }
+/* 시리즈 대표 썸네일 — 덱 단일 카드와 같은 자리·크기 계약(153×103 × scale) */
+.series-single-thumb {
+  width: calc(153px * var(--series-scale));
+  height: calc(103px * var(--series-scale));
+  object-fit: cover;
+  border-radius: calc(6px * var(--series-scale));
+  flex-shrink: 0;
+}
 .series-item-meta {
   display: flex;
   justify-content: space-between;
@@ -127,8 +137,8 @@
   position: relative;
   display: flex;
   overflow: hidden;
-  min-height: calc(370px * var(--series-scale));
-  border-bottom: 1px solid var(--color-border-primary);
+  min-height: calc(var(--series-hero-h) * var(--series-scale));
+  border-bottom: 1px dashed var(--color-border-primary);
 }
 /* 세로 슬러그 레일 — 공통 선언은 root.css의 u-rail :is() 그룹이 소유 */
 .series-hero .hero-rail {
@@ -166,6 +176,48 @@
   color: var(--color-text-secondary);
   word-break: keep-all;
 }
+/* 우측 풀블리드 썸네일 — 히어로 상/하/우 엣지까지 flush(absolute inset), object-fit cover.
+   폭 50%(텍스트 최대폭 ~560px < 이미지 시작 x=550@1100폭 → 여유). wrapper z-index:0으로 텍스트(z:1) 아래.
+   좌변을 시계방향 10° 사선("/", 상단 x가 하단보다 오른쪽)으로 컷 + 컷 엣지 위에 1px 스트로크 보더.
+   기하: 히어로 높이 = min-height (--series-hero-h)×scale(콘텐츠가 이 안에 들어와 실측=min-height).
+   per-side dx = tan10°×h/2 = 0.088165×(--series-hero-h)×scale. 스트로크는 h/cos10° 길이의 세로선을
+   rotate(10deg) → 박스 상/하단에서 x = cut ± dx 로 클립 좌변 두 끝점과 정확히 일치. */
+.series-hero-thumb-wrap {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  z-index: 0; /* 스택 컨텍스트 확립 → 스트로크(::before z:1)까지 텍스트 body(z:1) 아래로 가둠 */
+  --hero-cut-x: calc(44px * var(--series-scale));            /* 컷 중심 x(박스 좌측 기준) */
+  --hero-cut-dx: calc(var(--series-hero-h) * var(--series-scale) * 0.088165); /* tan10°×h/2 */
+}
+.series-hero-thumb {
+  display: block;
+  width: 100%;
+  max-width: none; /* preflight img{max-width:100%} 무력화 */
+  height: 100%;
+  object-fit: cover;
+  object-position: center; /* 세로 중앙 크롭 */
+  clip-path: polygon(
+    calc(var(--hero-cut-x) + var(--hero-cut-dx)) 0,
+    100% 0,
+    100% 100%,
+    calc(var(--hero-cut-x) - var(--hero-cut-dx)) 100%
+  );
+}
+.series-hero-thumb-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: var(--hero-cut-x);
+  width: 1px;
+  height: calc(var(--series-hero-h) * var(--series-scale) / 0.984808 + 4px); /* h/cos10° + slack, overflow는 히어로가 클리핑 */
+  background: var(--color-border-primary);
+  transform: translate(-50%, -50%) rotate(10deg); /* 양수=시계방향 → 상단이 오른쪽("/") */
+  z-index: 1;
+  pointer-events: none;
+}
 
 .series-posts {
   padding: calc(20px * var(--series-scale)) calc(28px * var(--series-scale))
@@ -199,12 +251,14 @@
   .series-column { border-inline: none; }
   .series-page-title { padding: 48px 28px 16px; font-size: 20px; }
   .series-item-link { padding: 24px 28px; min-height: 0; flex-direction: column; gap: 16px; }
-  .series-deck { display: none; }  /* 덱만 숨기고 메타는 유지 */
+  .series-deck,
+  .series-single-thumb { display: none; }  /* 덱/단일 썸네일만 숨기고 메타는 유지 */
   .series-item-title { margin-top: 12px; font-size: 18px; }
   .series-item-desc { margin-top: 12px; font-size: 11px; }
 
   .series-hero { min-height: 0; }
   .series-hero .hero-rail { display: none; }
+  .series-hero-thumb-wrap { display: none; }
   .series-hero-body { padding: 40px 28px 36px; }
   .series-hero-title { font-size: 22px; margin-top: 16px; }
   .series-hero-desc { margin-top: 20px; font-size: 11px; }

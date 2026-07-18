@@ -11,9 +11,10 @@ interface Props {
   title: string;
   description: string;
   postCount: number;
+  thumbnail: Thumbnail | null; // 시리즈 대표 썸네일(있으면 덱 대신 단일 렌더)
   thumbnails: Thumbnail[];
 }
-const { id, title, description, postCount, thumbnails } = Astro.props;
+const { id, title, description, postCount, thumbnail, thumbnails } = Astro.props;
 ---
 <li class="series-item">
   <a href={`/series/${id}`} class="series-item-link">
@@ -24,7 +25,16 @@ const { id, title, description, postCount, thumbnails } = Astro.props;
     </div>
 
     <div class="series-item-side">
-      {thumbnails.length > 0 && (
+      {thumbnail ? (
+        <Image
+          src={thumbnail.src}
+          alt=""
+          class="series-single-thumb"
+          widths={[168, 336]}
+          sizes="168px"
+          aria-hidden="true"
+        />
+      ) : thumbnails.length > 0 && (
         <div class="series-deck" aria-hidden="true" style={`--n: ${thumbnails.length}`}>
           {thumbnails.map((thumb, i) => (
             <Image src={thumb.src} alt="" class="deck-thumb" style={`--i: ${i}`} />

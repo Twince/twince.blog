@@ -1,13 +1,18 @@
 ---
-// 시리즈 상세 — Figma 4305:1568: 히어로(세로 슬러그 레일 + 라벨/타이틀/설명) + row 카드 그리드
-// TODO(사용자): 히어로 우측 시리즈 전용 이미지는 스키마 확장 결정 후
+// 시리즈 상세 — Figma 4305:1568: 히어로(세로 슬러그 레일 + 라벨/타이틀/설명 + 우측 풀블리드 썸네일) + row 카드 그리드
+import { Image } from "astro:assets";
 import BaseLayout from "../BaseLayout.astro";
 import RowDirectionPost from "../../components/astro/RowDirectionPost.astro";
 import type { PostCardWithThumbnail } from "../../../service/post/types/PostServicer";
 import Footer from "../Footer.astro";
 
 interface Props {
-  series: { id: string; title: string; description: string };
+  series: {
+    id: string;
+    title: string;
+    description: string;
+    thumbnail?: { src: ImageMetadata; alt?: string };
+  };
   posts: PostCardWithThumbnail[];
   index: number; // 시리즈 #N — 목록 순서 기반
 }
@@ -26,6 +31,17 @@ const { series, posts, index } = Astro.props;
             <h1 class="series-hero-title">{series.title}</h1>
             <p class="series-hero-desc">{series.description}</p>
           </div>
+          {series.thumbnail && (
+            <div class="series-hero-thumb-wrap" aria-hidden="true">
+              <Image
+                class="series-hero-thumb"
+                src={series.thumbnail.src}
+                alt={series.thumbnail.alt ?? series.title}
+                widths={[480, 960]}
+                sizes="480px"
+              />
+            </div>
+          )}
         </section>
 
         <section class="series-posts post-grid-text-package">

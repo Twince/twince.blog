@@ -18,6 +18,8 @@ const items = await Promise.all(
       title: entry.data.title,
       description: entry.data.description,
       postCount: posts.length,
+      // 시리즈 대표 썸네일 우선, 없으면 포스트 썸네일 덱으로 폴백(SeriesListItem이 분기)
+      thumbnail: entry.data.thumbnail ?? null,
       thumbnails: posts.slice(0, 5).map((post) => post.thumbnail),
     };
   })
