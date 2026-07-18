@@ -59,7 +59,7 @@
     font-size: var(--size-article-sub-heading);
     color: var(--color-article-title);
     font-weight: 700;
-    margin: 55px 0 0.5rem 0;
+    margin: 5rem 0 0.5rem 0;
   }
 
   h2 + h4 {
@@ -141,7 +141,7 @@
   blockquote {
     margin-left: 6px;
     margin-bottom: 1rem;
-    padding: 16px 12px;
+    padding: 16px 24px;
     border-left: 2.5px solid var(--color-border-blockquote);
     border-radius: 2px;
     background-color: var(--color-bg-article-blockquote);
@@ -156,6 +156,10 @@
   }
   blockquote > p {
     margin: 0;
+  }
+
+  blockquote > ol > li {
+    margin: 5px 0;
   }
 
   ul {
@@ -324,6 +328,56 @@
     max-width: 99%;
     border: 1px solid var(--color-article-image);
     border-radius: 5px;
+  }
+  /* 같은 줄에 쓴 이미지들의 가로 배치(rehypeImgToFigure가 생성). 균등 분할 + 상단 정렬.
+     셀은 bare img(캡션 없음) 또는 figure(셀별 캡션) 두 형태 — flex 계약은 셀에 건다 */
+  .img-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .img-row > img,
+  .img-row > figure {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+  .img-row img {
+    width: 100%;
+    height: auto;
+  }
+  /* 본문 랩 플로트(|left·|right 힌트). 데스크탑은 글이 이미지를 감싸 흐르고,
+     모바일은 일반 블록으로 복귀(이미지 위·글 아래). 폭 힌트가 없으면 45%가 상한 */
+  .img-float-left,
+  .img-float-right {
+    max-width: 45%;
+  }
+  .img-float-left {
+    float: left;
+    margin: 4px 20px 8px 0;
+  }
+  .img-float-right {
+    float: right;
+    margin: 4px 0 8px 20px;
+  }
+  :is(h1, h2, h3, h4, h5, h6) {
+    clear: both; /* 다음 섹션 제목은 플로트 아래에서 시작 — 랩이 섹션 경계를 넘지 않게 */
+  }
+  @media (width < 768px) {
+    .img-float-left,
+    .img-float-right {
+      float: none;
+      max-width: 100%;
+      margin: 0;
+    }
+    /* 나란히 배치도 모바일에선 세로 한 줄 스택 */
+    .img-row {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .img-row > img,
+    .img-row > figure {
+      flex: none;
+    }
   }
   figcaption {
     color: var(--color-article-image-caption);
