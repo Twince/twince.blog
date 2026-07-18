@@ -1,0 +1,29 @@
+[
+  {
+    "id": "neural-network-viz",
+    "title": "나는 AI를 어떻게 만들었을까?",
+    "description": "인공지능의 뇌를 직관적으로 표현해볼 수 있을까요? zero to one으로 바닥부터 구현해보는 인공신경망 시각화 도전기입니다.",
+    "thumbnail": {
+      "src": "./neural-network-viz/thumbnail.png",
+      "alt": "thumbnail"
+    }
+  },
+  {
+    "id": "building-blog",
+    "title": "자체 블로그 구축하기",
+    "description": "여러분이 보고 계신 이 블로그 맞습니다. 백지에서 시작하는 블로그 자체 개발 프로젝트. 개발을 진행하며 무슨 일들이 있었을까요?",
+    "thumbnail": {
+      "src": "./building-blog/thumbnail.png",
+      "alt": "thumbnail"
+    }
+  },
+  {
+    "id": "learning-language",
+    "title": "직관이 언어를 학습하기까지",
+    "description": "토익 400부터 980까지. 언어를 공부가 아닌 언어로 학습하는 과정을 담았습니다.",
+    "thumbnail": {
+      "src": "./learning-language/thumbnail.png",
+      "alt": "thumbnail"
+    }
+  }
+]

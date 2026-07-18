@@ -17,11 +17,21 @@
 //        카테고리별 글 수 등 모든 taxonomy 집계에 일반화된다.
 // ════════════════════════════════════════════════════════════════════
 
+import type { CollectionEntry } from "astro:content";
+
+type SeriesData = CollectionEntry<'series'>['data'];
+
 export interface SeriesCardSummary {
   id: string;
   title: string;
   count: number;
   description: string;
+  /**
+   * 시리즈 대표 썸네일(series.json thumbnail, image() 통과 = ImageMetadata).
+   * 스키마가 .optional()이라 실제 부재가 가능 — 없으면 null(소비처는 포스트 썸네일 덱으로 폴백).
+   * '유령 null'이 아니라 topic과 동일한 '명시적 부재' 규약. 타입 단일 출처는 스키마(CollectionEntry).
+   */
+  thumbnail: NonNullable<SeriesData['thumbnail']> | null;
 }
 
 // TODO(사용자): 구현 후 RootLayout.astro의 MOCK_SERIES를 이 함수 호출로 교체하세요.

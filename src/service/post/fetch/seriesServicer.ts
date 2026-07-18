@@ -26,6 +26,7 @@ export const SeriesService = {
       title: entry.data.title,
       count: seriesCounts.get(entry.id) ?? 0,
       description: entry.data.description,
+      thumbnail: entry.data.thumbnail ?? null, // undefined → null 명시 (유령 undefined 제거)
     }))
   }
 }
