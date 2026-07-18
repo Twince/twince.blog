@@ -34,7 +34,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
     year: "2026",
     items: [
       {
-        title: "숭실대학교 축제 서비스 SINGAL 기획 고도화 및 개발, 운영",
+        title: "숭실대학교 축제 서비스 SIGNAL 기획 고도화 및 개발, 운영",
         mention: [{ text: "@Ren" }, { text: "@Emily" }, { text: "@Max" }, { text: "@Dean" }],
         bullets: [
           "축제 기간동안 서로의 프로필을 구경하고 마음에 드는 연락처를 얻을 수 있는 소개팅 서비스",

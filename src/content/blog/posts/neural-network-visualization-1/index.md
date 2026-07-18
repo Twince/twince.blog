@@ -5,6 +5,7 @@ date: 2025-10-16T19:34:00
 status: published
 tags:
   - DEV
+  - PHILOSOPHY
   - DESIGN
   - MATH
 topics:
