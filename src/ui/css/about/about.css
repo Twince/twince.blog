@@ -362,17 +362,20 @@
   }
 }
 
+/* 거터 = (vw - --about-col)/2 이므로 1360에서야 30px가 확보된다.
+   그 아래는 박스를 full-bleed로 두되 타이틀만 들여써 화면 끝에 붙지 않게 한다. */
+@media (width < 1360px) {
+  .about-exp-title,
+  .about-cert-title {
+    margin-left: var(--about-exp-inset);
+  }
+}
+
 /* ══════════════════ 반응형 공통 <1024: EXPERIENCE 선형화 + 좁은 화면 줄바꿈 ══════════════════ */
 @media (width < 1024px) {
   .about-experience {
     --about-exp-inset: calc(28px * var(--about-scale));
     --about-rail: calc(110px * var(--about-scale));
-  }
-  /* 뷰포트 < 1300이라 섹션에 중앙정렬 거터가 없음 → 박스는 full-bleed지만 타이틀은
-     연도 라벨(박스 내용)에 맞춰 좌측 여백을 줘 뷰포트 끝에 붙지 않게 */
-  .about-exp-title,
-  .about-cert-title {
-    margin-left: var(--about-exp-inset);
   }
   .about-year-content {
     columns: 1; /* 내부 masonry 2열 → 1열 */
