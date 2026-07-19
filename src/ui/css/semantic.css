@@ -9,6 +9,23 @@
      --color-*  → text-, bg-, border- 유틸리티 생성. 테마 swap 대상.
      --size-*   → 유틸리티 없음(var 전용). 장문(prose) 타입 — bespoke, 테마 무관.
      --text-*   → text-* 유틸리티 생성하는 UI 타입(Tailwind 예약 namespace).
+
+   ★ 타이포 규칙 3가지 (어기면 티가 안 나게 깨진다)
+
+     1. 하한을 미디어쿼리에서 덮지 말 것
+        토큰이 `max(13px, …)`로 가독 하한을 걸어놨으면, 미디어쿼리에서 `font-size: 11px`
+        같은 절대값을 쓰면 안 된다. 하한이 무효가 되면서 화면이 작을수록 글자가 작아지는
+        역전이 생긴다(series에서 실제로 겪었다). 브레이크포인트마다 크기를 바꾸고 싶으면
+        개별 선언이 아니라 토큰이나 스케일 노브를 바꾼다.
+
+     2. 여러 페이지가 같이 쓰는 크기는 여기에 두고, 페이지 스케일과 분리할 것
+        --series-scale 같은 페이지 노브는 그 페이지의 '치수'를 담당한다. 공용 글자 크기가
+        특정 페이지의 노브를 따라가면, 그 페이지 스케일을 바꿨을 때 엉뚱한 페이지가 같이
+        변한다. 예전에 about이 series의 1.1을 그대로 베껴 쓰다가 이 문제를 만들었다.
+
+     3. 그렇다고 전부 여기로 올리지는 말 것
+        페이지 하나만 쓰는 시안 고유 크기는 그 페이지 CSS에 raw × scale로 남긴다.
+        공용이 아닌 걸 공용에 두는 것도 똑같이 부채다.
    ============================================================ */
 @theme {
   /* ── color: brand / accent (theme-invariant) ─────────────── */
@@ -71,6 +88,13 @@
   /* ── type: UI scale — text-* 유틸리티 생성 ───────────────── */
   --text-neighbor-post-title:       clamp(16px, calc(12px + 0.3125vw), 18px);
   --text-neighbor-post-description: clamp(11px, calc(9px + 0.156vw), 12px);
+
+  /* ── type: 페이지 섹션 헤딩 (var 전용) ───────────────────────
+     페이지 제목급 헤딩이 공통으로 쓰는 크기. 쓰는 곳은 세 군데다.
+       .series-page-title / .about-exp-title / .about-cert-title
+     페이지 스케일 노브와는 일부러 떼어놨다(위 규칙 2번). 예전엔 about이 series의 값을
+     `calc(25px * 1.1)`로 베껴 썼고, 짝인 cert-title은 27px로 혼자 어긋나 있었다. */
+  --size-page-section-title: 27.5px;
 
   /* ── type: post-grid (var 전용) ──────────────────────────── */
   --size-post-grid-title:  clamp(23px, calc(22.08px + 0.256vw), 28px);

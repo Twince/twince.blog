@@ -21,7 +21,7 @@
 ## D3. 스케일 시스템 — 페이지 스케일 노브 × Figma raw
 
 - **결정**: 페이지 루트에 `--{page}-scale` 하나를 두고 모든 치수를 `calc(figma원본px × scale)`로 파생. 파생 토큰은 **소비 지점에 선언**(:root에 두면 var()가 :root에서 치환돼 컨텍스트 override 무시 — 실제로 밟은 버그).
-- **읽기 하한**: 스케일(비례)과 가독 floor(`max(12px, …)`)는 **별개 축** — floor는 읽기 텍스트에만, 장식성 모노는 제외.
+- **읽기 하한**: 스케일(비례)과 가독 floor(`max(13px, …)` — 2026-07-19에 12→13px 상향)는 **별개 축** — floor는 읽기 텍스트에만, 장식성 모노는 제외.
 - **보류**: 뷰포트 연동 clamp 스케일(큰 모니터 문제)은 사이트 전체 동시 결정 사안으로 이연. knob 간접층 덕에 전환 비용은 값 교체 한 줄.
 - **전이**: 고정 스케일 = 캔버스 충실도 레짐, 뷰포트 스케일 = 디바이스 인체공학 레짐. 레짐 경계는 페이지가 아니라 *컴포넌트 재사용 경계*를 따라야 크기 점프가 없다.
 
@@ -88,3 +88,51 @@
 - **전이**: ① 반복 생성물은 "소스 컨벤션 + stale 검사 배치"로 — 도구 호출을 사람이 기억하는 구조는 지속 불가
   ② 파생 산출물을 커밋할지는 소비처(CI)의 의존성 비용으로 결정 ③ 중간값은 토큰 간 보간으로, 방향성 분기는
   끝점을 시맨틱 토큰으로. 상세 워크플로는 [thumbnail-line-pipeline.md](./thumbnail-line-pipeline.md).
+
+## D13. 타이포 계약 — 하한은 불변식, 공유 역할은 semantic
+
+- **맥락**: [D3](#d3-스케일-시스템--페이지-스케일-노브--figma-raw)의 스케일 노브는 *비례*만 다루고 **반응형 축을 안 다룬다**. 그래서 브레이크포인트마다 절대 px로 탈출했고(font-size 선언 96개 중 14개), 그 탈출구가 D3이 세운 가독 floor까지 함께 버렸다. 실제 피해 2건: ① `--series-item-desc`가 `max(12px, …)`인데 모바일 미디어쿼리가 `font-size: 11px`로 덮어 **모바일(11px)이 데스크탑(12px)보다 작은 역전** ② `about.css`가 `calc(25px * 1.1)`로 **series의 스케일 상수를 하드코딩**, 짝인 `.about-cert-title`은 27px로 0.5px 드리프트.
+- **대안**: ① 전 토큰을 clamp() 유동으로 전환(미디어쿼리 자체를 소거) ② 노브는 유지하고 계약으로 탈출을 금지 ③ 현상 유지 + 개별 수정
+- **결정**: ② — `semantic.css` 헤더에 타이포 계약 3조 명문화. (1) 하한은 불변식이므로 미디어쿼리 절대값으로 덮지 않는다, 크기 조정은 노브/토큰으로. (2) 여러 페이지가 공유하는 타이포 '역할'은 `--size-*`(semantic)에 두고 페이지 geometry 노브와 분리한다. (3) 페이지 전용·시안 고유 치수는 페이지 CSS의 raw × scale로 남긴다 — 전부 올리는 과잉 일반화도 부채.
+- **적용**: 모바일 `font-size: 11px` 선언 **삭제**(값 교체가 아니라 선언 제거 → 토큰 상속이 자동 복원). `--size-page-section-title: 27.5px` 신설, 소비처 3곳(`.series-page-title` / `.about-exp-title` / `.about-cert-title`) 공유. 속성 테스트로 결합 해소 증명 — `--series-scale`를 2배로 흔들어도 page-title 불변(item-title은 정상 추종), 공유 토큰 변경 시 3곳 동시 이동.
+- **근거**: 하한을 뚫는 사고는 *조용히* 일어난다(빌드도 타입체크도 안 잡음). 값을 고치는 대신 **선언을 지워 상속시키면** 이후 하한 변경이 전 브레이크포인트에 자동 전파돼 재발 자체가 불가능해진다.
+- **전이**: 스케일(비례)과 하한(가독)은 별개 축인데, 노브를 우회하는 절대값 오버라이드는 **두 축을 동시에 버린다**. 시스템이 어떤 축(여기선 반응형)을 안 다루면 사용자는 그 시스템을 우회하고, 우회로는 시스템이 세운 불변식을 모른다 — 탈출구를 막기 전에 *왜 탈출했는지*를 먼저 시스템에 흡수시켜야 한다.
+- **미결**: 타이포 축과 geometry 축이 아직 `--{ctx}-scale` 하나에 묶여 있다. 모바일 series 타이틀이 데스크탑 대비 전부 ≈0.74 비율인 걸로 보아 `--series-type-scale` 분리가 가능해 보이나, 같은 노브가 padding·min-height·gap도 구동해 파급이 크다 → D3의 보류 항목(뷰포트 연동 clamp 스케일)과 **함께** 결정할 것.
+
+## D14. CSS 캐스케이드 함정 — 공통화의 특이도 비용, content-sized 부모
+
+- **맥락**: 모바일 정리 작업에서 "분명히 썼는데 안 먹는" CSS 버그 2종을 밟았다. 둘 다 선언 자체는 옳고 *주변 구조*가 무력화한 경우.
+- **① `:is()` 특이도 전염**: `:is()`의 특이도 = **인자 중 최고값**. 세 레일을 `u-rail`로 공통화하면서 `.art-rail`(0,1,0)이 `.series-hero .hero-rail`(0,2,0)과 한 묶음에 들어갔고, 그 결과 공통 규칙 전체가 0,2,0이 되어 미디어쿼리의 bare `.art-rail { display: none }`이 졌다. → `.profile-art > .art-rail`로 특이도를 맞춰 해소(소스 순서상 뒤라 승). 근본 해결은 `:where()`(특이도 항상 0)지만 다른 소비처의 오버라이드 특이도까지 재조정해야 해 보류.
+- **② content-sized 부모의 `width: 100%`**: `justify-items: center`가 grid 아이템의 stretch를 막아 `li`가 트랙 폭 대신 fit-content로 줄었고, 그러면 카드의 `width: 100%`가 참조할 부모 폭이 **순환 참조**가 되어 shrink-to-fit으로 폴백 — 카드가 트랙보다 53px 좁았다. 다열 구간에서만 센터링이 의미 있으므로 모바일 1열에서 `stretch`로 복원.
+- **전이**: ① 공통화(`:is()`, 유틸리티 묶음)로 줄인 코드의 대가는 **특이도 결합**이다 — 가장 특이한 인자가 모두를 끌어올린다. ② `width: 100%`가 "안 먹으면" 자신이 아니라 *부모가 어떻게 사이징되는지*를 보라(부모가 content-sized면 순환). ③ **특이도를 올리기 전에 누가 왜 이기고 있는지를 먼저 측정하라** — `!important`가 필요하다고 느껴지면 대개 "이겨야 한다"가 아니라 "캐스케이드 구조를 잘못 알고 있다"는 신호다. 우회 순서: 원인 규명 → `@layer`로 우선순위를 설계로 표현 → `:where()`로 특이도 0 → 최후에 소폭 상향(자식 결합자·스코프 클래스).
+- **검증 하네스 교훈**: 인라인 `!important`조차 computed style에 반영되지 않으면 CSS가 아니라 **렌더러 정지**를 의심할 것(직후 CDP 타임아웃으로 확진). 캐스케이드를 파기 전에 하네스 생존 확인이 먼저.
+
+---
+
+# 미결 백로그 (사용자 결정 대기)
+
+> 위 D1~D14는 *내려진* 결정. 아래는 *아직 안 내려진* 결정 — 2026-07-06 아키텍처 감사(5개 관점
+> 멀티에이전트: 아키텍처/보안/TS/CSS·a11y/성능)에서 safe 22건은 적용하고 남긴 판단 지점들이다.
+> 착수 전 이 목록을 확인할 것. 해결되면 항목을 D번호로 승격하고 여기서 제거한다.
+
+5개 관점(아키텍처/보안/TS/CSS·a11y/성능) 멀티에이전트 감사 → safe 22건 리팩토링 적용 완료(**tsc 17건→0건**):
+- 죽은 코드 삭제 7파일(types/post.ts, useActiveHeadingObserver, imgFigurelizer, readingStatusObserver, MinimumPost, styles/global.css, createHaadingObserver 스텁) + 미사용 import 5곳.
+- 카드 <Image> widths/sizes(2.2MB 원본→srcset 3변형), 폰트 dynamic-subset + head preconnect/link(직렬 @import 체인 제거).
+- TocWrapper 죽은 render() 삭제(포스트당 마크다운 2중 컴파일 해소) + client:idle, Toc onChange 동일 activeId early-return.
+- config.ts toc 스키마 z.array 교정, resolver Astro5 잔재(.slug/.render) 제거, coAuthor→coAuthors, sorter import 경로.
+- a11y: gate 버튼 :focus-visible + 상태별 aria-label, TwistedGridMotion reduced-motion pauseAnimations, 각주 없는 img alt="".
+- 토큰: raw hex(#7b818d/#333)→primitive(slate-500/gray-850)+semantic(code-linenum/badge-lang), text-gray-800→text-text-secondary,
+  u-rail :is() 통합, --u-hover-ring 단일 출처(index.css), localStorage theme 화이트리스트, index.css 레거시 @tailwind 3줄 제거.
+**decision 17건(사용자 결정 대기)** — ① **✅해결(2026-07-14 커밋 160bf36)**: sorter comparator 반전(실버그 — '최신순'이 제목순으로 동작 중.
+힌트: 조기 반환 조건이 반대 — timeDiff==0일 때 0을 반환하면 tiebreak이 죽고, 날짜가 다를 때 title 비교가 실행된다.
+comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc.tsx 정비(li onClick→a href, null 규약, 폴링→IO 구독).
+③ TOC 이중 생성 파이프라인 일원화. ④ tocGenerator/markdownToHast를 plugins로 이동(레이어명 정합). ⑤ getPostDetail 서비스 계약.
+⑥ series 스키마 optional 위치 — 현재 `z.array(reference('series').optional())`라 **원소별** undefined(`(Reference|undefined)[]`)라서
+소비처가 원소 `?.` 가드 필요. 의도는 필드 전체 optional일 확률 높음 → `z.array(reference('series')).optional()`로 옮기면 원소 non-null.
+파급(getPostsWithSeries·ResolvedPost·seriesServicer 가드)이라 보류; seriesServicer의 getSeriesCount는 `if(!ref)return` 가드로 진행(스키마 어느 쪽이든 안전). ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
+⑨⑩ 기존 EDGE(getSeriesCards/limit/칩 라우팅). ⑪ gate DOM 계약·reset()·핫패스 캐시. ⑫ 의존성 취약점 36건+CSP.
+⑬ .card-tag 분리+!important 해체. ⑭ quaternary 라이트 대비 3.0:1. ⑮ no-scrollbar. ⑯ SMIL 외부화. ⑰ nnv-4 중복 에셋.
+⑱ 뷰포트 연동 스케일(D안) — 큰 모니터에서 1100px 고정 컬럼 전체가 작게 읽히는 문제. 사이트 전체(root·posts·series)
+동시 결정 필요: clamp 곡선(하한은 노트북 구간이라 floor 병행 필수)·컬럼 축 스케일 여부(헤더·root 세로 보더 정렬 트레이드오프).
+스킵(리스크): tailwind 임포트 단일화(캐스케이드), 오타 rename(TocGenrator/isVisable/sortBylastest — decision과 함께 권장).
+

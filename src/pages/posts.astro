@@ -5,8 +5,10 @@ import Footer from "../ui/layouts/Footer.astro";
 ---
 <BaseLayout>
   <div class="w-full h-full overflow-y-scroll no-scrollbar">
-    {/* root(.root-recent)와 동일한 컬럼·여백 비율: 1100px 중앙, 모바일 28px / md+ 그리드만 23px 인셋 */}
-    <div class="post-grid-text-package max-w-[1100px] mx-auto px-[28px] md:px-0 pb-24">
+    {/* root의 최근 포스트 섹션과 같은 컬럼/여백을 쓴다. 1100px 중앙 정렬,
+        모바일 좌우 여백은 --gutter-page-mobile(index.css)을 공유, md 이상은 그리드에만 23px 인셋.
+        여기에 숫자를 직접 적으면 root와 값이 갈라지므로 반드시 변수를 쓸 것. */}
+    <div class="post-grid-text-package max-w-[1100px] mx-auto px-[var(--gutter-page-mobile)] md:px-0 pb-24">
       <h1 class="grid-title mt-14 mb-10">POSTS</h1>
       <div class="md:px-[23px]">
         <PostGridLayout direction="col" />
