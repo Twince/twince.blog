@@ -14,6 +14,7 @@ import tailwindcss from '@tailwindcss/vite';
 const icon = _icon;
 
 export default defineConfig({
+  site: 'https://www.twince.me', // canonical URL·sitemap·OG의 기준 — GitHub Pages + Cloudflare DNS
   integrations: [react(), icon({iconDir: 'src/ui/assets/icons',})],
   markdown: {
     rehypePlugins: [
