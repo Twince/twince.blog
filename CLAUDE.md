@@ -84,6 +84,12 @@
 - **`!important` 쓰기 전에 "누가 왜 이기는지"를 먼저 측정**: 대개 캐스케이드 구조를 잘못 안 것이다.
 
 **검증**
+- **배포 확인은 커밋 SHA를 대조한다.** `gh run list --limit 1`은 새 실행이 없으면 *이전 실행*을 돌려주므로
+  그대로 믿으면 "배포 성공"을 오보하게 된다(실제로 3번 연속 오보). 머지한 SHA와 실행의 `headSha`가
+  같은지 확인할 것 — GitHub이 squash 머지 push에 대해 실행을 아예 생성하지 않은 사례가 있다.
+  멈췄으면 `gh workflow run ci --ref main`으로 수동 배포.
+- **WebKit 버그는 macOS Safari로 재현한다.** Chrome 기기 에뮬레이션으로는 안 잡히는 게 있다(합성 레이어 등).
+  `osascript`로 Safari 창 크기·URL 제어 + `screencapture -R`로 캡처하면 iPhone 없이 검증된다.
 - headless Chrome은 **최소 창폭 ~500px** → 모바일은 CDP `Emulation.setDeviceMetricsOverride` 또는 iframe 폭 사용.
 - 인라인 `!important`조차 computed에 안 잡히면 CSS가 아니라 **렌더러 정지**를 의심(CDP 타임아웃으로 확진된 적 있음).
 - `astro build`/`sync`는 이 환경에서 "Vite module runner closed"로 실패(clean HEAD에서도 재현 — 환경 이슈). **`astro dev`는 정상.**
