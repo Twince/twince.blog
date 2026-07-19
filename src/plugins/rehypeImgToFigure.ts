@@ -60,20 +60,15 @@ export function rehypeImgToFigure() {
   const makeCaptionedFigure = (
     body: ElementContent,
     captionChildren: ElementContent[],
-    labelTarget?: Element,
   ): Element => {
     figCount += 1;
     const figId = `caption-${figCount}`;
-    if (labelTarget) {
-      labelTarget.properties = {
-        ...labelTarget.properties,
-        'aria-labelledby': figId,
-      }; // AEO와 A11Y를 위해 figure와 figcaption 관계맺기
-    }
+    /* aria-labelledby는 항상 figure에 — img에 걸면 accname 우선순위상 alt가 소거되어
+       "alt는 SR 전용으로 유지"라는 저작 계약(docs/authoring-images.md)이 깨진다 */
     return {
       type: 'element',
       tagName: 'figure',
-      properties: labelTarget ? {} : { 'aria-labelledby': figId },
+      properties: { 'aria-labelledby': figId },
       children: [
         body,
         { type: 'element', tagName: 'figcaption', properties: { id: figId }, children: captionChildren },
@@ -82,6 +77,7 @@ export function rehypeImgToFigure() {
   };
 
   return (tree: Root) => {
+    let sawFloat = false; // 플로트 힌트가 없는 문서(대다수)에서 정리 패스를 건너뛰기 위한 플래그
     visit(tree, { type: 'element', tagName: 'img' }, (node: Element) => {
       // alt 부재 시 장식 이미지로 명시(alt 자체가 없으면 SR이 파일 경로를 낭독)
       if (node.properties?.alt === undefined) {
@@ -94,13 +90,15 @@ export function rehypeImgToFigure() {
       let width: string | undefined;
       let float: string | undefined;
       let hint: RegExpMatchArray | null;
-      while ((hint = alt.match(/^(.*?)\s*\|\s*((\d+)(?:x\d+)?|left|right)\s*$/))) {
+      // 폭은 2~4자리(10–9999px)만 힌트로 인정 — "비교 1|2" 같은 정당한 alt를 오인하지 않기 위한 하한
+      while ((hint = alt.match(/^(.*?)\s*\|\s*((\d{2,4})(?:x\d+)?|left|right)\s*$/))) {
         const token = hint[2];
         if (token === 'left' || token === 'right') float = token;
         else width = hint[3];
         alt = hint[1];
       }
       if (width || float) {
+        if (float) sawFloat = true;
         node.properties = {
           ...node.properties,
           alt,
@@ -148,7 +146,10 @@ export function rehypeImgToFigure() {
       let converted = false;
       for (const { imgs, run } of groups) {
         const single = imgs.length === 1;
-        const shared = hasContent(run) ? trimTrailing(trimLeading(run)) : null;
+        // 트리밍 후 빈 런(<br>·공백뿐)은 캡션 소스가 아니다 — []는 truthy라 그대로 두면
+        // 빈 figcaption이 생성되고 alt 폴백까지 억제된다(hasContent는 br을 못 거름)
+        const trimmedRun = trimTrailing(trimLeading(run));
+        const shared = trimmedRun.length > 0 ? trimmedRun : null;
 
         if (single) {
           const img = imgs[0];
@@ -156,7 +157,7 @@ export function rehypeImgToFigure() {
           const alt = (img.properties?.alt as string | undefined) ?? '';
           const caption: ElementContent[] | null =
             shared ?? (alt ? [{ type: 'text', value: alt }] : null);
-          const el: Element = caption ? makeCaptionedFigure(img, caption, img) : img;
+          const el: Element = caption ? makeCaptionedFigure(img, caption) : img;
           if (float) {
             // 플로트는 최외곽(figure 또는 bare img)에 — 뒤따르는 문단이 감싸 흐른다
             el.properties = { ...el.properties, className: [`img-float-${float}`] };
@@ -177,7 +178,7 @@ export function rehypeImgToFigure() {
         // 공동 캡션 없음 — alt 있는 이미지는 각자의 figure+figcaption으로(셀별 캡션)
         const cells = imgs.map((img): ElementContent => {
           const alt = (img.properties?.alt as string | undefined) ?? '';
-          return alt ? makeCaptionedFigure(img, [{ type: 'text', value: alt }], img) : img;
+          return alt ? makeCaptionedFigure(img, [{ type: 'text', value: alt }]) : img;
         });
         replacement.push({
           type: 'element', tagName: 'div', properties: { className: ['img-row'] }, children: cells,
@@ -190,9 +191,11 @@ export function rehypeImgToFigure() {
     });
 
     // 플로트 마커는 문단 승격 단계에서 소비 완료 — 어떤 경로든(row 셀·인라인·미변환 문단)
-    // data-float 속성이 HTML로 새지 않게 일괄 제거
-    visit(tree, { type: 'element', tagName: 'img' }, (node: Element) => {
-      if (node.properties && 'dataFloat' in node.properties) delete node.properties.dataFloat;
-    });
+    // data-float 속성이 HTML로 새지 않게 일괄 제거. 힌트가 아예 없던 문서는 순회 생략
+    if (sawFloat) {
+      visit(tree, { type: 'element', tagName: 'img' }, (node: Element) => {
+        if (node.properties && 'dataFloat' in node.properties) delete node.properties.dataFloat;
+      });
+    }
   }
 }

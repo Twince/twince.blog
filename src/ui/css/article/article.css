@@ -359,8 +359,13 @@
     float: right;
     margin: 4px 0 8px 20px;
   }
-  :is(h1, h2, h3, h4, h5, h6) {
-    clear: both; /* 다음 섹션 제목은 플로트 아래에서 시작 — 랩이 섹션 경계를 넘지 않게 */
+  /* 랩은 "뒤따르는 문단"만 감싼다 — 헤딩·다음 이미지 블록·각주 섹션은 플로트 아래에서 시작.
+     (헤딩만 clear하면 마지막 섹션의 플로트가 각주/다음 figure 위로 흘러넘침) */
+  :is(h1, h2, h3, h4, h5, h6),
+  figure,
+  .img-row,
+  section.footnotes {
+    clear: both;
   }
   @media (width < 768px) {
     .img-float-left,
