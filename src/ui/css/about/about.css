@@ -489,7 +489,8 @@
     --about-logo-lift: 60px;
     --about-logo-y: calc(170px - var(--about-logo-lift));
     margin-bottom: calc(-1 * var(--about-logo-lift));
-    transform: translateY(var(--about-logo-y));
+    /* transform 금지 — iOS가 합성 레이어로 올려 z-index를 무시한다. top은 승격도 스태킹도 없다 */
+    top: var(--about-logo-y);
     /* transparent 금지 — 뒤 그리드가 글자 속을 통과한다 */
     color: var(--color-bg-hero);
     -webkit-text-stroke: var(--about-logo-stroke) var(--color-border-primary);
