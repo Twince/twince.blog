@@ -335,18 +335,9 @@
   color: var(--color-text-tertiary);
   word-break: keep-all;
 }
-/* 썸네일 존: .series-desc와 동일한 하단 고정 존 패턴(margin-top:auto + 고정 height).
-   flex-grow(옛 방식)는 타이틀 줄 수(1~3줄)에 따라 존 시작 y가 카드마다 달라졌음 →
-   고정 height로 전환해 모든 썸네일 카드에서 존 top·height가 동일(타이틀 무관 시작선 통일).
-   height raw=178: 데스크톱 최장(3줄) 타이틀 카드에서 count 아래 gap이 8×scale 남는 최대치
-   (짧은 타이틀 카드는 gap이 더 커지는 게 의도 — .series-desc 폴백 존과 동일 거동).
-   좌(39)/우(24)/하(36) padding을 음수 마진으로 뚫고 카드 가장자리까지 풀블리드,
-   width는 그만큼(39+24=63) 늘려 우측 엣지까지 도달. margin-bottom -36으로 카드 하단 엣지까지.
-   래퍼 = 배치·클리핑·스트로크 소유(container-type로 cqw 기준 확립), img = 100% 채움.
-   상단 엣지를 반시계 8°("/", 우상단이 좌상단보다 높음)로 컷 + 컷 엣지 위 1px 스트로크.
-   기하 단일 출처: 폭 기준 dy = tan8°×폭/2 = 7.027%×폭 = 7.027cqw.
-   컬럼이 1fr 유동(태블릿 0.85·2열)이라 px 토큰 불가 → cqw로 실측 폭에 자동 추종(각도 항상 8°).
-   스트로크는 폭/cos8°(=100.983cqw) 길이의 가로선을 rotate(-8deg) → 컷 좌/우 두 끝점과 정확히 일치. */
+/* 하단 고정 존(타이틀 줄 수와 무관하게 시작선 통일). 음수 마진으로 카드 엣지까지 풀블리드.
+   상단 8° 사선 컷 — 컬럼이 1fr 유동이라 px 대신 cqw로 실측 폭에 추종한다.
+   7.027cqw = tan8°×폭/2, 100.983cqw = 폭/cos8°. 각도를 바꾸면 두 값 다시 계산. */
 .series-thumb-wrap {
   position: relative;
   flex: none;
@@ -573,12 +564,8 @@
 
   .series-showcase { display: none; }
 
-  /* 모바일에선 토픽 밴드를 통째로 숨긴다.
-     아래 칩 스트립 규칙들(.topics-grid 가로 스크롤 등)은 지금은 안 쓰이지만,
-     되살릴 때 이 display 한 줄만 지우면 되도록 남겨뒀다.
-     밴드가 갖고 있던 min-height:0 / border-top은 숨긴 뒤엔 효과가 없어서 지웠다.
-     되살린다면 border-top: 1px solid var(--color-border-primary) 을 다시 넣어야 한다
-     (아래쪽 보더는 .root-hero의 border-bottom이 담당하므로 top만). */
+  /* 아래 칩 스트립 규칙들은 이 display 한 줄만 지우면 되살아난다.
+     단 되살릴 땐 border-top: 1px solid var(--color-border-primary) 을 다시 넣을 것. */
   .topics-band { display: none; }
   .topics-band .explore-rail { display: none; }
   .topics-grid {

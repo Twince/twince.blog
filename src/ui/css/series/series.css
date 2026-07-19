@@ -183,12 +183,8 @@
   color: var(--color-text-secondary);
   word-break: keep-all;
 }
-/* 우측 풀블리드 썸네일 — 히어로 상/하/우 엣지까지 flush(absolute inset), object-fit cover.
-   폭 50%(텍스트 최대폭 ~560px < 이미지 시작 x=550@1100폭 → 여유). wrapper z-index:0으로 텍스트(z:1) 아래.
-   좌변을 시계방향 10° 사선("/", 상단 x가 하단보다 오른쪽)으로 컷 + 컷 엣지 위에 1px 스트로크 보더.
-   기하: 히어로 높이 = min-height (--series-hero-h)×scale(콘텐츠가 이 안에 들어와 실측=min-height).
-   per-side dx = tan10°×h/2 = 0.088165×(--series-hero-h)×scale. 스트로크는 h/cos10° 길이의 세로선을
-   rotate(10deg) → 박스 상/하단에서 x = cut ± dx 로 클립 좌변 두 끝점과 정확히 일치. */
+/* 우측 풀블리드 썸네일. 좌변을 10° 사선으로 컷 + 컷 엣지에 1px 스트로크.
+   0.088165 = tan10°/2 (dx 계수), 스트로크 길이는 h/cos10°. 각도를 바꾸면 둘 다 다시 계산. */
 .series-hero-thumb-wrap {
   position: absolute;
   top: 0;

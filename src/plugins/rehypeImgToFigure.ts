@@ -43,15 +43,9 @@ const trimLeading = (nodes: ElementContent[]): ElementContent[] => {
   return out;
 };
 
-/* 이미지 → figure/figcaption 승격 + 저작 편의 문법. 문단을 이미지 경계로 세그먼트화한다:
-     [선행 본문?] [img 그룹 (↵ 캡션 텍스트?)]* …
-   - img 그룹: 같은 줄에 나란히 쓴 이미지들(줄바꿈 없는 공백 간격) → <div class="img-row"> 가로 배치
-   - 캡션 우선순위: 그룹 뒤 연속 줄 텍스트(공동 캡션) > alt. 공동 캡션이 없는 그룹은
-     이미지별 alt가 각자의 캡션으로 승격된다(단독 이미지의 alt 폴백과 동일 의미론).
-     공동 캡션이 있으면 alt는 대체 텍스트(SR 전용)로만 유지
-   - 크기 힌트: alt 끝의 |폭 또는 |폭x높이 (예: ![도면|400](...)) → width:min(100%, 400px), 비율 유지
-     (Obsidian 리사이즈 문법과 호환 — 높이값은 비율 붕괴 방지를 위해 무시)
-   모든 이미지가 줄바꿈 경계 위에 있어야 하며, 아니면(문장 속 진짜 인라인) 문단을 건드리지 않는다. */
+/* 이미지 → figure/figcaption 승격 + 저작 문법(나란히 배치·공동 캡션·|폭 힌트).
+   문법 전체는 docs/authoring-images.md.
+   문단 안 진짜 인라인 이미지는 건드리지 않는다 — 줄바꿈 경계 위에 있을 때만 동작. */
 export function rehypeImgToFigure() {
   let figCount = 0; // alt가 중복돼도 figId가 유일하도록
 
