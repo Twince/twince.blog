@@ -398,6 +398,12 @@
   .about-hero-intro p + p {
     margin-top: calc(4px * var(--about-scale));
   }
+  /* gap 요소는 숨겨도 DOM 마커로 살아 있다 — 문단 첫 줄(gap 다음 p)에만 큰 여백을 줘
+     데스크탑의 문단 리듬(줄 4px ≪ 문단 간격)을 좁은 화면에서도 보존.
+     ※ 위 `p + p`(0,1,2)를 이기려면 스코프 클래스 포함 특이도(0,2,1) 필요 */
+  .about-hero-intro .about-hero-intro-gap + p {
+    margin-top: calc(16px * var(--about-scale));
+  }
 }
 
 /* ══════════════════ HERO 태블릿(650–1023): 텍스트(좌)·사진(우), intro는 아래 전폭 ══════════════════ */
