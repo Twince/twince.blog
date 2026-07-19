@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "thumbnail-trace": "python3 scripts/trace-line-art.py",
-    "dev:fresh": "rm -rf .astro node_modules/.astro && astro dev"
+    "dev:fresh": "rm -rf .astro node_modules/.astro && astro dev",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",
@@ -22,15 +24,18 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "rehype-parse": "^9.0.1",
-    "remark-parse": "^11.0.0",
-    "remark-rehype": "^11.1.2",
     "tailwindcss": "^4.1.18",
-    "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0"
   },
   "devDependencies": {
     "@types/hast": "^3.0.4",
+    "rehype-raw": "^7.0.0",
+    "rehype-stringify": "^10.0.1",
+    "remark-parse": "^11.0.0",
+    "remark-rehype": "^11.1.2",
     "sharp": "^0.34.0",
-    "vite-plugin-svgr": "^4.5.0"
+    "unified": "^11.0.5",
+    "vite-plugin-svgr": "^4.5.0",
+    "vitest": "^4.1.10"
   }
 }
