@@ -481,12 +481,28 @@
   .about-hero-text {
     display: contents;
   }
+  /* 포스터 구도. 유도 과정은 docs/build-notes.md */
   .about-hero .profile-logotype {
     order: 1;
+    font-size: calc(133px * var(--about-scale));
+    align-self: center;
+    /* 170px = 폰트 120px 기준 인물 세로 중앙. 폰트 바꾸면 다시 잴 것 */
+    --about-logo-lift: 60px;
+    --about-logo-y: calc(170px - var(--about-logo-lift));
+    margin-bottom: calc(-1 * var(--about-logo-lift));
+    transform: translateY(var(--about-logo-y));
+    /* transparent 금지 — 뒤 그리드가 글자 속을 통과한다 */
+    color: var(--color-bg-hero);
+    -webkit-text-stroke: var(--about-logo-stroke) var(--color-border-primary);
+    --about-logo-stroke: 1px;
+  }
+  .about-hero .profile-badge {
+    display: none;
   }
   .about-hero-photo {
     order: 2;
-    margin-top: calc(-8px * var(--about-scale)); /* TWINCE 여백으로 위로 tuck (사진은 좌측, 배지는 우측이라 미충돌) */
+    /* 이미지 위쪽 투명 51px(렌더 37px) 회수분. 사진 교체 시 다시 계산 */
+    margin-top: calc(-49px * var(--about-scale));
     margin-left: calc(-10px * var(--about-scale));
     /* 확대 + 하단 crop(네이티브 338 → 275) → 상체 하부가 잘려 텍스트와 더 붙음 */
     width: calc(280px * var(--about-scale));
@@ -502,7 +518,7 @@
     /* full-bleed 유리 밴드 — border·radius·margin 없이 폭을 꽉 채우고 내부 여백은 padding으로 */
     width: 100vw;
     margin-inline: calc(50% - 50vw); /* 컨테이너 패딩을 뚫고 뷰포트 폭까지 */
-    padding: calc(20px * var(--about-scale)) calc(28px * var(--about-scale)); /* margin 대신 내부 여백 */
+    padding: calc(28px * var(--about-scale)) calc(28px * var(--about-scale)); /* margin 대신 내부 여백 */
     background: color-mix(in srgb, var(--color-bg-pure) 10%, transparent); /* SUNWOO HA 배지 glass tint */
     backdrop-filter: blur(calc(6px * var(--about-scale)));
     -webkit-backdrop-filter: blur(calc(6px * var(--about-scale)));
@@ -527,6 +543,7 @@
      아래로만 거동이 바뀐다. max/min은 교차점에서 연속(값 점프 없음)이라 breakpoint 추가와 달리 매끄럽다. */
   .about-hero {
     --about-art-left: min(-230px, -55%); /* 하한: 좁아져도 -230px보다 덜 왼쪽으로 안 감(좌측 앵커 고정) */
+    /* 기준이 히어로 높이라 로고 크기·lift를 바꾸면 함께 확인할 것 */
     --about-art-top: -15%;
     --about-art-width: max(1000px, 260%); /* 하한: 좁아져도 1000px 밑으로 안 줄어 계속 프레임을 넘침 */
     --about-art-rotate: -13deg;
