@@ -262,10 +262,11 @@
   .series-item-link { padding: 24px 28px; min-height: 0; flex-direction: column; gap: 16px; }
   .series-deck,
   .series-single-thumb { display: none; }  /* 덱/단일 썸네일만 숨기고 메타는 유지 */
-  .series-item-title { margin-top: 12px; font-size: 18px; }
+  /* 세로 스택이라 데스크탑(29.7px)만큼은 필요 없지만, desc가 13px로 커진 만큼 숨통을 틔운다 */
+  .series-item-title { margin-top: 18px; font-size: 18px; }
   /* font-size를 일부러 안 쓴다. 토큰의 13px 가독 하한을 그대로 물려받기 위해서다.
      여기에 절대값을 쓰면 하한이 무효가 되고, 모바일이 데스크탑보다 글자가 작아진다(전에 11px로 실제 발생). */
-  .series-item-desc { margin-top: 12px; }
+  .series-item-desc { margin-top: 18px; }
 
   .series-hero { min-height: 0; }
   .series-hero .hero-rail { display: none; }
