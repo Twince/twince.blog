@@ -495,6 +495,7 @@
   }
   /* greeting·nickname·contacts 묶음 = frosted glass 패널 — 뒤 twisted-grid를 이 영역에서 흐림 */
   .about-hero-blurb {
+    border: 1px solid var(--color-border-primary);
     order: 3;
     /* full-bleed 유리 밴드 — border·radius·margin 없이 폭을 꽉 채우고 내부 여백은 padding으로 */
     width: 100vw;
