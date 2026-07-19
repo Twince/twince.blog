@@ -36,6 +36,11 @@
   --about-text-top: calc(142px * var(--about-scale)); /* TWINCE top */
   --about-intro-top: calc(153px * var(--about-scale)); /* 소개문 top */
   --about-contacts-top: calc(50px * var(--about-scale)); /* 닉네임↔contact 간격 */
+  /* 히어로 레이어 스택 — 값의 크기가 곧 앞뒤 순서다 */
+  --about-layer-art: -1;
+  --about-layer-photo: 0;
+  --about-layer-text: 1;
+
   /* SUNWOO HA 배지 오프셋(TWINCE 우측 하단 겹침) */
   --about-badge-right: calc(-30px * var(--about-scale));
   --about-badge-bottom: calc(8px * var(--about-scale));
@@ -65,7 +70,7 @@
   opacity: var(--about-art-opacity);
   color: var(--color-text-primary);
   pointer-events: none;
-  z-index: -1; /* 항상 배경 — 모바일 display:contents에서 텍스트 z-index umbrella가 사라져도 아트가 위로 안 옴 */
+  z-index: var(--about-layer-art);
 }
 .about-hero-art .twisted-grid-motion {
   display: block;
@@ -76,7 +81,7 @@
 /* 사진: sunwoo_profile 네이티브 비율(345×417) 그대로 — object-fit 확대 없음 */
 .about-hero-photo {
   position: relative;
-  z-index: 0;
+  z-index: var(--about-layer-photo);
   width: calc(325px * var(--about-scale));
   overflow: hidden;
 }
@@ -91,7 +96,7 @@
 /* 텍스트 블록(중앙) — TWINCE/greeting/nickname/contacts */
 .about-hero-text {
   position: relative;
-  z-index: 1;
+  z-index: var(--about-layer-text);
   margin-top: var(--about-text-top);
 }
 .about-hero-greeting {
@@ -116,7 +121,7 @@
 /* 소개문(오른쪽) — 줄마다 <p>, 빈 줄은 zero-width space */
 .about-hero-intro {
   position: relative;
-  z-index: 1;
+  z-index: var(--about-layer-text);
   margin-top: var(--about-intro-top);
   font-family: var(--font-pretendard);
   font-size: calc(16px * var(--about-scale));
@@ -492,6 +497,9 @@
   }
   .about-hero .profile-badge {
     display: none;
+  }
+  .about-hero {
+    --about-layer-photo: 2; /* 인물이 로고(1) 위로 */
   }
   .about-hero-photo {
     order: 2;
