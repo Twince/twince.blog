@@ -1,5 +1,9 @@
 # main 트렁크 CI/CD — PR: 테스트+빌드 체크(required check 후보) / main push: 체크 후 GitHub Pages 배포.
 # tsc는 기존 베이스라인 에러(Toc.tsx 4건 — decision ②)가 해소되면 check 스텝에 추가할 것.
+#
+# workflow_dispatch는 수동 배포용이다. GitHub이 squash 머지 push에 대해 실행을 생성하지 않아
+# 프로덕션이 3커밋 뒤처진 채 멈춘 적이 있다(2026-07-20). 그때 빈 커밋으로 복구했는데,
+# 이 트리거가 있으면 `gh workflow run ci --ref main` 한 줄로 끝난다.
 name: ci
 
 on:
@@ -7,6 +11,7 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -31,13 +36,13 @@ jobs:
       - run: pnpm test
       - run: pnpm build
       - name: Upload Pages artifact
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:
           path: dist
 
   deploy:
-    if: github.event_name == 'push'
+    if: github.event_name != 'pull_request'
     needs: check
     runs-on: ubuntu-latest
     environment:
