@@ -60,7 +60,8 @@ const hasBoth = !!(next && previous);
     </div>
   </a>
   )}
-  {/* 다음 글의 왼쪽 기준선: 짝이 목록보기 폴백(좌측 정렬 pl-12)이면 맞추고, 정상-정상 조합에서만 우측 정렬 pl-20
+  {/* 다음 글의 왼쪽 기준선: 짝이 목록보기 폴백일 때만 pl-14로 낮춰 폴백(pl-12) 근처로 정렬
+      — pl-14는 사용자 육안 튜닝값(정확 일치 아님). 정상-정상 조합에서만 우측 정렬 pl-20
       ※ 삼항 괄호 안 주석+요소 병치 금지(단일 표현식 깨짐) — 주석은 분기 밖에 둔다 */}
   {next ? (
   <a href={`/posts/${next.slug}`} class:list={[hasBoth ? "pl-20" : "pl-14", `z-10 relative pr-4 pt-6 pb-5 mb-3 block overflow-hidden
