@@ -362,12 +362,18 @@
   }
 }
 
-/* 거터 = (vw - --about-col)/2 이므로 1360에서야 30px가 확보된다.
-   그 아래는 박스를 full-bleed로 두되 타이틀만 들여써 화면 끝에 붙지 않게 한다. */
+/* 섹션 거터 = (레이아웃폭 - --about-col)/2 이고, 레이아웃폭은 스크롤바(약 15px)를 뺀 값이다.
+   1360에서 거터가 22px라 이 아래로는 박스를 full-bleed로 두되 타이틀을 들여써 화면 끝을 피한다.
+   ※ 이 1360은 --about-col(1300)에서 유도한 값인데 미디어쿼리는 var()를 못 쓴다.
+      --about-col을 바꾸면 여기도 같이 고칠 것.
+   ※ .about-cert의 padding-left를 같이 옮기지 않으면 타이틀만 42, 리스트는 34가 되어 어긋난다. */
 @media (width < 1360px) {
   .about-exp-title,
   .about-cert-title {
     margin-left: var(--about-exp-inset);
+  }
+  .about-cert {
+    padding-left: var(--about-exp-inset);
   }
 }
 
@@ -379,9 +385,6 @@
   }
   .about-year-content {
     columns: 1; /* 내부 masonry 2열 → 1열 */
-  }
-  .about-cert {
-    padding-left: var(--about-exp-inset);
   }
   /* 데스크톱 nowrap → 좁은 화면에선 줄바꿈 허용(태블릿·모바일 공통) */
   .about-hero-intro,
