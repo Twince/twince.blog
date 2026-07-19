@@ -1,17 +1,10 @@
-// 포스트 상세 페이지 스크롤 게이트 — 단방향(아래로) 충전 인터랙션
+// 포스트 상세 스크롤 게이트 — 단방향 충전.
 // 상태: hidden → ready ↔ charging → snapping-forward → arrived
 //
-// 핵심 구조(바운스 근본 해결): 관련 포스트 섹션(#related-posts)은 게이트 통과 전까지
-// height 0으로 접어 둔다. 그러면 스크롤 컨테이너는 "경계 아래로는 스크롤할 콘텐츠가 없는"
-// 상태가 되고, 아래로의 오버스크롤은 브라우저의 네이티브 스크롤 클램프가 막는다.
-// → JS가 컴포지터 스무스 스크롤과 싸울 필요 자체가 사라진다(1~15차 튕김의 근본 원인 제거):
-//   preventDefault로 못 멈추는 "이미 시작된" 네이티브 애니메이션이 애초에 시작될 수 없다.
-//
-// 위로(관련 포스트 → 본문) 복귀는 자유 스크롤이다 — 클램프가 없으니 위쪽 바운스도 없다.
-// 경계 위로 다시 올라오면 관련 포스트를 재수납(collapse)해 게이트를 재장전한다.
-//
-// 바닥에서의 충전은 passive wheel/touchmove로 델타만 읽어 누적한다(네이티브 클램프가
-// 이미 이동을 막으므로 preventDefault가 필요 없다 — 상시 passive라 컴포지터 스크롤을 죽이지 않음).
+// 관련 포스트를 통과 전까지 height 0으로 접어, 경계 아래에 스크롤할 콘텐츠가 없게 만든다.
+// 네이티브 클램프가 경계를 지키므로 JS가 컴포지터 스크롤과 싸울 필요가 없고,
+// 리스너도 전부 passive로 둘 수 있다. 이 구조에 이르기까지의 실패 이력은
+// docs/gate-history.md, 결정 근거는 docs/decisions.md D4.
 
 let scrollRootEl: HTMLElement | null = null;
 let resizeListener: (() => void) | null = null;
@@ -58,14 +51,9 @@ function easeInOutQuad(t: number) {
   return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
 }
 
-// snapping-forward tween 구간(RELEASE_DURATION)만의 네이티브 스크롤 가드.
-// tween의 animate 루프는 프레임마다 scrollTop을 절대 재대입한다 — 즉 이 구간엔 tween이
-// scrollTop을 '소유'한다. 그런데 나머지 리스너가 전부 passive라, 사용자의 휠/터치가
-// 프레임 사이에 끼어들어 네이티브 스크롤을 유발하면 tween 목표와 경합해 미세 지터가 생긴다
-// (상태 무결성은 무관 — 순수 시각 품질). 그래서 tween 동안만 wheel/touchmove를 non-passive로
-// 가로채 preventDefault한다. non-passive의 비용은 핸들러 실행이 아니라 '리스너의 존재 자체'
-// (브라우저가 매 이벤트 JS 응답을 대기해 컴포지터 스크롤을 죽인다)이므로, 상시 부착하지 않고
-// tween 시작~종료(350ms)에만 부착/해제한다 — 7차 전이 라벨의 패턴.
+// tween 구간만의 네이티브 스크롤 가드. tween이 scrollTop을 소유하는 동안 사용자 입력이
+// 끼어들면 미세 지터가 생긴다(시각 품질 문제). non-passive 리스너는 존재 자체가 컴포지터
+// 스크롤을 죽이므로 상시 부착하지 않고 tween 시작~종료에만 붙였다 뗀다.
 function preventNativeScroll(e: Event) {
   e.preventDefault();
 }

@@ -427,15 +427,9 @@
   .about-hero-photo {
     grid-area: photo;
     margin-top: 0;
-    /* 세로 full-fill: 사진을 grid 흐름에서 빼 absolute로 전환한다. abspos 그리드 아이템은
-       자신에게 배정된 grid-area(= 위 "photo" 셀, 프로필 행 × 사진 컬럼)를 containing block으로
-       삼는다(CSS Grid §9.4, 크로스브라우저 지원) — 그 덕에 위 grid-template-columns가 못박은
-       사진 컬럼 폭은 그대로 유지한 채, top/right/bottom 세 변만으로 "히어로 상단 가장자리 →
-       프로필 행 하단(= intro 밴드가 시작되는 지점)"까지 세로로 정확히 채울 수 있다.
-       top·right는 inner의 padding(40px/28px)을 상쇄해 히어로 실제 가장자리까지 bleed하고,
-       bottom:0은 프로필 행(그리드 area) 하단에 크롭 없이 flush — "붕 뜬 작은 사진"이 아니라
-       우측 전체를 채우는 세로 이미지로 보이게 한다. 고정 280px 높이 대신 height:auto로 두 변
-       (top/bottom) 사이 거리를 그대로 채워, 텍스트 콘텐츠양에 따라 달라지는 실제 행 높이에 맞춘다. */
+    /* abspos 그리드 아이템은 배정된 grid-area가 containing block이라(CSS Grid §9.4),
+       컬럼 폭은 유지한 채 top/right/bottom만으로 세로를 채운다.
+       top·right 음수값은 inner padding(40/28) 상쇄분 — padding을 바꾸면 같이 고칠 것. */
     position: absolute;
     top: calc(-40px * var(--about-scale));
     right: calc(-28px * var(--about-scale));
@@ -533,14 +527,8 @@
     order: 6;
     margin-top: 0; /* blurb 패널과 붙임(꽉 참) — 간격은 blurb padding-bottom + intro padding-top */
   }
-  /* twisted grid 모바일 전용 위치 — 직접 조정 (데스크톱 knob이 세로 긴 inner에서 화면 밖).
-     좁은 폭(≲416px)에서 아트가 %비례로 함께 줄어 프레임 안에 funnel 전체가 들어와 버리는 문제:
-     아트 크기는 뷰포트폭에 선형(240%)인데 hero 높이는 텍스트 리플로우로 좁을수록 오히려 커져
-     (798@360 vs 730@430) 아트가 프레임 대비 작아져 상하좌우로 안 삐져나감 → 완결된 hourglass가 노출.
-     → width/left에 절대 px "하한"을 겹쳐(max/min) 임계폭 아래에선 아트가 더 안 줄고 그 자리에 고정.
-     그러면 창이 좁아질수록 같은 크기의 아트가 더 크롭된다(우측부터 잘림) — funnel이 "덜 보이는" 방향.
-     교차점 = 하한값이 %값과 같아지는 폭(≈416px)이라 그 위(태블릿 경계까지)는 기존 튜닝값 그대로,
-     아래로만 거동이 바뀐다. max/min은 교차점에서 연속(값 점프 없음)이라 breakpoint 추가와 달리 매끄럽다. */
+  /* max/min의 절대 px는 하한이다. 없으면 좁은 폭에서 아트가 %비례로 줄어
+     funnel 전체가 프레임 안에 들어와 버린다(≈416px에서 교차, 그 아래로만 거동이 바뀜). */
   .about-hero {
     --about-art-left: min(-230px, -55%); /* 하한: 좁아져도 -230px보다 덜 왼쪽으로 안 감(좌측 앵커 고정) */
     /* 기준이 히어로 높이라 로고 크기·lift를 바꾸면 함께 확인할 것 */
