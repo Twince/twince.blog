@@ -71,7 +71,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         title: "군복무 중 수상 및 포상",
         bullets: [
           "병 858기 진급평가 우수자 수상",
-          "특급병사 / 체력검정 특급 (2025 하반기 체력검정 만점)",
+          "특급병사 / 체력검정 특급 포상 (2025 하반기 체력검정 만점)",
           "대대 사격 성적 최우수 병사"
         ],
       }
@@ -95,7 +95,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
       {
         title: "군입대",
         period: "2024.5 ~ 2026.3",
-        bullets: ["공군 제 858기 항공기전자장비정비특기"],
+        bullets: ["공군 제 858기 항공기전자장비정비특기(병장 만기전역) "],
       },
     ],
   },
