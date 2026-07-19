@@ -162,3 +162,28 @@ SVG 안에서 잘린다. 이걸 "클리핑 부채"로 오해하기 쉬우나, �
 root는 특히 위험하다 — `.twisted-art`가 `height:1082px` 고정 + `align-items:center` + `clip-path:inset(...)`
 + `rotate(61deg)`이라 SVG가 커지면 중앙 정렬 기준과 클립 관계가 전부 어긋난다.
 정말 필요해지면 소비처별 `width`·`top`·`clip-path`를 함께 재조정하는 별도 작업으로 다룰 것.
+
+### WebKit — transform은 합성 레이어로 승격돼 z-index를 무시한다 (2026-07-20)
+
+about 히어로 모바일에서 아웃라인 `TWINCE`가 인물 사진 **앞**에 그려졌다. Chrome(데스크탑·기기 에뮬레이션)에서는
+재현되지 않고 **WebKit에서만** 발생했다.
+
+**1차 수정은 실패했다.** 페인트 순서를 flex `order`에 맡긴 게 원인이라 보고 레이어 스택
+(`--about-layer-photo: 2` vs `--about-layer-text: 1`)을 명시했으나 그대로였다. z-index 우선순위 문제가 아니었다.
+
+**진짜 원인**: 로고에 걸린 `transform: translateY(...)`가 WebKit에서 GPU 합성 레이어 승격을 트리거한다.
+승격된 레이어는 합성 단계에서 처리되어 **비합성 형제 위에 z-index와 무관하게 그려진다.** 사진에는 승격
+트리거가 없어 메인 레이어에 남았다. Blink는 z-index를 지키므로 Chrome에서는 정상이었다.
+
+**수정**: `transform: translateY(var(--about-logo-y))` → `top: var(--about-logo-y)`.
+`.profile-logotype`은 이미 `position: relative`(root.css)라 바로 먹는다. 상대 위치의 `top`은 translateY와
+똑같이 레이아웃 영향 없이 시각 위치만 옮기면서, **스태킹 컨텍스트도 합성 승격도 만들지 않는다.**
+"사진에도 `translateZ(0)`을 줘서 같이 승격"은 원인 제거가 아니라 맞불이라 택하지 않았다.
+
+**디버깅 경로(재사용 가능)**: iPhone 원격 인스펙터가 안 붙어서 대신 **macOS Safari로 재현**했다 —
+Safari도 WebKit이라 같은 버그가 난다. `osascript`로 창 크기·URL을 제어하고 `screencapture -R`로 캡처하면
+Chrome 없이도 WebKit 렌더를 눈으로 검증할 수 있다. 배포본(버그)과 localhost(수정)를 A/B로 비교했다.
+※ `do JavaScript`는 Safari 개발자용 › "Apple Events에서 JavaScript 허용"이 필요하다(이번엔 안 켜고 진행).
+
+**전이**: 위치만 옮기면 되는데 `transform`을 쓰면 공짜로 합성 레이어가 딸려 온다. 애니메이션이 아니라면
+`top`/`left`가 부작용이 없다. 반대로 애니메이션에는 `transform`이 맞다 — 레이아웃을 건드리지 않아 빠르다.
