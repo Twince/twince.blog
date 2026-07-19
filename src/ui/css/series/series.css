@@ -4,17 +4,24 @@
   --series-scale: 1.1;
 
   /* 목록 */
-  --series-page-title: calc(25px * var(--series-scale));
+  /* about의 EXPERIENCE/CERTIFICATIONS 헤딩과 같은 값(정의는 semantic.css).
+     단, 공유되는 건 데스크탑까지다. 모바일에선 아래 미디어쿼리가 20px로 따로 잡는다.
+     즉 이 토큰을 바꾸면 about은 전 구간이, series는 ≥768px만 따라온다. */
+  --series-page-title: var(--size-page-section-title);
   --series-item-title: calc(22px * var(--series-scale));
   --series-item-slug:  calc(8px * var(--series-scale));
-  --series-item-desc:  max(12px, calc(10px * var(--series-scale)));
-  --series-item-meta:  max(12px, calc(9px * var(--series-scale)));
+  /* 읽기 텍스트 3종(desc/meta/hero-desc)의 가독 하한은 13px. posts 카드 모바일과 같은 기준이다.
+     주의: 지금 스케일(1.1)에서는 raw×scale이 11px, 9.9px라 하한에 못 미친다.
+     그래서 이 세 토큰은 사실상 13px 상수다. 스케일을 돌려도 안 움직이는 게 정상이고,
+     파생이 살아나려면 스케일이 1.3을 넘어야 한다(desc 기준). */
+  --series-item-desc:  max(13px, calc(10px * var(--series-scale)));
+  --series-item-meta:  max(13px, calc(9px * var(--series-scale)));
 
   /* 상세 히어로 */
   --series-hero-h:     320px; /* 히어로 높이 노브 — min-height·사선 dx·스트로크 길이가 전부 이 값에서 파생 */
   --series-label:      calc(12px * var(--series-scale));
   --series-hero-title: calc(27px * var(--series-scale));
-  --series-hero-desc:  max(12px, calc(10px * var(--series-scale)));
+  --series-hero-desc:  max(13px, calc(10px * var(--series-scale))); /* item-desc와 같은 하한 */
   --series-rail:       calc(9px * var(--series-scale));
 
   /* 상세 카드는 row 카드 재사용 — root row 카드 컨텍스트(1.1)와 정합 */
@@ -249,18 +256,23 @@
 /* ── 모바일(<768) ─────────────────────────────────────────────── */
 @media (width < 768px) {
   .series-column { border-inline: none; }
+  /* 모바일 제목은 공유 토큰(27.5px)이 너무 커서 여기서 따로 잡는다.
+     about 헤딩은 모바일에서도 27.5px를 유지하므로 두 페이지가 이 구간에서만 갈라진다(의도된 분기). */
   .series-page-title { padding: 48px 28px 16px; font-size: 20px; }
   .series-item-link { padding: 24px 28px; min-height: 0; flex-direction: column; gap: 16px; }
   .series-deck,
   .series-single-thumb { display: none; }  /* 덱/단일 썸네일만 숨기고 메타는 유지 */
   .series-item-title { margin-top: 12px; font-size: 18px; }
-  .series-item-desc { margin-top: 12px; font-size: 11px; }
+  /* font-size를 일부러 안 쓴다. 토큰의 13px 가독 하한을 그대로 물려받기 위해서다.
+     여기에 절대값을 쓰면 하한이 무효가 되고, 모바일이 데스크탑보다 글자가 작아진다(전에 11px로 실제 발생). */
+  .series-item-desc { margin-top: 12px; }
 
   .series-hero { min-height: 0; }
   .series-hero .hero-rail { display: none; }
   .series-hero-thumb-wrap { display: none; }
   .series-hero-body { padding: 40px 28px 36px; }
   .series-hero-title { font-size: 22px; margin-top: 16px; }
-  .series-hero-desc { margin-top: 20px; font-size: 11px; }
+  /* item-desc와 같은 이유로 font-size를 안 쓴다(하한 토큰을 물려받는다) */
+  .series-hero-desc { margin-top: 20px; }
   .series-posts { padding: 20px 28px 64px; }
 }

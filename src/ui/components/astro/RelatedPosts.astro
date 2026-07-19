@@ -51,7 +51,7 @@ const description = isMatchingEmpty
     </div>
 
     {/* grid 유틸은 PostGridLayout col variant와 동일 — 없으면 li가 전체 폭이라 카드 밖 hover가 걸림 */}
-    <ul class="related-posts-grid post-grid grid justify-items-center grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
+    <ul class="related-posts-grid post-grid grid sm:justify-items-center grid-cols-1 gap-y-7 sm:gap-x-6 lg:gap-x-10 sm:grid-cols-2 lg:grid-cols-3">
       {displayPosts.map((card) => (
         <li class="post-item py-1 px-1 rounded-[1px] transition-all duration-150 ease-in-out hover:-translate-y-1">
           <ColDirectionPost {...card} />

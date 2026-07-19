@@ -142,12 +142,22 @@
 
 /* 모바일(<768): col 카드 시안 절대 스펙 */
 @media (width < 768px) {
+  /* li의 px-1(좌우 4px)은 hover 링이 잘리지 않게 두는 여백이다.
+     모바일엔 hover가 없어서 그냥 낭비라 좌우만 회수한다. py-1(위아래)은 카드 간격이라 남긴다. */
+  .post-grid > .post-item { padding-inline: 0; }
+
   .col-post-card {
     width: 100%;
 
     .col-post-thumbnail { aspect-ratio: 317 / 215; }
     .col-post-text { margin-top: 8px; }
-    .post-title      { font-size: 16px; }
-    .post-description { font-size: 12px; }
+  }
+
+  /* 모바일 카드 글자 크기는 두 variant가 같다(row 카드도 <1024 규칙 때문에 세로 카드 모양이 된다).
+     한 곳에서만 정해야 root(row)와 /posts(col)가 갈라지지 않는다.
+     위 <1024 블록을 고치면 태블릿까지 커지므로 여기서 모바일만 덮어쓴다. */
+  :is(.col-post-card, .row-post-card) {
+    .post-title       { font-size: 17px; }
+    .post-description { font-size: 13px; }
   }
 }

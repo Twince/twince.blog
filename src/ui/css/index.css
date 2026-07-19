@@ -17,6 +17,12 @@
     --header-h: 64px;
     /* hover 링 레시피 단일 출처 — root(profile/series-col/topics-band)·series(series-item) 공유 */
     --u-hover-ring: inset 0 0 0 1.5px var(--color-brand-hover);
+    /* 모바일에서 페이지 좌우에 두는 여백. root의 최근 포스트와 /posts 목록이 같이 쓴다.
+       이름에 mobile이 붙었지만 값 자체는 전역 상수다. '모바일에서만'은 소비처가 보장한다
+       (root는 미디어쿼리 안에서, posts.astro는 md:px-0으로 데스크탑을 지운다). 새로 쓸 때도 같게 할 것.
+       예전엔 두 곳이 각자 값을 갖고 "서로 같다"는 주석만 달아뒀는데, 한쪽을 고치니 22 vs 28로 갈라졌다.
+       페이지 스케일 노브를 안 곱한 고정값이다(공용 값은 특정 페이지 노브를 따라가면 안 된다). */
+    --gutter-page-mobile: 22px;
   }
 
   * {
