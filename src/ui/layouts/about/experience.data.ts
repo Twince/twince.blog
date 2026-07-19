@@ -223,7 +223,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         bullets: [
           "코로나 펜데믹 대비 효과적인 수업을 위한 서비스 주다(ZUDA) 기획",
           "기성 온라인 플랫폼의 정보 파편화 문제를 기반으로, 참여자와 교사가 실시간으로 인터렉션할 수 있는 대시보드 UX 제시",
-          "뉴모피즘과 플랫 디자인 트랜드를 혼합한 UI 디자인 도입시도",
+          "뉴모피즘과 플랫 디자인 트랜드를 혼합한 Bento Grid UI 디자인 도입",
           "react-parallax를 이용한 인터렉티브 웹 디자인 및 구현",
         ],
       },
