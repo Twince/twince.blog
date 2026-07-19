@@ -543,7 +543,9 @@
 /* ── 모바일 — Figma mobile(4114:883): 시리즈 없음, 칩 가로 스크롤 ── */
 @media (width < 768px) {
   .profile-art { min-height: calc(219px * var(--root-scale)); }
-  .art-rail { display: none; }
+  /* :is(…) 공통 레일 규칙(display:flex)이 .series-hero .hero-rail 때문에 특이도 0,2,0으로
+     부풀어 있어 bare .art-rail(0,1,0)로는 못 이긴다 → 동일 0,2,0 자식결합자로 맞추고 소스 뒤라 승 */
+  .profile-art > .art-rail { display: none; }
   .profile-body { padding: calc(45px * var(--root-scale)) calc(28px * var(--root-scale)) calc(36px * var(--root-scale)); }
   .profile-quote { font-size: calc(9px * var(--root-scale)); }
   .profile-quote br { display: none; }
