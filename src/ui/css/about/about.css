@@ -554,8 +554,10 @@
   }
 }
 
-/* ══════════════════ EXPERIENCE <640: 연도 레일 가로 스택 ══════════════════ */
-@media (width < 640px) {
+/* ══════════════════ EXPERIENCE <650: 연도 레일 가로 스택 ══════════════════
+   히어로 모바일과 같은 경계를 쓴다. 예전엔 640이라 640~649에서 히어로만 모바일이고
+   연도 레일은 세로로 남는 10px짜리 중간 상태가 있었다. */
+@media (width < 650px) {
   .about-year {
     grid-template-columns: 1fr;
     row-gap: calc(12px * var(--about-scale));
