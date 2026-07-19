@@ -1,5 +1,5 @@
 import { defineCollection, reference } from "astro:content";
-import { file } from 'astro/loaders'
+import { file, glob } from 'astro/loaders'
 import { z } from 'astro/zod';
 import { tocGenerator } from "../service/post/observe/tocGenerator";
 import type { TocNode } from "../service/post/types/TocGenrator";
@@ -67,7 +67,8 @@ const posts = defineCollection({
 loader: {
   name: "custom-post-loader",
   load: async (context) => {
-      const { glob } = await import('astro/loaders');
+      /* glob은 반드시 정적 import — 빌드 sync 시점엔 config를 로드한 Vite 모듈 러너가
+         이미 닫혀 있어, 여기서의 동적 import는 "Vite module runner has been closed"로 죽는다 */
       const baseDir = "src/content/blog/posts";
       const innerLoader = glob({ 
         pattern: "**/*.md", 
