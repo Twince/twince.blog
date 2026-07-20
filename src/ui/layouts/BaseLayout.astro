@@ -15,7 +15,9 @@ const CANONICAL_URL = new URL(Astro.url.pathname, Astro.site);
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 		<title>{SITE_TITLE}</title>
 		{SITE_DESCRIPTION && <meta name="description" content={SITE_DESCRIPTION} />}
 		<link rel="canonical" href={CANONICAL_URL} />
