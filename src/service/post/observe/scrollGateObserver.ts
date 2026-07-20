@@ -13,7 +13,9 @@ interface ScrollGateConfig {
   scrollRootId: string;
 }
 
-const RAW_THRESHOLD = 600;       // 충전 임계값
+// 휠은 관성 델타가 계속 날아오지만 터치는 손가락 이동 거리가 전부다(관성 스크롤은 touchmove 미발생)
+const WHEEL_THRESHOLD = 600;
+const TOUCH_THRESHOLD = 300;
 const DECAY_RATE = 0.9;
 const DECAY_IDLE_DURATION = 120; // ms — 입력 멈춤 판단
 const RELEASE_DURATION = 350;    // ms — snap tween
@@ -28,6 +30,7 @@ type GateState = 'hidden' | 'ready' | 'charging' | 'snapping-forward' | 'arrived
 
 let state: GateState = 'hidden';
 let raw = 0;
+let threshold = WHEEL_THRESHOLD;
 let lastInputTime = 0;
 let isAtBottom = false;
 let lastScrollTop = 0;
@@ -102,7 +105,7 @@ function setRelatedCollapsed(collapsed: boolean) {
 }
 
 function updateProgress() {
-  const tau = RAW_THRESHOLD / 4;
+  const tau = threshold / 4;
   const progress = clamp(1 - Math.exp(-raw / tau), 0, 1);
   document.documentElement.style.setProperty('--gate-progress', progress.toString());
 }
@@ -177,14 +180,15 @@ function onScroll() {
   lastScrollTop = top;
 }
 
-function charge(amount: number) {
+function charge(amount: number, limit: number) {
+  threshold = limit;
   raw += amount;
   lastInputTime = Date.now();
   cancelDecay();
   setState('charging');
 
-  if (raw >= RAW_THRESHOLD) {
-    raw = RAW_THRESHOLD;
+  if (raw >= threshold) {
+    raw = threshold;
     updateProgress();
     triggerRelease();
   } else {
@@ -200,7 +204,7 @@ function onWheel(e: WheelEvent) {
   const delta = normalizeWheelDelta(e);
   if (delta <= 0 || !isAtBottom) return;
   if (consumeChargeBlock(delta)) return;
-  charge(delta);
+  charge(delta, WHEEL_THRESHOLD);
 }
 
 function onTouchStart(e: TouchEvent) {
@@ -220,7 +224,7 @@ function onTouchMove(e: TouchEvent) {
   if (delta <= 0 || !isAtBottom) return;
   if (state !== 'ready' && state !== 'charging') return;
   if (consumeChargeBlock(delta)) return;
-  charge(delta);
+  charge(delta, TOUCH_THRESHOLD);
 }
 
 function startDecay() {
