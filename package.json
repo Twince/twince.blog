@@ -10,7 +10,8 @@
     "thumbnail-trace": "python3 scripts/trace-line-art.py",
     "dev:fresh": "rm -rf .astro node_modules/.astro && astro dev",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "gen:favicons": "node scripts/gen-favicons.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^4.4.2",

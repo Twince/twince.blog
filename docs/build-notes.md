@@ -225,3 +225,27 @@ Chrome 없이도 WebKit 렌더를 눈으로 검증할 수 있다. 배포본(버�
   수동 실행이 체크만 돌리고 배포를 건너뛴다.
 - 머지 후 **SHA 대조**를 절차로 고정(CLAUDE.md 검증 항목). `gh run list`의 `headSha`가
   머지한 커밋과 같은지 확인하고, 다르면 수동 트리거.
+
+---
+
+## 파비콘 생성 파이프라인
+
+`npm run gen:favicons` (`scripts/gen-favicons.mjs`)
+
+**단일 출처**: `src/ui/assets/icons/twince_logo.svg`. 스크립트가 `<path d>`만 뽑아 3개 산출물을 만든다.
+로고 도형을 고칠 곳은 이 파일 하나뿐이고, `public/`의 아이콘은 전부 생성물이다(직접 수정 금지 — 재생성 시 덮인다).
+
+| 산출물 | 용도 | 색 |
+|---|---|---|
+| `public/favicon.svg` | Chrome·Firefox·Edge | `prefers-color-scheme`로 흑/백 전환 |
+| `public/favicon-32.png` | Safari(SVG 파비콘 미지원) 폴백 | brand orange, 투명 배경 |
+| `public/apple-touch-icon.png` | iOS 홈 화면(180×180) | orange 배경 + 흰 마크 |
+
+**왜 PNG는 테마 대응을 못 하나**: PNG엔 미디어쿼리가 없다. 그래서 라이트/다크 탭 바 양쪽에서
+보이는 brand orange를 쓴다 — 흑·백 중 하나를 고르면 반대 테마에서 사라진다.
+
+**왜 apple-touch-icon만 배경이 있나**: iOS 홈 화면은 투명을 검정으로 합성한다. 투명 배경이면
+다크 아이콘 덩어리가 된다.
+
+**link 순서**: PNG를 먼저, SVG를 뒤에 선언한다. SVG를 지원하는 브라우저는 뒤의 SVG를 택하고,
+Safari는 파싱 못 하는 SVG를 건너뛰고 PNG로 떨어진다. 순서를 뒤집으면 일부 브라우저가 PNG에 눌러앉는다.
