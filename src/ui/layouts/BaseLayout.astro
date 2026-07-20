@@ -2,6 +2,12 @@
 import '../css/index.css'
 
 import Header from "./Header.astro"
+
+const SITE_TITLE = "TWINCE.BLOG";
+const SITE_DESCRIPTION = "";
+const OG_IMAGE = new URL("/OG_thumbnail.png", Astro.site);
+const OG_IMAGE_SIZE = { width: "1260", height: "630" };
+const CANONICAL_URL = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
 <html lang="ko">
@@ -10,7 +16,20 @@ import Header from "./Header.astro"
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<title>TWINCE.BLOG</title>
+		<title>{SITE_TITLE}</title>
+		{SITE_DESCRIPTION && <meta name="description" content={SITE_DESCRIPTION} />}
+		<link rel="canonical" href={CANONICAL_URL} />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={SITE_TITLE} />
+		<meta property="og:locale" content="ko_KR" />
+		<meta property="og:url" content={CANONICAL_URL} />
+		<meta property="og:title" content={SITE_TITLE} />
+		{SITE_DESCRIPTION && <meta property="og:description" content={SITE_DESCRIPTION} />}
+		<meta property="og:image" content={OG_IMAGE} />
+		<meta property="og:image:width" content={OG_IMAGE_SIZE.width} />
+		<meta property="og:image:height" content={OG_IMAGE_SIZE.height} />
+		<meta name="twitter:card" content="summary_large_image" />
 		{/* 폰트: CSS @import 직렬 체인(번들 CSS→CDN CSS→폰트) 대신 head에서 병렬 로드.
 		    Pretendard는 dynamic-subset(unicode-range 슬라이스만 다운로드) */}
 		<link rel="preconnect" href="https://cdn.jsdelivr.net" />

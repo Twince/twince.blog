@@ -129,7 +129,19 @@ comparator는 '다르면 즉시 결정, 같으면 폴스루'가 골격). ② Toc
 ③ TOC 이중 생성 파이프라인 일원화. ④ tocGenerator/markdownToHast를 plugins로 이동(레이어명 정합). ⑤ getPostDetail 서비스 계약.
 ⑥ series 스키마 optional 위치 — 현재 `z.array(reference('series').optional())`라 **원소별** undefined(`(Reference|undefined)[]`)라서
 소비처가 원소 `?.` 가드 필요. 의도는 필드 전체 optional일 확률 높음 → `z.array(reference('series')).optional()`로 옮기면 원소 non-null.
-파급(getPostsWithSeries·ResolvedPost·seriesServicer 가드)이라 보류; seriesServicer의 getSeriesCount는 `if(!ref)return` 가드로 진행(스키마 어느 쪽이든 안전). ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2).
+파급(getPostsWithSeries·ResolvedPost·seriesServicer 가드)이라 보류; seriesServicer의 getSeriesCount는 `if(!ref)return` 가드로 진행(스키마 어느 쪽이든 안전). ⑦ thumbnail 폴백/유령 null. ⑧ BaseLayout title prop(전 페이지 고정 <title> — WCAG 2.4.2). **페이지별 OG와 같은 통로다.**
+2026-07-20에 글로벌 OG만 먼저 붙였다(BaseLayout에 SITE_TITLE/OG_IMAGE 상수 + og:* 메타). 그 결과
+어느 글을 공유해도 제목·이미지가 동일하다 — 블로그 OG의 핵심 가치인 '글마다 다른 미리보기'가 아직 없다.
+- 데이터는 이미 있다: 포스트·시리즈 스키마에 title/description, 포스트엔 thumbnail까지.
+  없는 건 그걸 <head>까지 나르는 props 통로뿐이다.
+- 소비처 6곳: RootLayout / AboutLayout / posts.astro / series.astro / SeriesDetailLayout / ArticleLayout.
+  현재 아무도 props를 안 넘긴다.
+- 결정할 것: (a) props 모양 — title만 / title+description / +image
+  (b) 필수 vs 선택+기본값 — 필수면 6곳을 한 번에 고쳐야 하지만 새 페이지가 빠뜨릴 수 없다.
+      선택이면 점진 적용이 되는 대신 조용히 기본값을 쓰는 페이지가 남는다.
+  (c) og:image를 포스트 썸네일로 쓸지 — 썸네일 비율이 OG 권장(1.91:1)과 달라 카카오가 크롭할 수 있다.
+- SITE_DESCRIPTION은 현재 빈 문자열이고, 빈 값이면 태그를 아예 안 내보낸다(빈 content는 크롤러에
+  '설명이 있는데 비었다'는 잘못된 신호를 준다). 문구가 정해지면 상수만 채우면 된다.
 ⑨⑩ 기존 EDGE(getSeriesCards/limit/칩 라우팅). ⑪ gate DOM 계약·reset()·핫패스 캐시. ⑫ 의존성 취약점 36건+CSP.
 ⑬ .card-tag 분리+!important 해체. ⑭ quaternary 라이트 대비 3.0:1. ⑮ no-scrollbar. ⑯ SMIL 외부화. ⑰ nnv-4 중복 에셋.
 ⑱ 뷰포트 연동 스케일 — **방향 확정, 구현 대기**. 실측·후보 비교는 D15 참고(계단식 스케일 + 컬럼 clamp = ②안).
