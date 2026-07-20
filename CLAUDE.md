@@ -95,7 +95,8 @@
   `osascript`로 Safari 창 크기·URL 제어 + `screencapture -R`로 캡처하면 iPhone 없이 검증된다.
 - headless Chrome은 **최소 창폭 ~500px** → 모바일은 CDP `Emulation.setDeviceMetricsOverride` 또는 iframe 폭 사용.
 - 인라인 `!important`조차 computed에 안 잡히면 CSS가 아니라 **렌더러 정지**를 의심(CDP 타임아웃으로 확진된 적 있음).
-- `astro build`/`sync`는 이 환경에서 "Vite module runner closed"로 실패(clean HEAD에서도 재현 — 환경 이슈). **`astro dev`는 정상.**
+- ~~`astro build`가 "Vite module runner closed"로 실패~~ — 2026-07-20 재현 안 됨. 9페이지 정상 빌드.
+  **빌드 산출물 검증을 dev 서버 curl로 대체하지 말 것**: dev는 `/about`, 프로덕션은 `/about/`(build.format=directory)라 URL이 다르다.
 
 **기타**
 - topic id는 **소문자 canonical**(topics.json: dev/design/memoir/…), 표시는 title 또는 CSS uppercase.
