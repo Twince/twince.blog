@@ -20,7 +20,7 @@ const linkColor = (href: string) =>
 <nav class:list={["flex font-semibold text-[15px]", vertical ? "flex-col gap-y-5" : "gap-x-8 md:gap-x-14"]}>
   {
     menus.map((menu) => (
-      <a class={linkColor(menu.href)} href={menu.href}>
+      <a class:list={[linkColor(menu.href), vertical && "py-[10px] -my-[10px]"]} href={menu.href}>
         {menu.label}
       </a>
     ))

@@ -40,6 +40,7 @@ import ThemeToggle from "../components/astro/ThemeToggle.astro"
 
 <style>
   .hamburger {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -47,6 +48,12 @@ import ThemeToggle from "../components/astro/ThemeToggle.astro"
     gap: 5px;
     width: 32px;
     height: 32px;
+  }
+  /* 헤더(64px)에 남는 여백을 히트 영역으로만 쓴다 — 박스는 32px 그대로라 배치 불변, 터치 타깃은 44px */
+  .hamburger::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
   }
   .hamburger span {
     display: block;
@@ -98,5 +105,13 @@ import ThemeToggle from "../components/astro/ThemeToggle.astro"
   menu?.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => setOpen(false)));
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && isOpen()) setOpen(false);
+  });
+  // 바깥 클릭 닫기. toggle 가드가 없으면 토글 클릭이 여기까지 버블링해 열자마자 닫힌다.
+  // pointerdown은 스크롤 시작에도 발생하므로 탭이 완결되는 click을 쓴다.
+  document.addEventListener("click", (e) => {
+    if (!isOpen()) return;
+    const target = e.target as Node;
+    if (menu?.contains(target) || toggle?.contains(target)) return;
+    setOpen(false);
   });
 </script>
