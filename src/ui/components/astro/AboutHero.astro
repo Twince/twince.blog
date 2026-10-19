@@ -2,11 +2,13 @@
 // ABOUT 히어로 — Figma 4738:150(1300×448). 사진(좌) | 텍스트 블록(중) | 소개문(우) 3열 인플로우.
 // 배경 아트만 absolute. 로고타입/연락처는 root와 공유(ProfileLogotype/ProfileContacts),
 // 크기는 about.css의 .about-hero 스코프가 오버라이드.
-import { Image } from "astro:assets";
+import { getImage } from "astro:assets";
 import TwistedGridMotion from "./TwistedGridMotion.astro";
 import ProfileLogotype from "./ProfileLogotype.astro";
 import ProfileContacts from "./ProfileContacts.astro";
 import profilePhoto from "../../assets/images/sunwoo_profile_2.png";
+
+const optimizedPhoto = await getImage({ src: profilePhoto, width: 345, height: 417, format: "webp" });
 ---
 <section class="about-hero">
   <div class="about-hero-inner">
@@ -15,7 +17,21 @@ import profilePhoto from "../../assets/images/sunwoo_profile_2.png";
     </div>
 
     <div class="about-hero-photo">
-      <Image src={profilePhoto} alt="하선우 프로필 사진" width={345} height={417} />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 345 417"
+        width="345"
+        height="417"
+        preserveAspectRatio="xMidYMin slice"
+        role="img"
+        aria-label="하선우 프로필 사진"
+      >
+        <polygon
+          class="about-hero-paper"
+          points="18,417 13,386 19,352 40,294 58,266 87,218 93,177 114,179 131,173 128,149 131,119 136,84 150,59 159,44 182,38 207,31 231,40 252,45 274,62 293,77 316,113 308,135 303,153 289,171 284,189 277,211 267,231 243,239 229,245 238,265 251,283 253,309 262,333 268,378 273,417"
+        />
+        <image href={optimizedPhoto.src} width="345" height="417" />
+      </svg>
     </div>
 
     <div class="about-hero-text">

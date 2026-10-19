@@ -163,7 +163,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         ],
       },
       {
-        title: "YOURSSU Web FE Lead",
+        title: "YOURSSU FE Lead",
         bullets: [
           "@Yourssu Frontend팀 리드",
           "팀 리소스 관리 및 동아리 운영",
