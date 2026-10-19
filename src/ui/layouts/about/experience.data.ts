@@ -43,6 +43,20 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
           "AI Driven한 빠른 프로덕트 리팩토링 및 프론트엔드 개발 진행(온보딩 및 프로덕트 기획 고도화, 서비스 리팩토링, QA 포함 - 전체 10일)",
         ],
       },
+      {
+        title: "법무법인(유) 린, 탄소감축본부 IT Partner",
+        mention: [{text: "@Hyunsook Sim (탄소감축본부 본부장)", href: "https://www.law-lin.com/ko/people/detail/334?q=%EC%8B%AC%ED%98%84%EC%88%99"}],
+        bullets: [
+          "기후공시 인벤토리 Data Transformation/Migration 수행",
+          "IBM Envizi 솔루션 구조 산정 및 데이터 계층 구조화 협력",
+          "(in progress) Scope 1, 2 산정 솔루션 Project Operation / Management",
+        ],
+      },
+       {
+        title: "SSU Data Inteligence and Privacy Lab 합류",
+        mention: [{text: "@Prof. Yongdae An", href: "https://diplab.ssu.ac.kr/"}, {text: "@Ph.D. Hanyul Ryu", href: "https://diplab.ssu.ac.kr/"}, {text: "@M.S. Eungab Jo", href: "https://diplab.ssu.ac.kr/"}],
+        bullets: [],
+      },
     ],
   },
   {
@@ -72,7 +86,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         bullets: [
           "병 858기 진급평가 우수자 수상",
           "특급병사 / 체력검정 특급 포상 (2025 하반기 체력검정 만점)",
-          "대대 사격 성적 최우수 병사"
+          "대대 사격 성적 최우수 병사 (특등사수)"
         ],
       }
     ],
