@@ -44,8 +44,8 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         ],
       },
       {
-        title: "법무법인(유) 린, 탄소감축본부 IT Partner",
-        mention: [{text: "@Hyunsook Sim (탄소감축본부 본부장)", href: "https://www.law-lin.com/ko/people/detail/334?q=%EC%8B%AC%ED%98%84%EC%88%99"}],
+        title: "법무법인 OOO, 탄소감축본부 IT 협력",
+        mention: [{text: "@OOO 탄소감축본부 본부장"}],
         bullets: [
           "기후공시 인벤토리 Data Transformation/Migration 수행",
           "IBM Envizi 솔루션 구조 산정 및 데이터 계층 구조화 협력",
