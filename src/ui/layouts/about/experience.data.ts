@@ -125,7 +125,7 @@ export const EXPERIENCE_YEARS: ExperienceYear[] = [
         ],
       },
       {
-        title: "SSUTODAY - 숭실대학교 스터디룸 예약 시스템",
+        title: "SSUTODAY - 숭실대학교 정보대학 공식 시스템",
         mention: [{ text: "@jonghokim27", href: "https://github.com/jonghokim27" }],
         bullets: [
           "숭실대학교 IT대학(정보과학관) 테라스 예약 및 학부 공지 시스템 기획",
